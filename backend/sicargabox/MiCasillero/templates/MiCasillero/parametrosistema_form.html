@@ -1,0 +1,42 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    
+<p>
+    <a class="btn btn-light" href="{% url 'MiCasillero_ParametroSistema_list' %}">
+    ParametroSistema Listing
+    </a>
+</p>
+    
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{form.errors}}
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="nombre_parametro">nombre_parametro: </label>
+      <input class="form-control col-sm-10"
+         id="nombre_parametro" type="text"
+         name="nombre_parametro" value="{{ object.nombre_parametro }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="valor">valor: </label>
+      <input class="form-control col-sm-10"
+         id="valor" type="text"
+         name="valor" value="{{ object.valor }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="tipo_dato">tipo_dato: </label>
+      <input class="form-control col-sm-10"
+         id="tipo_dato" type="text"
+         name="tipo_dato" value="{{ object.tipo_dato }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="fecha_actualizacion">fecha_actualizacion: </label>
+      <input class="form-control col-sm-10"
+         id="fecha_actualizacion" type="datetime-local"
+         name="fecha_actualizacion" value="{{ object.fecha_actualizacion }}">
+  </div>
+  <input type="submit" value="Save" class="btn btn-primary">
+</form>
+
+{% endblock %}

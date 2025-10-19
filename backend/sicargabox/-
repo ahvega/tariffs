@@ -1,0 +1,4364 @@
+openapi: 3.0.3
+info:
+  title: SiCargaBox API
+  version: 1.0.0
+  description: RESTful API for international courier shipping platform. Provides endpoints
+    for managing tariff items, customers, quotations, and articles.
+  contact:
+    name: SiCargaBox Support
+    email: support@sicargabox.com
+  license:
+    name: Proprietary
+paths:
+  /MiCasillero/api/v1/Alerta/:
+    get:
+      operationId: MiCasillero_api_v1_Alerta_list
+      description: ViewSet for the Alerta class
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAlertaList'
+          description: ''
+    post:
+      operationId: MiCasillero_api_v1_Alerta_create
+      description: ViewSet for the Alerta class
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AlertaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AlertaRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alerta'
+          description: ''
+  /MiCasillero/api/v1/Alerta/{id}/:
+    get:
+      operationId: MiCasillero_api_v1_Alerta_retrieve
+      description: ViewSet for the Alerta class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this alerta.
+        required: true
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alerta'
+          description: ''
+    put:
+      operationId: MiCasillero_api_v1_Alerta_update
+      description: ViewSet for the Alerta class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this alerta.
+        required: true
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AlertaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AlertaRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alerta'
+          description: ''
+    patch:
+      operationId: MiCasillero_api_v1_Alerta_partial_update
+      description: ViewSet for the Alerta class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this alerta.
+        required: true
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAlertaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAlertaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAlertaRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alerta'
+          description: ''
+    delete:
+      operationId: MiCasillero_api_v1_Alerta_destroy
+      description: ViewSet for the Alerta class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this alerta.
+        required: true
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+  /MiCasillero/api/v1/Articulo/:
+    get:
+      operationId: MiCasillero_api_v1_Articulo_list
+      description: ViewSet for the Articulo class
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedArticuloList'
+          description: ''
+    post:
+      operationId: MiCasillero_api_v1_Articulo_create
+      description: ViewSet for the Articulo class
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticuloRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ArticuloRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ArticuloRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Articulo'
+          description: ''
+  /MiCasillero/api/v1/Articulo/{id}/:
+    get:
+      operationId: MiCasillero_api_v1_Articulo_retrieve
+      description: ViewSet for the Articulo class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this articulo.
+        required: true
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Articulo'
+          description: ''
+    put:
+      operationId: MiCasillero_api_v1_Articulo_update
+      description: ViewSet for the Articulo class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this articulo.
+        required: true
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticuloRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ArticuloRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ArticuloRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Articulo'
+          description: ''
+    patch:
+      operationId: MiCasillero_api_v1_Articulo_partial_update
+      description: ViewSet for the Articulo class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this articulo.
+        required: true
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedArticuloRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedArticuloRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedArticuloRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Articulo'
+          description: ''
+    delete:
+      operationId: MiCasillero_api_v1_Articulo_destroy
+      description: ViewSet for the Articulo class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this articulo.
+        required: true
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+  /MiCasillero/api/v1/Cliente/:
+    get:
+      operationId: MiCasillero_api_v1_Cliente_list
+      description: ViewSet for the Cliente class
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedClienteList'
+          description: ''
+    post:
+      operationId: MiCasillero_api_v1_Cliente_create
+      description: ViewSet for the Cliente class
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClienteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClienteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClienteRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+          description: ''
+  /MiCasillero/api/v1/Cliente/{id}/:
+    get:
+      operationId: MiCasillero_api_v1_Cliente_retrieve
+      description: ViewSet for the Cliente class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cliente.
+        required: true
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+          description: ''
+    put:
+      operationId: MiCasillero_api_v1_Cliente_update
+      description: ViewSet for the Cliente class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cliente.
+        required: true
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClienteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClienteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClienteRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+          description: ''
+    patch:
+      operationId: MiCasillero_api_v1_Cliente_partial_update
+      description: ViewSet for the Cliente class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cliente.
+        required: true
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedClienteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedClienteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedClienteRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+          description: ''
+    delete:
+      operationId: MiCasillero_api_v1_Cliente_destroy
+      description: ViewSet for the Cliente class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cliente.
+        required: true
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+  /MiCasillero/api/v1/Cotizacion/:
+    get:
+      operationId: MiCasillero_api_v1_Cotizacion_list
+      description: ViewSet for the Cotizacion class
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCotizacionList'
+          description: ''
+    post:
+      operationId: MiCasillero_api_v1_Cotizacion_create
+      description: ViewSet for the Cotizacion class
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CotizacionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CotizacionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CotizacionRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cotizacion'
+          description: ''
+  /MiCasillero/api/v1/Cotizacion/{id}/:
+    get:
+      operationId: MiCasillero_api_v1_Cotizacion_retrieve
+      description: ViewSet for the Cotizacion class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cotizacion.
+        required: true
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cotizacion'
+          description: ''
+    put:
+      operationId: MiCasillero_api_v1_Cotizacion_update
+      description: ViewSet for the Cotizacion class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cotizacion.
+        required: true
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CotizacionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CotizacionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CotizacionRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cotizacion'
+          description: ''
+    patch:
+      operationId: MiCasillero_api_v1_Cotizacion_partial_update
+      description: ViewSet for the Cotizacion class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cotizacion.
+        required: true
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCotizacionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCotizacionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCotizacionRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cotizacion'
+          description: ''
+    delete:
+      operationId: MiCasillero_api_v1_Cotizacion_destroy
+      description: ViewSet for the Cotizacion class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cotizacion.
+        required: true
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+  /MiCasillero/api/v1/Envio/:
+    get:
+      operationId: MiCasillero_api_v1_Envio_list
+      description: ViewSet for the Envio class
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEnvioList'
+          description: ''
+    post:
+      operationId: MiCasillero_api_v1_Envio_create
+      description: ViewSet for the Envio class
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnvioRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EnvioRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EnvioRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Envio'
+          description: ''
+  /MiCasillero/api/v1/Envio/{id}/:
+    get:
+      operationId: MiCasillero_api_v1_Envio_retrieve
+      description: ViewSet for the Envio class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this envio.
+        required: true
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Envio'
+          description: ''
+    put:
+      operationId: MiCasillero_api_v1_Envio_update
+      description: ViewSet for the Envio class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this envio.
+        required: true
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnvioRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EnvioRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EnvioRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Envio'
+          description: ''
+    patch:
+      operationId: MiCasillero_api_v1_Envio_partial_update
+      description: ViewSet for the Envio class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this envio.
+        required: true
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedEnvioRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedEnvioRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedEnvioRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Envio'
+          description: ''
+    delete:
+      operationId: MiCasillero_api_v1_Envio_destroy
+      description: ViewSet for the Envio class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this envio.
+        required: true
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+  /MiCasillero/api/v1/Factura/:
+    get:
+      operationId: MiCasillero_api_v1_Factura_list
+      description: ViewSet for the Factura class
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFacturaList'
+          description: ''
+    post:
+      operationId: MiCasillero_api_v1_Factura_create
+      description: ViewSet for the Factura class
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacturaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FacturaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FacturaRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Factura'
+          description: ''
+  /MiCasillero/api/v1/Factura/{id}/:
+    get:
+      operationId: MiCasillero_api_v1_Factura_retrieve
+      description: ViewSet for the Factura class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this factura.
+        required: true
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Factura'
+          description: ''
+    put:
+      operationId: MiCasillero_api_v1_Factura_update
+      description: ViewSet for the Factura class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this factura.
+        required: true
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacturaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FacturaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FacturaRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Factura'
+          description: ''
+    patch:
+      operationId: MiCasillero_api_v1_Factura_partial_update
+      description: ViewSet for the Factura class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this factura.
+        required: true
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedFacturaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedFacturaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedFacturaRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Factura'
+          description: ''
+    delete:
+      operationId: MiCasillero_api_v1_Factura_destroy
+      description: ViewSet for the Factura class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this factura.
+        required: true
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+  /MiCasillero/api/v1/ParametroSistema/:
+    get:
+      operationId: MiCasillero_api_v1_ParametroSistema_list
+      description: ViewSet for the ParametroSistema class
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedParametroSistemaList'
+          description: ''
+    post:
+      operationId: MiCasillero_api_v1_ParametroSistema_create
+      description: ViewSet for the ParametroSistema class
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParametroSistemaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ParametroSistemaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ParametroSistemaRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParametroSistema'
+          description: ''
+  /MiCasillero/api/v1/ParametroSistema/{id}/:
+    get:
+      operationId: MiCasillero_api_v1_ParametroSistema_retrieve
+      description: ViewSet for the ParametroSistema class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this parametro sistema.
+        required: true
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParametroSistema'
+          description: ''
+    put:
+      operationId: MiCasillero_api_v1_ParametroSistema_update
+      description: ViewSet for the ParametroSistema class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this parametro sistema.
+        required: true
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParametroSistemaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ParametroSistemaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ParametroSistemaRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParametroSistema'
+          description: ''
+    patch:
+      operationId: MiCasillero_api_v1_ParametroSistema_partial_update
+      description: ViewSet for the ParametroSistema class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this parametro sistema.
+        required: true
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedParametroSistemaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedParametroSistemaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedParametroSistemaRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParametroSistema'
+          description: ''
+    delete:
+      operationId: MiCasillero_api_v1_ParametroSistema_destroy
+      description: ViewSet for the ParametroSistema class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this parametro sistema.
+        required: true
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+  /MiCasillero/api/v1/PartidaArancelaria/:
+    get:
+      operationId: MiCasillero_api_v1_PartidaArancelaria_list
+      description: ViewSet for the PartidaArancelaria class
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPartidaArancelariaList'
+          description: ''
+    post:
+      operationId: MiCasillero_api_v1_PartidaArancelaria_create
+      description: ViewSet for the PartidaArancelaria class
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartidaArancelariaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PartidaArancelariaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PartidaArancelariaRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartidaArancelaria'
+          description: ''
+  /MiCasillero/api/v1/PartidaArancelaria/{id}/:
+    get:
+      operationId: MiCasillero_api_v1_PartidaArancelaria_retrieve
+      description: ViewSet for the PartidaArancelaria class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this partida arancelaria.
+        required: true
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartidaArancelaria'
+          description: ''
+    put:
+      operationId: MiCasillero_api_v1_PartidaArancelaria_update
+      description: ViewSet for the PartidaArancelaria class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this partida arancelaria.
+        required: true
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartidaArancelariaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PartidaArancelariaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PartidaArancelariaRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartidaArancelaria'
+          description: ''
+    patch:
+      operationId: MiCasillero_api_v1_PartidaArancelaria_partial_update
+      description: ViewSet for the PartidaArancelaria class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this partida arancelaria.
+        required: true
+      tags:
+      - MiCasillero
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPartidaArancelariaRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPartidaArancelariaRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPartidaArancelariaRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartidaArancelaria'
+          description: ''
+    delete:
+      operationId: MiCasillero_api_v1_PartidaArancelaria_destroy
+      description: ViewSet for the PartidaArancelaria class
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this partida arancelaria.
+        required: true
+      tags:
+      - MiCasillero
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/articulos/:
+    get:
+      operationId: articulos_list
+      description: |-
+        ViewSet for managing Articulos (Shipment Items).
+
+        Handles individual items within quotations, including their dimensions,
+        weight, value, and associated tax calculations.
+
+        **Available filters:**
+        - cotizacion: Filter by quotation ID
+
+        **Calculated fields:**
+        - peso_volumetrico: Volumetric weight (calculated from dimensions)
+        - peso_a_usar: Weight to use for shipping (max of actual weight and volumetric weight)
+        - impuesto_dai, impuesto_isc, impuesto_ispc, impuesto_isv: Tax amounts
+        - impuesto_total: Total tax amount
+
+        **Note:** All tax-related fields are automatically calculated and are read-only.
+        The calculation is based on the associated tariff item (partida_arancelaria).
+      parameters:
+      - in: query
+        name: cotizacion
+        schema:
+          type: integer
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - Articulos
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedArticuloAPIList'
+          description: ''
+    post:
+      operationId: articulos_create
+      description: |-
+        ViewSet for managing Articulos (Shipment Items).
+
+        Handles individual items within quotations, including their dimensions,
+        weight, value, and associated tax calculations.
+
+        **Available filters:**
+        - cotizacion: Filter by quotation ID
+
+        **Calculated fields:**
+        - peso_volumetrico: Volumetric weight (calculated from dimensions)
+        - peso_a_usar: Weight to use for shipping (max of actual weight and volumetric weight)
+        - impuesto_dai, impuesto_isc, impuesto_ispc, impuesto_isv: Tax amounts
+        - impuesto_total: Total tax amount
+
+        **Note:** All tax-related fields are automatically calculated and are read-only.
+        The calculation is based on the associated tariff item (partida_arancelaria).
+      tags:
+      - Articulos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticuloAPIRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ArticuloAPIRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ArticuloAPIRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticuloAPI'
+          description: ''
+  /api/articulos/{id}/:
+    get:
+      operationId: articulos_retrieve
+      description: |-
+        ViewSet for managing Articulos (Shipment Items).
+
+        Handles individual items within quotations, including their dimensions,
+        weight, value, and associated tax calculations.
+
+        **Available filters:**
+        - cotizacion: Filter by quotation ID
+
+        **Calculated fields:**
+        - peso_volumetrico: Volumetric weight (calculated from dimensions)
+        - peso_a_usar: Weight to use for shipping (max of actual weight and volumetric weight)
+        - impuesto_dai, impuesto_isc, impuesto_ispc, impuesto_isv: Tax amounts
+        - impuesto_total: Total tax amount
+
+        **Note:** All tax-related fields are automatically calculated and are read-only.
+        The calculation is based on the associated tariff item (partida_arancelaria).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this articulo.
+        required: true
+      tags:
+      - Articulos
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticuloAPI'
+          description: ''
+    put:
+      operationId: articulos_update
+      description: |-
+        ViewSet for managing Articulos (Shipment Items).
+
+        Handles individual items within quotations, including their dimensions,
+        weight, value, and associated tax calculations.
+
+        **Available filters:**
+        - cotizacion: Filter by quotation ID
+
+        **Calculated fields:**
+        - peso_volumetrico: Volumetric weight (calculated from dimensions)
+        - peso_a_usar: Weight to use for shipping (max of actual weight and volumetric weight)
+        - impuesto_dai, impuesto_isc, impuesto_ispc, impuesto_isv: Tax amounts
+        - impuesto_total: Total tax amount
+
+        **Note:** All tax-related fields are automatically calculated and are read-only.
+        The calculation is based on the associated tariff item (partida_arancelaria).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this articulo.
+        required: true
+      tags:
+      - Articulos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticuloAPIRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ArticuloAPIRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ArticuloAPIRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticuloAPI'
+          description: ''
+    patch:
+      operationId: articulos_partial_update
+      description: |-
+        ViewSet for managing Articulos (Shipment Items).
+
+        Handles individual items within quotations, including their dimensions,
+        weight, value, and associated tax calculations.
+
+        **Available filters:**
+        - cotizacion: Filter by quotation ID
+
+        **Calculated fields:**
+        - peso_volumetrico: Volumetric weight (calculated from dimensions)
+        - peso_a_usar: Weight to use for shipping (max of actual weight and volumetric weight)
+        - impuesto_dai, impuesto_isc, impuesto_ispc, impuesto_isv: Tax amounts
+        - impuesto_total: Total tax amount
+
+        **Note:** All tax-related fields are automatically calculated and are read-only.
+        The calculation is based on the associated tariff item (partida_arancelaria).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this articulo.
+        required: true
+      tags:
+      - Articulos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedArticuloAPIRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedArticuloAPIRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedArticuloAPIRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticuloAPI'
+          description: ''
+    delete:
+      operationId: articulos_destroy
+      description: |-
+        ViewSet for managing Articulos (Shipment Items).
+
+        Handles individual items within quotations, including their dimensions,
+        weight, value, and associated tax calculations.
+
+        **Available filters:**
+        - cotizacion: Filter by quotation ID
+
+        **Calculated fields:**
+        - peso_volumetrico: Volumetric weight (calculated from dimensions)
+        - peso_a_usar: Weight to use for shipping (max of actual weight and volumetric weight)
+        - impuesto_dai, impuesto_isc, impuesto_ispc, impuesto_isv: Tax amounts
+        - impuesto_total: Total tax amount
+
+        **Note:** All tax-related fields are automatically calculated and are read-only.
+        The calculation is based on the associated tariff item (partida_arancelaria).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this articulo.
+        required: true
+      tags:
+      - Articulos
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/clientes/:
+    get:
+      operationId: clientes_list
+      description: |-
+        ViewSet for managing Clientes (Customers).
+
+        Handles customer information for the courier shipping system.
+        Each customer record includes personal information, contact details,
+        and location data.
+
+        **Available filters:**
+        - codigo_cliente: Filter by customer code
+
+        **Search fields:**
+        - nombres: Search by first name
+        - apellidos: Search by last name
+        - correo_electronico: Search by email
+        - codigo_cliente: Search by customer code
+
+        **Note:** Customer codes are auto-generated and read-only.
+      parameters:
+      - in: query
+        name: codigo_cliente
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Clientes
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedClienteAPIList'
+          description: ''
+    post:
+      operationId: clientes_create
+      description: |-
+        ViewSet for managing Clientes (Customers).
+
+        Handles customer information for the courier shipping system.
+        Each customer record includes personal information, contact details,
+        and location data.
+
+        **Available filters:**
+        - codigo_cliente: Filter by customer code
+
+        **Search fields:**
+        - nombres: Search by first name
+        - apellidos: Search by last name
+        - correo_electronico: Search by email
+        - codigo_cliente: Search by customer code
+
+        **Note:** Customer codes are auto-generated and read-only.
+      tags:
+      - Clientes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClienteAPIRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClienteAPIRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClienteAPIRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClienteAPI'
+          description: ''
+  /api/clientes/{id}/:
+    get:
+      operationId: clientes_retrieve
+      description: |-
+        ViewSet for managing Clientes (Customers).
+
+        Handles customer information for the courier shipping system.
+        Each customer record includes personal information, contact details,
+        and location data.
+
+        **Available filters:**
+        - codigo_cliente: Filter by customer code
+
+        **Search fields:**
+        - nombres: Search by first name
+        - apellidos: Search by last name
+        - correo_electronico: Search by email
+        - codigo_cliente: Search by customer code
+
+        **Note:** Customer codes are auto-generated and read-only.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cliente.
+        required: true
+      tags:
+      - Clientes
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClienteAPI'
+          description: ''
+    put:
+      operationId: clientes_update
+      description: |-
+        ViewSet for managing Clientes (Customers).
+
+        Handles customer information for the courier shipping system.
+        Each customer record includes personal information, contact details,
+        and location data.
+
+        **Available filters:**
+        - codigo_cliente: Filter by customer code
+
+        **Search fields:**
+        - nombres: Search by first name
+        - apellidos: Search by last name
+        - correo_electronico: Search by email
+        - codigo_cliente: Search by customer code
+
+        **Note:** Customer codes are auto-generated and read-only.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cliente.
+        required: true
+      tags:
+      - Clientes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClienteAPIRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClienteAPIRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClienteAPIRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClienteAPI'
+          description: ''
+    patch:
+      operationId: clientes_partial_update
+      description: |-
+        ViewSet for managing Clientes (Customers).
+
+        Handles customer information for the courier shipping system.
+        Each customer record includes personal information, contact details,
+        and location data.
+
+        **Available filters:**
+        - codigo_cliente: Filter by customer code
+
+        **Search fields:**
+        - nombres: Search by first name
+        - apellidos: Search by last name
+        - correo_electronico: Search by email
+        - codigo_cliente: Search by customer code
+
+        **Note:** Customer codes are auto-generated and read-only.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cliente.
+        required: true
+      tags:
+      - Clientes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedClienteAPIRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedClienteAPIRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedClienteAPIRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClienteAPI'
+          description: ''
+    delete:
+      operationId: clientes_destroy
+      description: |-
+        ViewSet for managing Clientes (Customers).
+
+        Handles customer information for the courier shipping system.
+        Each customer record includes personal information, contact details,
+        and location data.
+
+        **Available filters:**
+        - codigo_cliente: Filter by customer code
+
+        **Search fields:**
+        - nombres: Search by first name
+        - apellidos: Search by last name
+        - correo_electronico: Search by email
+        - codigo_cliente: Search by customer code
+
+        **Note:** Customer codes are auto-generated and read-only.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cliente.
+        required: true
+      tags:
+      - Clientes
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/cotizaciones/:
+    get:
+      operationId: cotizaciones_list
+      description: |-
+        ViewSet for managing Cotizaciones (Shipping Quotations).
+
+        Handles quotation creation and management for international shipments.
+        Each quotation is associated with a customer and contains multiple articles.
+
+        **Available filters:**
+        - estado: Filter by quotation status
+        - cliente: Filter by customer ID
+
+        **Permissions:**
+        - Staff users can view all quotations
+        - Regular users can only view their own quotations
+
+        **Note:** The fecha_creacion (creation date) field is auto-generated and read-only.
+      parameters:
+      - in: query
+        name: cliente
+        schema:
+          type: integer
+      - in: query
+        name: estado
+        schema:
+          type: string
+          enum:
+          - Aceptada
+          - Pendiente
+          - Rechazada
+        description: |-
+          * `Pendiente` - Pendiente
+          * `Aceptada` - Aceptada
+          * `Rechazada` - Rechazada
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - Cotizaciones
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCotizacionAPIList'
+          description: ''
+    post:
+      operationId: cotizaciones_create
+      description: |-
+        ViewSet for managing Cotizaciones (Shipping Quotations).
+
+        Handles quotation creation and management for international shipments.
+        Each quotation is associated with a customer and contains multiple articles.
+
+        **Available filters:**
+        - estado: Filter by quotation status
+        - cliente: Filter by customer ID
+
+        **Permissions:**
+        - Staff users can view all quotations
+        - Regular users can only view their own quotations
+
+        **Note:** The fecha_creacion (creation date) field is auto-generated and read-only.
+      tags:
+      - Cotizaciones
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CotizacionAPIRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CotizacionAPIRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CotizacionAPIRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CotizacionAPI'
+          description: ''
+  /api/cotizaciones/{id}/:
+    get:
+      operationId: cotizaciones_retrieve
+      description: |-
+        ViewSet for managing Cotizaciones (Shipping Quotations).
+
+        Handles quotation creation and management for international shipments.
+        Each quotation is associated with a customer and contains multiple articles.
+
+        **Available filters:**
+        - estado: Filter by quotation status
+        - cliente: Filter by customer ID
+
+        **Permissions:**
+        - Staff users can view all quotations
+        - Regular users can only view their own quotations
+
+        **Note:** The fecha_creacion (creation date) field is auto-generated and read-only.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cotizacion.
+        required: true
+      tags:
+      - Cotizaciones
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CotizacionAPI'
+          description: ''
+    put:
+      operationId: cotizaciones_update
+      description: |-
+        ViewSet for managing Cotizaciones (Shipping Quotations).
+
+        Handles quotation creation and management for international shipments.
+        Each quotation is associated with a customer and contains multiple articles.
+
+        **Available filters:**
+        - estado: Filter by quotation status
+        - cliente: Filter by customer ID
+
+        **Permissions:**
+        - Staff users can view all quotations
+        - Regular users can only view their own quotations
+
+        **Note:** The fecha_creacion (creation date) field is auto-generated and read-only.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cotizacion.
+        required: true
+      tags:
+      - Cotizaciones
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CotizacionAPIRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CotizacionAPIRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CotizacionAPIRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CotizacionAPI'
+          description: ''
+    patch:
+      operationId: cotizaciones_partial_update
+      description: |-
+        ViewSet for managing Cotizaciones (Shipping Quotations).
+
+        Handles quotation creation and management for international shipments.
+        Each quotation is associated with a customer and contains multiple articles.
+
+        **Available filters:**
+        - estado: Filter by quotation status
+        - cliente: Filter by customer ID
+
+        **Permissions:**
+        - Staff users can view all quotations
+        - Regular users can only view their own quotations
+
+        **Note:** The fecha_creacion (creation date) field is auto-generated and read-only.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cotizacion.
+        required: true
+      tags:
+      - Cotizaciones
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCotizacionAPIRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCotizacionAPIRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCotizacionAPIRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CotizacionAPI'
+          description: ''
+    delete:
+      operationId: cotizaciones_destroy
+      description: |-
+        ViewSet for managing Cotizaciones (Shipping Quotations).
+
+        Handles quotation creation and management for international shipments.
+        Each quotation is associated with a customer and contains multiple articles.
+
+        **Available filters:**
+        - estado: Filter by quotation status
+        - cliente: Filter by customer ID
+
+        **Permissions:**
+        - Staff users can view all quotations
+        - Regular users can only view their own quotations
+
+        **Note:** The fecha_creacion (creation date) field is auto-generated and read-only.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cotizacion.
+        required: true
+      tags:
+      - Cotizaciones
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/partidas-arancelarias/:
+    get:
+      operationId: partidas_arancelarias_list
+      description: |-
+        ViewSet for managing Partidas Arancelarias (Tariff Classification Items).
+
+        Provides CRUD operations for tariff items used in international shipping.
+        Each item includes:
+        - Tariff codes and descriptions
+        - Tax rates (DAI, ISC, ISPC, ISV)
+        - Courier category (ALLOWED/RESTRICTED/PROHIBITED)
+        - Shipping restrictions and special handling requirements
+
+        **Available filters:**
+        - item_no: Filter by tariff item number
+        - partida_arancelaria: Filter by tariff classification code
+        - courier_category: Filter by shipping category (ALLOWED/RESTRICTED/PROHIBITED)
+        - package_type: Filter by package type
+        - requires_special_handling: Filter items requiring special handling (true/false)
+
+        **Search fields:**
+        - descripcion: Search in item descriptions
+        - item_no: Search by item number
+        - partida_arancelaria: Search by tariff code
+        - search_keywords: Search in generated keywords
+        - special_instructions: Search in special instructions
+
+        **Ordering:**
+        - item_no: Order by item number
+        - impuesto_dai: Order by DAI tax rate
+        - courier_category: Order by courier category
+        - requires_special_handling: Order by special handling requirement
+      parameters:
+      - in: query
+        name: courier_category
+        schema:
+          type: string
+          enum:
+          - ALLOWED
+          - PROHIBITED
+          - RESTRICTED
+        description: |-
+          * `ALLOWED` - Permitido para Courier
+          * `RESTRICTED` - Articulos restringidos para Courier
+          * `PROHIBITED` - Articulos prohibidos para Courier
+      - in: query
+        name: item_no
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: package_type
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: partida_arancelaria
+        schema:
+          type: string
+      - in: query
+        name: requires_special_handling
+        schema:
+          type: boolean
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Partidas Arancelarias
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPartidaArancelariaAPIList'
+          description: ''
+    post:
+      operationId: partidas_arancelarias_create
+      description: |-
+        ViewSet for managing Partidas Arancelarias (Tariff Classification Items).
+
+        Provides CRUD operations for tariff items used in international shipping.
+        Each item includes:
+        - Tariff codes and descriptions
+        - Tax rates (DAI, ISC, ISPC, ISV)
+        - Courier category (ALLOWED/RESTRICTED/PROHIBITED)
+        - Shipping restrictions and special handling requirements
+
+        **Available filters:**
+        - item_no: Filter by tariff item number
+        - partida_arancelaria: Filter by tariff classification code
+        - courier_category: Filter by shipping category (ALLOWED/RESTRICTED/PROHIBITED)
+        - package_type: Filter by package type
+        - requires_special_handling: Filter items requiring special handling (true/false)
+
+        **Search fields:**
+        - descripcion: Search in item descriptions
+        - item_no: Search by item number
+        - partida_arancelaria: Search by tariff code
+        - search_keywords: Search in generated keywords
+        - special_instructions: Search in special instructions
+
+        **Ordering:**
+        - item_no: Order by item number
+        - impuesto_dai: Order by DAI tax rate
+        - courier_category: Order by courier category
+        - requires_special_handling: Order by special handling requirement
+      tags:
+      - Partidas Arancelarias
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartidaArancelariaAPIRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PartidaArancelariaAPIRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PartidaArancelariaAPIRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartidaArancelariaAPI'
+          description: ''
+  /api/partidas-arancelarias/{id}/:
+    get:
+      operationId: partidas_arancelarias_retrieve
+      description: |-
+        ViewSet for managing Partidas Arancelarias (Tariff Classification Items).
+
+        Provides CRUD operations for tariff items used in international shipping.
+        Each item includes:
+        - Tariff codes and descriptions
+        - Tax rates (DAI, ISC, ISPC, ISV)
+        - Courier category (ALLOWED/RESTRICTED/PROHIBITED)
+        - Shipping restrictions and special handling requirements
+
+        **Available filters:**
+        - item_no: Filter by tariff item number
+        - partida_arancelaria: Filter by tariff classification code
+        - courier_category: Filter by shipping category (ALLOWED/RESTRICTED/PROHIBITED)
+        - package_type: Filter by package type
+        - requires_special_handling: Filter items requiring special handling (true/false)
+
+        **Search fields:**
+        - descripcion: Search in item descriptions
+        - item_no: Search by item number
+        - partida_arancelaria: Search by tariff code
+        - search_keywords: Search in generated keywords
+        - special_instructions: Search in special instructions
+
+        **Ordering:**
+        - item_no: Order by item number
+        - impuesto_dai: Order by DAI tax rate
+        - courier_category: Order by courier category
+        - requires_special_handling: Order by special handling requirement
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this partida arancelaria.
+        required: true
+      tags:
+      - Partidas Arancelarias
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartidaArancelariaAPI'
+          description: ''
+    put:
+      operationId: partidas_arancelarias_update
+      description: |-
+        ViewSet for managing Partidas Arancelarias (Tariff Classification Items).
+
+        Provides CRUD operations for tariff items used in international shipping.
+        Each item includes:
+        - Tariff codes and descriptions
+        - Tax rates (DAI, ISC, ISPC, ISV)
+        - Courier category (ALLOWED/RESTRICTED/PROHIBITED)
+        - Shipping restrictions and special handling requirements
+
+        **Available filters:**
+        - item_no: Filter by tariff item number
+        - partida_arancelaria: Filter by tariff classification code
+        - courier_category: Filter by shipping category (ALLOWED/RESTRICTED/PROHIBITED)
+        - package_type: Filter by package type
+        - requires_special_handling: Filter items requiring special handling (true/false)
+
+        **Search fields:**
+        - descripcion: Search in item descriptions
+        - item_no: Search by item number
+        - partida_arancelaria: Search by tariff code
+        - search_keywords: Search in generated keywords
+        - special_instructions: Search in special instructions
+
+        **Ordering:**
+        - item_no: Order by item number
+        - impuesto_dai: Order by DAI tax rate
+        - courier_category: Order by courier category
+        - requires_special_handling: Order by special handling requirement
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this partida arancelaria.
+        required: true
+      tags:
+      - Partidas Arancelarias
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartidaArancelariaAPIRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PartidaArancelariaAPIRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PartidaArancelariaAPIRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartidaArancelariaAPI'
+          description: ''
+    patch:
+      operationId: partidas_arancelarias_partial_update
+      description: |-
+        ViewSet for managing Partidas Arancelarias (Tariff Classification Items).
+
+        Provides CRUD operations for tariff items used in international shipping.
+        Each item includes:
+        - Tariff codes and descriptions
+        - Tax rates (DAI, ISC, ISPC, ISV)
+        - Courier category (ALLOWED/RESTRICTED/PROHIBITED)
+        - Shipping restrictions and special handling requirements
+
+        **Available filters:**
+        - item_no: Filter by tariff item number
+        - partida_arancelaria: Filter by tariff classification code
+        - courier_category: Filter by shipping category (ALLOWED/RESTRICTED/PROHIBITED)
+        - package_type: Filter by package type
+        - requires_special_handling: Filter items requiring special handling (true/false)
+
+        **Search fields:**
+        - descripcion: Search in item descriptions
+        - item_no: Search by item number
+        - partida_arancelaria: Search by tariff code
+        - search_keywords: Search in generated keywords
+        - special_instructions: Search in special instructions
+
+        **Ordering:**
+        - item_no: Order by item number
+        - impuesto_dai: Order by DAI tax rate
+        - courier_category: Order by courier category
+        - requires_special_handling: Order by special handling requirement
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this partida arancelaria.
+        required: true
+      tags:
+      - Partidas Arancelarias
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPartidaArancelariaAPIRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPartidaArancelariaAPIRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPartidaArancelariaAPIRequest'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartidaArancelariaAPI'
+          description: ''
+    delete:
+      operationId: partidas_arancelarias_destroy
+      description: |-
+        ViewSet for managing Partidas Arancelarias (Tariff Classification Items).
+
+        Provides CRUD operations for tariff items used in international shipping.
+        Each item includes:
+        - Tariff codes and descriptions
+        - Tax rates (DAI, ISC, ISPC, ISV)
+        - Courier category (ALLOWED/RESTRICTED/PROHIBITED)
+        - Shipping restrictions and special handling requirements
+
+        **Available filters:**
+        - item_no: Filter by tariff item number
+        - partida_arancelaria: Filter by tariff classification code
+        - courier_category: Filter by shipping category (ALLOWED/RESTRICTED/PROHIBITED)
+        - package_type: Filter by package type
+        - requires_special_handling: Filter items requiring special handling (true/false)
+
+        **Search fields:**
+        - descripcion: Search in item descriptions
+        - item_no: Search by item number
+        - partida_arancelaria: Search by tariff code
+        - search_keywords: Search in generated keywords
+        - special_instructions: Search in special instructions
+
+        **Ordering:**
+        - item_no: Order by item number
+        - impuesto_dai: Order by DAI tax rate
+        - courier_category: Order by courier category
+        - requires_special_handling: Order by special handling requirement
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this partida arancelaria.
+        required: true
+      tags:
+      - Partidas Arancelarias
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/partidas-arancelarias/search_products/:
+    get:
+      operationId: partidas_arancelarias_search_products_retrieve
+      description: Search for tariff items by product description
+      parameters:
+      - in: query
+        name: query
+        schema:
+          type: string
+        description: Search term for products
+        required: true
+      tags:
+      - Partidas Arancelarias
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartidaArancelariaAPI'
+          description: ''
+components:
+  schemas:
+    Alerta:
+      type: object
+      properties:
+        envio:
+          type: integer
+        cliente:
+          type: integer
+        tipo_alerta:
+          $ref: '#/components/schemas/TipoAlertaEnum'
+        mensaje:
+          type: string
+        fecha_envio:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          $ref: '#/components/schemas/AlertaEstadoEnum'
+      required:
+      - cliente
+      - envio
+      - estado
+      - fecha_envio
+      - mensaje
+      - tipo_alerta
+    AlertaEstadoEnum:
+      enum:
+      - Enviado
+      - Error
+      type: string
+      description: |-
+        * `Enviado` - Enviado
+        * `Error` - Error
+    AlertaRequest:
+      type: object
+      properties:
+        envio:
+          type: integer
+        cliente:
+          type: integer
+        tipo_alerta:
+          $ref: '#/components/schemas/TipoAlertaEnum'
+        mensaje:
+          type: string
+          minLength: 1
+        estado:
+          $ref: '#/components/schemas/AlertaEstadoEnum'
+      required:
+      - cliente
+      - envio
+      - estado
+      - mensaje
+      - tipo_alerta
+    Articulo:
+      type: object
+      properties:
+        cotizacion:
+          type: integer
+        valor_articulo:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        largo:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        ancho:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        alto:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        peso:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        impuesto_dai:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        impuesto_isc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        impuesto_ispc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        impuesto_isv:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        impuesto_total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+      required:
+      - alto
+      - ancho
+      - cotizacion
+      - largo
+      - peso
+      - valor_articulo
+    ArticuloAPI:
+      type: object
+      description: |-
+        Serializer for Articulo (Shipment Item).
+
+        Represents an individual item within a quotation, including its physical
+        dimensions, weight, value, and calculated tax information.
+
+        Fields:
+            id (int): Unique identifier
+            cotizacion (int): Quotation ID (foreign key to Cotizacion)
+            valor_articulo (decimal): Item value in local currency
+            largo (decimal): Length in cm
+            ancho (decimal): Width in cm
+            alto (decimal): Height in cm
+            peso (decimal): Actual weight in kg
+            peso_volumetrico (decimal): Volumetric weight in kg (read-only, calculated)
+            peso_a_usar (decimal): Weight to use for shipping calculation (read-only, max of peso and peso_volumetrico)
+            partida_arancelaria (int): Tariff item ID (foreign key to PartidaArancelaria)
+            impuesto_dai (decimal): DAI tax amount (read-only, auto-calculated)
+            impuesto_isc (decimal): ISC tax amount (read-only, auto-calculated)
+            impuesto_ispc (decimal): ISPC tax amount (read-only, auto-calculated)
+            impuesto_isv (decimal): ISV tax amount (read-only, auto-calculated)
+            impuesto_total (decimal): Total tax amount (read-only, auto-calculated)
+
+        Note:
+            All tax fields are automatically calculated upon creation based on the
+            associated partida arancelaria's tax rates.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        cotizacion:
+          type: integer
+        valor_articulo:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        largo:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        ancho:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        alto:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        peso:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        peso_volumetrico:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+        peso_a_usar:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+        partida_arancelaria:
+          type: integer
+        impuesto_dai:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+          nullable: true
+        impuesto_isc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+          nullable: true
+        impuesto_ispc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+          nullable: true
+        impuesto_isv:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+          nullable: true
+        impuesto_total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+          nullable: true
+      required:
+      - alto
+      - ancho
+      - cotizacion
+      - id
+      - impuesto_dai
+      - impuesto_isc
+      - impuesto_ispc
+      - impuesto_isv
+      - impuesto_total
+      - largo
+      - partida_arancelaria
+      - peso
+      - peso_a_usar
+      - peso_volumetrico
+      - valor_articulo
+    ArticuloAPIRequest:
+      type: object
+      description: |-
+        Serializer for Articulo (Shipment Item).
+
+        Represents an individual item within a quotation, including its physical
+        dimensions, weight, value, and calculated tax information.
+
+        Fields:
+            id (int): Unique identifier
+            cotizacion (int): Quotation ID (foreign key to Cotizacion)
+            valor_articulo (decimal): Item value in local currency
+            largo (decimal): Length in cm
+            ancho (decimal): Width in cm
+            alto (decimal): Height in cm
+            peso (decimal): Actual weight in kg
+            peso_volumetrico (decimal): Volumetric weight in kg (read-only, calculated)
+            peso_a_usar (decimal): Weight to use for shipping calculation (read-only, max of peso and peso_volumetrico)
+            partida_arancelaria (int): Tariff item ID (foreign key to PartidaArancelaria)
+            impuesto_dai (decimal): DAI tax amount (read-only, auto-calculated)
+            impuesto_isc (decimal): ISC tax amount (read-only, auto-calculated)
+            impuesto_ispc (decimal): ISPC tax amount (read-only, auto-calculated)
+            impuesto_isv (decimal): ISV tax amount (read-only, auto-calculated)
+            impuesto_total (decimal): Total tax amount (read-only, auto-calculated)
+
+        Note:
+            All tax fields are automatically calculated upon creation based on the
+            associated partida arancelaria's tax rates.
+      properties:
+        cotizacion:
+          type: integer
+        valor_articulo:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        largo:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        ancho:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        alto:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        peso:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        partida_arancelaria:
+          type: integer
+      required:
+      - alto
+      - ancho
+      - cotizacion
+      - largo
+      - partida_arancelaria
+      - peso
+      - valor_articulo
+    ArticuloRequest:
+      type: object
+      properties:
+        cotizacion:
+          type: integer
+        valor_articulo:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        largo:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        ancho:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        alto:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        peso:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        impuesto_dai:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        impuesto_isc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        impuesto_ispc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        impuesto_isv:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        impuesto_total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+      required:
+      - alto
+      - ancho
+      - cotizacion
+      - largo
+      - peso
+      - valor_articulo
+    Cliente:
+      type: object
+      properties:
+        nombres:
+          type: string
+          maxLength: 255
+        apellidos:
+          type: string
+          maxLength: 255
+        nombre_corto:
+          type: string
+          maxLength: 50
+        direccion:
+          type: string
+          maxLength: 255
+        telefono:
+          type: string
+          maxLength: 20
+        correo_electronico:
+          type: string
+          format: email
+          maxLength: 254
+        codigo_cliente:
+          type: string
+          maxLength: 13
+        fecha_registro:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - apellidos
+      - codigo_cliente
+      - correo_electronico
+      - direccion
+      - fecha_registro
+      - nombres
+      - telefono
+    ClienteAPI:
+      type: object
+      description: |-
+        Serializer for Cliente (Customer).
+
+        Represents a customer in the courier shipping system with their personal
+        and contact information.
+
+        Fields:
+            id (int): Unique identifier
+            codigo_cliente (str): Auto-generated customer code (read-only)
+            nombres (str): First name(s)
+            apellidos (str): Last name(s)
+            telefono (str): Contact phone number
+            correo_electronico (str): Email address
+            nombre_corto (str): Auto-generated short name (read-only)
+            direccion (str): Street address
+            ciudad (str): City
+            departamento (str): Department/State
+            pais (str): Country
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        codigo_cliente:
+          type: string
+          readOnly: true
+        nombres:
+          type: string
+          maxLength: 255
+        apellidos:
+          type: string
+          maxLength: 255
+        telefono:
+          type: string
+          maxLength: 20
+        correo_electronico:
+          type: string
+          format: email
+          maxLength: 254
+        nombre_corto:
+          type: string
+          readOnly: true
+        direccion:
+          type: string
+          maxLength: 255
+        ciudad:
+          type: string
+          maxLength: 50
+        departamento:
+          type: string
+          maxLength: 50
+        pais:
+          type: string
+          maxLength: 50
+      required:
+      - apellidos
+      - codigo_cliente
+      - correo_electronico
+      - direccion
+      - id
+      - nombre_corto
+      - nombres
+      - telefono
+    ClienteAPIRequest:
+      type: object
+      description: |-
+        Serializer for Cliente (Customer).
+
+        Represents a customer in the courier shipping system with their personal
+        and contact information.
+
+        Fields:
+            id (int): Unique identifier
+            codigo_cliente (str): Auto-generated customer code (read-only)
+            nombres (str): First name(s)
+            apellidos (str): Last name(s)
+            telefono (str): Contact phone number
+            correo_electronico (str): Email address
+            nombre_corto (str): Auto-generated short name (read-only)
+            direccion (str): Street address
+            ciudad (str): City
+            departamento (str): Department/State
+            pais (str): Country
+      properties:
+        nombres:
+          type: string
+          minLength: 1
+          maxLength: 255
+        apellidos:
+          type: string
+          minLength: 1
+          maxLength: 255
+        telefono:
+          type: string
+          minLength: 1
+          maxLength: 20
+        correo_electronico:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        direccion:
+          type: string
+          minLength: 1
+          maxLength: 255
+        ciudad:
+          type: string
+          minLength: 1
+          maxLength: 50
+        departamento:
+          type: string
+          minLength: 1
+          maxLength: 50
+        pais:
+          type: string
+          minLength: 1
+          maxLength: 50
+      required:
+      - apellidos
+      - correo_electronico
+      - direccion
+      - nombres
+      - telefono
+    ClienteRequest:
+      type: object
+      properties:
+        nombres:
+          type: string
+          minLength: 1
+          maxLength: 255
+        apellidos:
+          type: string
+          minLength: 1
+          maxLength: 255
+        nombre_corto:
+          type: string
+          maxLength: 50
+        direccion:
+          type: string
+          minLength: 1
+          maxLength: 255
+        telefono:
+          type: string
+          minLength: 1
+          maxLength: 20
+        correo_electronico:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        codigo_cliente:
+          type: string
+          minLength: 1
+          maxLength: 13
+      required:
+      - apellidos
+      - codigo_cliente
+      - correo_electronico
+      - direccion
+      - nombres
+      - telefono
+    Cotizacion:
+      type: object
+      properties:
+        cliente:
+          type: integer
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          $ref: '#/components/schemas/Estado785Enum'
+      required:
+      - cliente
+      - estado
+      - fecha_creacion
+    CotizacionAPI:
+      type: object
+      description: |-
+        Serializer for Cotizacion (Shipping Quotation).
+
+        Represents a shipping quotation that contains multiple articles
+        for a specific customer.
+
+        Fields:
+            id (int): Unique identifier
+            cliente (int): Customer ID (foreign key to Cliente)
+            fecha_creacion (datetime): Creation timestamp (read-only, auto-generated)
+            estado (str): Quotation status
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        cliente:
+          type: integer
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          $ref: '#/components/schemas/Estado785Enum'
+      required:
+      - cliente
+      - estado
+      - fecha_creacion
+      - id
+    CotizacionAPIRequest:
+      type: object
+      description: |-
+        Serializer for Cotizacion (Shipping Quotation).
+
+        Represents a shipping quotation that contains multiple articles
+        for a specific customer.
+
+        Fields:
+            id (int): Unique identifier
+            cliente (int): Customer ID (foreign key to Cliente)
+            fecha_creacion (datetime): Creation timestamp (read-only, auto-generated)
+            estado (str): Quotation status
+      properties:
+        cliente:
+          type: integer
+        estado:
+          $ref: '#/components/schemas/Estado785Enum'
+      required:
+      - cliente
+      - estado
+    CotizacionRequest:
+      type: object
+      properties:
+        cliente:
+          type: integer
+        estado:
+          $ref: '#/components/schemas/Estado785Enum'
+      required:
+      - cliente
+      - estado
+    CourierCategoryEnum:
+      enum:
+      - ALLOWED
+      - RESTRICTED
+      - PROHIBITED
+      type: string
+      description: |-
+        * `ALLOWED` - Permitido para Courier
+        * `RESTRICTED` - Articulos restringidos para Courier
+        * `PROHIBITED` - Articulos prohibidos para Courier
+    Envio:
+      type: object
+      properties:
+        cotizacion:
+          type: integer
+        cliente:
+          type: integer
+        tracking_number_original:
+          type: string
+          maxLength: 50
+        tracking_number_final:
+          type: string
+          maxLength: 50
+        direccion_casillero:
+          type: string
+          maxLength: 255
+        estado_envio:
+          $ref: '#/components/schemas/EstadoEnvioEnum'
+        flete:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - cliente
+      - cotizacion
+      - direccion_casillero
+      - estado_envio
+      - fecha_actualizacion
+      - tracking_number_final
+      - tracking_number_original
+    EnvioRequest:
+      type: object
+      properties:
+        cotizacion:
+          type: integer
+        cliente:
+          type: integer
+        tracking_number_original:
+          type: string
+          minLength: 1
+          maxLength: 50
+        tracking_number_final:
+          type: string
+          minLength: 1
+          maxLength: 50
+        direccion_casillero:
+          type: string
+          minLength: 1
+          maxLength: 255
+        estado_envio:
+          $ref: '#/components/schemas/EstadoEnvioEnum'
+        flete:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+      required:
+      - cliente
+      - cotizacion
+      - direccion_casillero
+      - estado_envio
+      - tracking_number_final
+      - tracking_number_original
+    Estado785Enum:
+      enum:
+      - Pendiente
+      - Aceptada
+      - Rechazada
+      type: string
+      description: |-
+        * `Pendiente` - Pendiente
+        * `Aceptada` - Aceptada
+        * `Rechazada` - Rechazada
+    EstadoEnvioEnum:
+      enum:
+      - Recibido en Miami
+      - En tránsito
+      - En aduana
+      - Disponible para entrega
+      type: string
+      description: |-
+        * `Recibido en Miami` - Recibido en Miami
+        * `En tránsito` - En tránsito
+        * `En aduana` - En aduana
+        * `Disponible para entrega` - Disponible para entrega
+    EstadoPagoEnum:
+      enum:
+      - Pendiente
+      - Pagada
+      - Cancelada
+      type: string
+      description: |-
+        * `Pendiente` - Pendiente
+        * `Pagada` - Pagada
+        * `Cancelada` - Cancelada
+    Factura:
+      type: object
+      properties:
+        envio:
+          type: integer
+        cliente:
+          type: integer
+        flete:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        total_impuesto_dai:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        total_impuesto_isc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        total_impuesto_ispc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        total_impuesto_isv:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        total_impuesto:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        monto_total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        fecha_emision:
+          type: string
+          format: date-time
+          readOnly: true
+        estado_pago:
+          $ref: '#/components/schemas/EstadoPagoEnum'
+      required:
+      - cliente
+      - envio
+      - estado_pago
+      - fecha_emision
+    FacturaRequest:
+      type: object
+      properties:
+        envio:
+          type: integer
+        cliente:
+          type: integer
+        flete:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        total_impuesto_dai:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        total_impuesto_isc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        total_impuesto_ispc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        total_impuesto_isv:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        total_impuesto:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        monto_total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        estado_pago:
+          $ref: '#/components/schemas/EstadoPagoEnum'
+      required:
+      - cliente
+      - envio
+      - estado_pago
+    PaginatedAlertaList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Alerta'
+    PaginatedArticuloAPIList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArticuloAPI'
+    PaginatedArticuloList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Articulo'
+    PaginatedClienteAPIList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClienteAPI'
+    PaginatedClienteList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cliente'
+    PaginatedCotizacionAPIList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CotizacionAPI'
+    PaginatedCotizacionList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cotizacion'
+    PaginatedEnvioList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Envio'
+    PaginatedFacturaList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Factura'
+    PaginatedParametroSistemaList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParametroSistema'
+    PaginatedPartidaArancelariaAPIList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartidaArancelariaAPI'
+    PaginatedPartidaArancelariaList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartidaArancelaria'
+    ParametroSistema:
+      type: object
+      properties:
+        nombre_parametro:
+          type: string
+          maxLength: 50
+        valor:
+          type: string
+          maxLength: 255
+        tipo_dato:
+          $ref: '#/components/schemas/TipoDatoEnum'
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - fecha_actualizacion
+      - nombre_parametro
+      - tipo_dato
+      - valor
+    ParametroSistemaRequest:
+      type: object
+      properties:
+        nombre_parametro:
+          type: string
+          minLength: 1
+          maxLength: 50
+        valor:
+          type: string
+          minLength: 1
+          maxLength: 255
+        tipo_dato:
+          $ref: '#/components/schemas/TipoDatoEnum'
+      required:
+      - nombre_parametro
+      - tipo_dato
+      - valor
+    PartidaArancelaria:
+      type: object
+      properties:
+        item_no:
+          type: string
+          maxLength: 50
+        descripcion:
+          type: string
+          maxLength: 1255
+        partida_arancelaria:
+          type: string
+          maxLength: 50
+        impuesto_dai:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        impuesto_isc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        impuesto_ispc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        impuesto_isv:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        courier_category:
+          $ref: '#/components/schemas/CourierCategoryEnum'
+        restrictions: {}
+        package_type:
+          type: string
+          maxLength: 100
+        requires_special_handling:
+          type: boolean
+        special_instructions:
+          type: string
+        max_weight_allowed:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,6}(?:\.\d{0,2})?$
+          nullable: true
+        search_keywords:
+          nullable: true
+      required:
+      - descripcion
+      - item_no
+      - partida_arancelaria
+    PartidaArancelariaAPI:
+      type: object
+      description: |-
+        Serializer for Partida Arancelaria (Tariff Classification Item).
+
+        Represents a tariff item with its associated tax rates, shipping category,
+        and handling requirements for international courier services.
+
+        Fields:
+            id (int): Unique identifier
+            item_no (str): Tariff item number (e.g., "4805.24.00.00")
+            descripcion (str): Detailed description of the item
+            partida_arancelaria (str): Tariff classification code
+            impuesto_dai (decimal): DAI tax rate (0.00-1.00)
+            impuesto_isc (decimal): ISC tax rate (0.00-1.00)
+            impuesto_ispc (decimal): ISPC tax rate (0.00-1.00)
+            impuesto_isv (decimal): ISV tax rate (0.00-1.00)
+            courier_category (str): Shipping category (ALLOWED/RESTRICTED/PROHIBITED)
+            restrictions (list): Array of shipping restrictions
+            package_type (str): Required package type
+            requires_special_handling (bool): Whether special handling is required
+            special_instructions (str): Additional handling instructions
+            max_weight_allowed (decimal): Maximum allowed weight (null if no limit)
+            search_keywords (list): Keywords for search functionality
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        item_no:
+          type: string
+          maxLength: 50
+        descripcion:
+          type: string
+          maxLength: 1255
+        partida_arancelaria:
+          type: string
+          maxLength: 50
+        impuesto_dai:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        impuesto_isc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        impuesto_ispc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        impuesto_isv:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        courier_category:
+          $ref: '#/components/schemas/CourierCategoryEnum'
+        restrictions: {}
+        package_type:
+          type: string
+          maxLength: 100
+        requires_special_handling:
+          type: boolean
+        special_instructions:
+          type: string
+        max_weight_allowed:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,6}(?:\.\d{0,2})?$
+          nullable: true
+        search_keywords:
+          nullable: true
+      required:
+      - descripcion
+      - id
+      - item_no
+      - partida_arancelaria
+    PartidaArancelariaAPIRequest:
+      type: object
+      description: |-
+        Serializer for Partida Arancelaria (Tariff Classification Item).
+
+        Represents a tariff item with its associated tax rates, shipping category,
+        and handling requirements for international courier services.
+
+        Fields:
+            id (int): Unique identifier
+            item_no (str): Tariff item number (e.g., "4805.24.00.00")
+            descripcion (str): Detailed description of the item
+            partida_arancelaria (str): Tariff classification code
+            impuesto_dai (decimal): DAI tax rate (0.00-1.00)
+            impuesto_isc (decimal): ISC tax rate (0.00-1.00)
+            impuesto_ispc (decimal): ISPC tax rate (0.00-1.00)
+            impuesto_isv (decimal): ISV tax rate (0.00-1.00)
+            courier_category (str): Shipping category (ALLOWED/RESTRICTED/PROHIBITED)
+            restrictions (list): Array of shipping restrictions
+            package_type (str): Required package type
+            requires_special_handling (bool): Whether special handling is required
+            special_instructions (str): Additional handling instructions
+            max_weight_allowed (decimal): Maximum allowed weight (null if no limit)
+            search_keywords (list): Keywords for search functionality
+      properties:
+        item_no:
+          type: string
+          minLength: 1
+          maxLength: 50
+        descripcion:
+          type: string
+          minLength: 1
+          maxLength: 1255
+        partida_arancelaria:
+          type: string
+          minLength: 1
+          maxLength: 50
+        impuesto_dai:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        impuesto_isc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        impuesto_ispc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        impuesto_isv:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        courier_category:
+          $ref: '#/components/schemas/CourierCategoryEnum'
+        restrictions: {}
+        package_type:
+          type: string
+          maxLength: 100
+        requires_special_handling:
+          type: boolean
+        special_instructions:
+          type: string
+        max_weight_allowed:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,6}(?:\.\d{0,2})?$
+          nullable: true
+        search_keywords:
+          nullable: true
+      required:
+      - descripcion
+      - item_no
+      - partida_arancelaria
+    PartidaArancelariaRequest:
+      type: object
+      properties:
+        item_no:
+          type: string
+          minLength: 1
+          maxLength: 50
+        descripcion:
+          type: string
+          minLength: 1
+          maxLength: 1255
+        partida_arancelaria:
+          type: string
+          minLength: 1
+          maxLength: 50
+        impuesto_dai:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        impuesto_isc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        impuesto_ispc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        impuesto_isv:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        courier_category:
+          $ref: '#/components/schemas/CourierCategoryEnum'
+        restrictions: {}
+        package_type:
+          type: string
+          maxLength: 100
+        requires_special_handling:
+          type: boolean
+        special_instructions:
+          type: string
+        max_weight_allowed:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,6}(?:\.\d{0,2})?$
+          nullable: true
+        search_keywords:
+          nullable: true
+      required:
+      - descripcion
+      - item_no
+      - partida_arancelaria
+    PatchedAlertaRequest:
+      type: object
+      properties:
+        envio:
+          type: integer
+        cliente:
+          type: integer
+        tipo_alerta:
+          $ref: '#/components/schemas/TipoAlertaEnum'
+        mensaje:
+          type: string
+          minLength: 1
+        estado:
+          $ref: '#/components/schemas/AlertaEstadoEnum'
+    PatchedArticuloAPIRequest:
+      type: object
+      description: |-
+        Serializer for Articulo (Shipment Item).
+
+        Represents an individual item within a quotation, including its physical
+        dimensions, weight, value, and calculated tax information.
+
+        Fields:
+            id (int): Unique identifier
+            cotizacion (int): Quotation ID (foreign key to Cotizacion)
+            valor_articulo (decimal): Item value in local currency
+            largo (decimal): Length in cm
+            ancho (decimal): Width in cm
+            alto (decimal): Height in cm
+            peso (decimal): Actual weight in kg
+            peso_volumetrico (decimal): Volumetric weight in kg (read-only, calculated)
+            peso_a_usar (decimal): Weight to use for shipping calculation (read-only, max of peso and peso_volumetrico)
+            partida_arancelaria (int): Tariff item ID (foreign key to PartidaArancelaria)
+            impuesto_dai (decimal): DAI tax amount (read-only, auto-calculated)
+            impuesto_isc (decimal): ISC tax amount (read-only, auto-calculated)
+            impuesto_ispc (decimal): ISPC tax amount (read-only, auto-calculated)
+            impuesto_isv (decimal): ISV tax amount (read-only, auto-calculated)
+            impuesto_total (decimal): Total tax amount (read-only, auto-calculated)
+
+        Note:
+            All tax fields are automatically calculated upon creation based on the
+            associated partida arancelaria's tax rates.
+      properties:
+        cotizacion:
+          type: integer
+        valor_articulo:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        largo:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        ancho:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        alto:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        peso:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        partida_arancelaria:
+          type: integer
+    PatchedArticuloRequest:
+      type: object
+      properties:
+        cotizacion:
+          type: integer
+        valor_articulo:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        largo:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        ancho:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        alto:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        peso:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        impuesto_dai:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        impuesto_isc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        impuesto_ispc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        impuesto_isv:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        impuesto_total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+    PatchedClienteAPIRequest:
+      type: object
+      description: |-
+        Serializer for Cliente (Customer).
+
+        Represents a customer in the courier shipping system with their personal
+        and contact information.
+
+        Fields:
+            id (int): Unique identifier
+            codigo_cliente (str): Auto-generated customer code (read-only)
+            nombres (str): First name(s)
+            apellidos (str): Last name(s)
+            telefono (str): Contact phone number
+            correo_electronico (str): Email address
+            nombre_corto (str): Auto-generated short name (read-only)
+            direccion (str): Street address
+            ciudad (str): City
+            departamento (str): Department/State
+            pais (str): Country
+      properties:
+        nombres:
+          type: string
+          minLength: 1
+          maxLength: 255
+        apellidos:
+          type: string
+          minLength: 1
+          maxLength: 255
+        telefono:
+          type: string
+          minLength: 1
+          maxLength: 20
+        correo_electronico:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        direccion:
+          type: string
+          minLength: 1
+          maxLength: 255
+        ciudad:
+          type: string
+          minLength: 1
+          maxLength: 50
+        departamento:
+          type: string
+          minLength: 1
+          maxLength: 50
+        pais:
+          type: string
+          minLength: 1
+          maxLength: 50
+    PatchedClienteRequest:
+      type: object
+      properties:
+        nombres:
+          type: string
+          minLength: 1
+          maxLength: 255
+        apellidos:
+          type: string
+          minLength: 1
+          maxLength: 255
+        nombre_corto:
+          type: string
+          maxLength: 50
+        direccion:
+          type: string
+          minLength: 1
+          maxLength: 255
+        telefono:
+          type: string
+          minLength: 1
+          maxLength: 20
+        correo_electronico:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        codigo_cliente:
+          type: string
+          minLength: 1
+          maxLength: 13
+    PatchedCotizacionAPIRequest:
+      type: object
+      description: |-
+        Serializer for Cotizacion (Shipping Quotation).
+
+        Represents a shipping quotation that contains multiple articles
+        for a specific customer.
+
+        Fields:
+            id (int): Unique identifier
+            cliente (int): Customer ID (foreign key to Cliente)
+            fecha_creacion (datetime): Creation timestamp (read-only, auto-generated)
+            estado (str): Quotation status
+      properties:
+        cliente:
+          type: integer
+        estado:
+          $ref: '#/components/schemas/Estado785Enum'
+    PatchedCotizacionRequest:
+      type: object
+      properties:
+        cliente:
+          type: integer
+        estado:
+          $ref: '#/components/schemas/Estado785Enum'
+    PatchedEnvioRequest:
+      type: object
+      properties:
+        cotizacion:
+          type: integer
+        cliente:
+          type: integer
+        tracking_number_original:
+          type: string
+          minLength: 1
+          maxLength: 50
+        tracking_number_final:
+          type: string
+          minLength: 1
+          maxLength: 50
+        direccion_casillero:
+          type: string
+          minLength: 1
+          maxLength: 255
+        estado_envio:
+          $ref: '#/components/schemas/EstadoEnvioEnum'
+        flete:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+    PatchedFacturaRequest:
+      type: object
+      properties:
+        envio:
+          type: integer
+        cliente:
+          type: integer
+        flete:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        total_impuesto_dai:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        total_impuesto_isc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        total_impuesto_ispc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        total_impuesto_isv:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        total_impuesto:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        monto_total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        estado_pago:
+          $ref: '#/components/schemas/EstadoPagoEnum'
+    PatchedParametroSistemaRequest:
+      type: object
+      properties:
+        nombre_parametro:
+          type: string
+          minLength: 1
+          maxLength: 50
+        valor:
+          type: string
+          minLength: 1
+          maxLength: 255
+        tipo_dato:
+          $ref: '#/components/schemas/TipoDatoEnum'
+    PatchedPartidaArancelariaAPIRequest:
+      type: object
+      description: |-
+        Serializer for Partida Arancelaria (Tariff Classification Item).
+
+        Represents a tariff item with its associated tax rates, shipping category,
+        and handling requirements for international courier services.
+
+        Fields:
+            id (int): Unique identifier
+            item_no (str): Tariff item number (e.g., "4805.24.00.00")
+            descripcion (str): Detailed description of the item
+            partida_arancelaria (str): Tariff classification code
+            impuesto_dai (decimal): DAI tax rate (0.00-1.00)
+            impuesto_isc (decimal): ISC tax rate (0.00-1.00)
+            impuesto_ispc (decimal): ISPC tax rate (0.00-1.00)
+            impuesto_isv (decimal): ISV tax rate (0.00-1.00)
+            courier_category (str): Shipping category (ALLOWED/RESTRICTED/PROHIBITED)
+            restrictions (list): Array of shipping restrictions
+            package_type (str): Required package type
+            requires_special_handling (bool): Whether special handling is required
+            special_instructions (str): Additional handling instructions
+            max_weight_allowed (decimal): Maximum allowed weight (null if no limit)
+            search_keywords (list): Keywords for search functionality
+      properties:
+        item_no:
+          type: string
+          minLength: 1
+          maxLength: 50
+        descripcion:
+          type: string
+          minLength: 1
+          maxLength: 1255
+        partida_arancelaria:
+          type: string
+          minLength: 1
+          maxLength: 50
+        impuesto_dai:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        impuesto_isc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        impuesto_ispc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        impuesto_isv:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        courier_category:
+          $ref: '#/components/schemas/CourierCategoryEnum'
+        restrictions: {}
+        package_type:
+          type: string
+          maxLength: 100
+        requires_special_handling:
+          type: boolean
+        special_instructions:
+          type: string
+        max_weight_allowed:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,6}(?:\.\d{0,2})?$
+          nullable: true
+        search_keywords:
+          nullable: true
+    PatchedPartidaArancelariaRequest:
+      type: object
+      properties:
+        item_no:
+          type: string
+          minLength: 1
+          maxLength: 50
+        descripcion:
+          type: string
+          minLength: 1
+          maxLength: 1255
+        partida_arancelaria:
+          type: string
+          minLength: 1
+          maxLength: 50
+        impuesto_dai:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        impuesto_isc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        impuesto_ispc:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        impuesto_isv:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        courier_category:
+          $ref: '#/components/schemas/CourierCategoryEnum'
+        restrictions: {}
+        package_type:
+          type: string
+          maxLength: 100
+        requires_special_handling:
+          type: boolean
+        special_instructions:
+          type: string
+        max_weight_allowed:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,6}(?:\.\d{0,2})?$
+          nullable: true
+        search_keywords:
+          nullable: true
+    TipoAlertaEnum:
+      enum:
+      - SMS
+      - WhatsApp
+      type: string
+      description: |-
+        * `SMS` - SMS
+        * `WhatsApp` - WhatsApp
+    TipoDatoEnum:
+      enum:
+      - STRING
+      - INTEGER
+      - FLOAT
+      - BOOLEAN
+      type: string
+      description: |-
+        * `STRING` - String
+        * `INTEGER` - Integer
+        * `FLOAT` - Float
+        * `BOOLEAN` - Boolean
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+servers:
+- url: http://localhost:8000
+  description: Development server
+tags:
+- name: Partidas Arancelarias
+  description: Tariff classification items with tax rates and shipping restrictions
+- name: Clientes
+  description: Customer management endpoints
+- name: Cotizaciones
+  description: Shipping quotations and estimates
+- name: Articulos
+  description: Individual items within quotations

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block extrahead %}
+<script src="https://unpkg.com/htmx.org@1.8.4"></script>
+<script>
+  htmx.config.useTemplateFragments = true;
+</script>
+{% endblock %}
+{% block allcontent %}
+<div id="content" class="container">
+  <h2>Home: <a href="{% url 'index' %}">Project1233</a></h2>
+  <div class="container">
+    <div class="row">
+    
+      <div class="col col-lg-6">
+        <h5>Add A Alerta</h5>
+        <div hx-get="{% url 'MiCasillero_Alerta_htmx_create' %}" hx-trigger="load" hx-swap="outerHTML"></div>
+        <h4>Alerta List</h4>
+        <div hx-get="{% url 'MiCasillero_Alerta_htmx_list' %}" hx-trigger="load">
+        </div>
+      </div>
+      <div class="col col-lg-6">
+        <h5>Add A Articulo</h5>
+        <div hx-get="{% url 'MiCasillero_Articulo_htmx_create' %}" hx-trigger="load" hx-swap="outerHTML"></div>
+        <h4>Articulo List</h4>
+        <div hx-get="{% url 'MiCasillero_Articulo_htmx_list' %}" hx-trigger="load">
+        </div>
+      </div>
+      <div class="col col-lg-6">
+        <h5>Add A Cliente</h5>
+        <div hx-get="{% url 'MiCasillero_Cliente_htmx_create' %}" hx-trigger="load" hx-swap="outerHTML"></div>
+        <h4>Cliente List</h4>
+        <div hx-get="{% url 'MiCasillero_Cliente_htmx_list' %}" hx-trigger="load">
+        </div>
+      </div>
+      <div class="col col-lg-6">
+        <h5>Add A Cotizacion</h5>
+        <div hx-get="{% url 'MiCasillero_Cotizacion_htmx_create' %}" hx-trigger="load" hx-swap="outerHTML"></div>
+        <h4>Cotizacion List</h4>
+        <div hx-get="{% url 'MiCasillero_Cotizacion_htmx_list' %}" hx-trigger="load">
+        </div>
+      </div>
+      <div class="col col-lg-6">
+        <h5>Add A Envio</h5>
+        <div hx-get="{% url 'MiCasillero_Envio_htmx_create' %}" hx-trigger="load" hx-swap="outerHTML"></div>
+        <h4>Envio List</h4>
+        <div hx-get="{% url 'MiCasillero_Envio_htmx_list' %}" hx-trigger="load">
+        </div>
+      </div>
+      <div class="col col-lg-6">
+        <h5>Add A Factura</h5>
+        <div hx-get="{% url 'MiCasillero_Factura_htmx_create' %}" hx-trigger="load" hx-swap="outerHTML"></div>
+        <h4>Factura List</h4>
+        <div hx-get="{% url 'MiCasillero_Factura_htmx_list' %}" hx-trigger="load">
+        </div>
+      </div>
+      <div class="col col-lg-6">
+        <h5>Add A ParametroSistema</h5>
+        <div hx-get="{% url 'MiCasillero_ParametroSistema_htmx_create' %}" hx-trigger="load" hx-swap="outerHTML"></div>
+        <h4>ParametroSistema List</h4>
+        <div hx-get="{% url 'MiCasillero_ParametroSistema_htmx_list' %}" hx-trigger="load">
+        </div>
+      </div>
+      <div class="col col-lg-6">
+        <h5>Add A PartidaArancelaria</h5>
+        <div hx-get="{% url 'MiCasillero_PartidaArancelaria_htmx_create' %}" hx-trigger="load" hx-swap="outerHTML"></div>
+        <h4>PartidaArancelaria List</h4>
+        <div hx-get="{% url 'MiCasillero_PartidaArancelaria_htmx_list' %}" hx-trigger="load">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

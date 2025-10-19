@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Agregar Artículo - SICARGA Box{% endblock %}
+
+{% block content %}
+    <div class="max-w-md mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
+        <h2 class="text-2xl font-bold mb-4">Agregar Artículo</h2>
+        <form id="articulo-form" method="post" class="space-y-4">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit"
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Agregar Artículo
+            </button>
+        </form>
+        <div id="impuestos" class="mt-4">
+            <p>Impuesto DAI: <span id="impuesto_dai">0.00</span></p>
+            <p>Impuesto ISC: <span id="impuesto_isc">0.00</span></p>
+            <p>Impuesto ISPC: <span id="impuesto_ispc">0.00</span></p>
+            <p>Suma de Impuestos de Importación: <span id="suma_impuestos_importacion">0.00</span></p>
+            <p>Impuesto ISV: <span id="impuesto_isv">0.00</span></p>
+        </div>
+        {% if permitir_consolidacion %}
+            <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">Puede agregar más artículos a esta cotización.</p>
+        {% else %}
+            <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">Solo se permite un artículo por cotización.</p>
+        {% endif %}
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const partidaSelect = document.getElementById("id_partida_arancelaria");
+            const valorInput = document.getElementById("id_valor_articulo");
+            const articuloForm = document.getElementById("articulo-form");
+
+            function calcularImpuestos() {
+                const partidaId = partidaSelect.value;
+                const valorArticulo = valorInput.value;
+
+                if (partidaId && valorArticulo) {
+                    fetch("{% url 'calcular_impuestos' %}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify({
+                            partida_arancelaria: partidaId,
+                            valor_articulo: valorArticulo
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (!data.error) {
+                                document.getElementById("impuesto_dai").innerText = data.impuesto_dai;
+                                document.getElementById("impuesto_isc").innerText = data.impuesto_isc;
+                                document.getElementById("impuesto_ispc").innerText = data.impuesto_ispc;
+                                document.getElementById("suma_impuestos_importacion").innerText = data.suma_impuestos_importacion;
+                                document.getElementById("impuesto_isv").innerText = data.impuesto_isv;
+                            }
+                        });
+                }
+            }
+
+            partidaSelect.addEventListener("change", calcularImpuestos);
+            valorInput.addEventListener("input", calcularImpuestos);
+        });
+    </script>
+{% endblock %}

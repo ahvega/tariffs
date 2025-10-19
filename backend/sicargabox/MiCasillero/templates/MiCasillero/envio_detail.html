@@ -1,0 +1,22 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    
+<p>
+    <a class="btn btn-light" href="{% url 'MiCasillero_Envio_list' %}">
+    Envio Listing
+    </a>
+</p>
+    
+<table class="table">
+    <tr><td>tracking_number_original</td><td>{{ object.tracking_number_original }}</td></tr>
+    <tr><td>tracking_number_final</td><td>{{ object.tracking_number_final }}</td></tr>
+    <tr><td>direccion_casillero</td><td>{{ object.direccion_casillero }}</td></tr>
+    <tr><td>estado_envio</td><td>{{ object.estado_envio }}</td></tr>
+    <tr><td>flete</td><td>{{ object.flete }}</td></tr>
+    <tr><td>fecha_actualizacion</td><td>{{ object.fecha_actualizacion }}</td></tr>
+</table>
+<a class="btn btn-primary" href="{{object.get_update_url}}">Edit</a>
+
+{% endblock %}

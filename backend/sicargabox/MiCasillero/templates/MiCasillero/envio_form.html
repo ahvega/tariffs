@@ -1,0 +1,54 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    
+<p>
+    <a class="btn btn-light" href="{% url 'MiCasillero_Envio_list' %}">
+    Envio Listing
+    </a>
+</p>
+    
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{form.errors}}
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="tracking_number_original">tracking_number_original: </label>
+      <input class="form-control col-sm-10"
+         id="tracking_number_original" type="text"
+         name="tracking_number_original" value="{{ object.tracking_number_original }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="tracking_number_final">tracking_number_final: </label>
+      <input class="form-control col-sm-10"
+         id="tracking_number_final" type="text"
+         name="tracking_number_final" value="{{ object.tracking_number_final }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="direccion_casillero">direccion_casillero: </label>
+      <input class="form-control col-sm-10"
+         id="direccion_casillero" type="text"
+         name="direccion_casillero" value="{{ object.direccion_casillero }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="estado_envio">estado_envio: </label>
+      <input class="form-control col-sm-10"
+         id="estado_envio" type="text"
+         name="estado_envio" value="{{ object.estado_envio }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="flete">flete: </label>
+      <input class="form-control col-sm-10"
+         id="flete" type="text"
+         name="flete" value="{{ object.flete }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="fecha_actualizacion">fecha_actualizacion: </label>
+      <input class="form-control col-sm-10"
+         id="fecha_actualizacion" type="datetime-local"
+         name="fecha_actualizacion" value="{{ object.fecha_actualizacion }}">
+  </div>
+  <input type="submit" value="Save" class="btn btn-primary">
+</form>
+
+{% endblock %}

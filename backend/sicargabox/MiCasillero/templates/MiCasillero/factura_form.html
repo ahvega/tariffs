@@ -1,0 +1,72 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    
+<p>
+    <a class="btn btn-light" href="{% url 'MiCasillero_Factura_list' %}">
+    Factura Listing
+    </a>
+</p>
+    
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{form.errors}}
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="flete">flete: </label>
+      <input class="form-control col-sm-10"
+         id="flete" type="text"
+         name="flete" value="{{ object.flete }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="total_impuesto_dai">total_impuesto_dai: </label>
+      <input class="form-control col-sm-10"
+         id="total_impuesto_dai" type="text"
+         name="total_impuesto_dai" value="{{ object.total_impuesto_dai }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="total_impuesto_isc">total_impuesto_isc: </label>
+      <input class="form-control col-sm-10"
+         id="total_impuesto_isc" type="text"
+         name="total_impuesto_isc" value="{{ object.total_impuesto_isc }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="total_impuesto_ispc">total_impuesto_ispc: </label>
+      <input class="form-control col-sm-10"
+         id="total_impuesto_ispc" type="text"
+         name="total_impuesto_ispc" value="{{ object.total_impuesto_ispc }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="total_impuesto_isv">total_impuesto_isv: </label>
+      <input class="form-control col-sm-10"
+         id="total_impuesto_isv" type="text"
+         name="total_impuesto_isv" value="{{ object.total_impuesto_isv }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="total_impuesto">total_impuesto: </label>
+      <input class="form-control col-sm-10"
+         id="total_impuesto" type="text"
+         name="total_impuesto" value="{{ object.total_impuesto }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="monto_total">monto_total: </label>
+      <input class="form-control col-sm-10"
+         id="monto_total" type="text"
+         name="monto_total" value="{{ object.monto_total }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="fecha_emision">fecha_emision: </label>
+      <input class="form-control col-sm-10"
+         id="fecha_emision" type="datetime-local"
+         name="fecha_emision" value="{{ object.fecha_emision }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="estado_pago">estado_pago: </label>
+      <input class="form-control col-sm-10"
+         id="estado_pago" type="text"
+         name="estado_pago" value="{{ object.estado_pago }}">
+  </div>
+  <input type="submit" value="Save" class="btn btn-primary">
+</form>
+
+{% endblock %}

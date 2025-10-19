@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Cotización {{ cotizacion.id }}{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
+    <h2 class="text-2xl font-bold mb-4">Cotización #{{ cotizacion.id }}</h2>
+    <p><strong>Cliente:</strong> {{ cotizacion.cliente }}</p>
+    <p><strong>Fecha:</strong> {{ cotizacion.fecha }}</p>
+    <p><strong>Total:</strong> {{ cotizacion.total }}</p>
+
+    <h3 class="text-xl font-bold mt-6">Artículos</h3>
+    <table class="w-full mt-2 border-collapse border border-gray-400">
+        <thead>
+            <tr class="bg-gray-200 dark:bg-gray-700">
+                <th class="border border-gray-400 p-2 text-left">Valor Artículo</th>
+                <th class="border border-gray-400 p-2 text-left">Peso</th>
+                <th class="border border-gray-400 p-2 text-left">Largo</th>
+                <th class="border border-gray-400 p-2 text-left">Ancho</th>
+                <th class="border border-gray-400 p-2 text-left">Alto</th>
+                <th class="border border-gray-400 p-2 text-left">Partida Arancelaria</th>
+                <th class="border border-gray-400 p-2 text-left">Impuesto DAI</th>
+                <th class="border border-gray-400 p-2 text-left">Impuesto ISC</th>
+                <th class="border border-gray-400 p-2 text-left">Impuesto ISPC</th>
+                <th class="border border-gray-400 p-2 text-left">Impuesto ISV</th>
+                <th class="border border-gray-400 p-2 text-left">Impuesto Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for articulo in articulos %}
+            <tr>
+                <td class="border border-gray-400 p-2">{{ articulo.valor_articulo }}</td>
+                <td class="border border-gray-400 p-2">{{ articulo.peso }}</td>
+                <td class="border border-gray-400 p-2">{{ articulo.largo }}</td>
+                <td class="border border-gray-400 p-2">{{ articulo.ancho }}</td>
+                <td class="border border-gray-400 p-2">{{ articulo.alto }}</td>
+                <td class="border border-gray-400 p-2">{{ articulo.partida_arancelaria }}</td>
+                <td class="border border-gray-400 p-2">{{ articulo.impuesto_dai }}</td>
+                <td class="border border-gray-400 p-2">{{ articulo.impuesto_isc }}</td>
+                <td class="border border-gray-400 p-2">{{ articulo.impuesto_ispc }}</td>
+                <td class="border border-gray-400 p-2">{{ articulo.impuesto_isv }}</td>
+                <td class="border border-gray-400 p-2">{{ articulo.impuesto_total }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="11" class="border border-gray-400 p-2 text-center">No hay artículos en esta cotización.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'MiCasillero_Cotizacion_list' %}" class="text-blue-500 hover:underline mt-4 inline-block">Volver a la lista</a>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{
+  "executionEnvironments": [
+    {
+      "root": "./",
+      "pythonVersion": "3.13",
+      "extraPaths": [
+        "E:/MyDevTools/tariffs/backend/sicargabox/venv/Lib/site-packages",
+        "E:/MyDevTools/tariffs/backend/sicargabox"
+      ]
+    }
+  ],
+  "reportMissingImports": true,
+  "typeCheckingMode": "basic"
+}

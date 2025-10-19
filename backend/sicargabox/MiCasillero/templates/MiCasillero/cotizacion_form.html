@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<p>
+    <a class="btn btn-light" href="{% url 'MiCasillero_Cotizacion_list' %}">
+        Lista de Cotizaciones
+    </a>
+</p>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            Por favor, corrija los siguientes errores:
+            <ul>
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <li>{{ field }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label" for="id_fecha_creacion">Fecha de creación:</label>
+        <div class="col-sm-10">
+            {{ form.fecha_creacion }}
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label" for="id_estado">Estado:</label>
+        <div class="col-sm-10">
+            {{ form.estado }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
+
+{% endblock %}

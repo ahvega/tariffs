@@ -1,0 +1,60 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    
+<p>
+    <a class="btn btn-light" href="{% url 'MiCasillero_Cliente_list' %}">
+    Cliente Listing
+    </a>
+</p>
+    
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{form.errors}}
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="nombres">nombres: </label>
+      <input class="form-control col-sm-10"
+         id="nombres" type="text"
+         name="nombres" value="{{ object.nombres }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="apellidos">apellidos: </label>
+      <input class="form-control col-sm-10"
+         id="apellidos" type="text"
+         name="apellidos" value="{{ object.apellidos }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="direccion">direccion: </label>
+      <input class="form-control col-sm-10"
+         id="direccion" type="text"
+         name="direccion" value="{{ object.direccion }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="telefono">telefono: </label>
+      <input class="form-control col-sm-10"
+         id="telefono" type="text"
+         name="telefono" value="{{ object.telefono }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="correo_electronico">correo_electronico: </label>
+      <input class="form-control col-sm-10"
+         id="correo_electronico" type="text"
+         name="correo_electronico" value="{{ object.correo_electronico }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="codigo_cliente">codigo_cliente: </label>
+      <input class="form-control col-sm-10"
+         id="codigo_cliente" type="text"
+         name="codigo_cliente" value="{{ object.codigo_cliente }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="fecha_registro">fecha_registro: </label>
+      <input class="form-control col-sm-10"
+         id="fecha_registro" type="datetime-local"
+         name="fecha_registro" value="{{ object.fecha_registro }}">
+  </div>
+  <input type="submit" value="Save" class="btn btn-primary">
+</form>
+
+{% endblock %}

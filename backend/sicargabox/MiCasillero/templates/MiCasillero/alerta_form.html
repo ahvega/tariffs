@@ -1,0 +1,42 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    
+<p>
+    <a class="btn btn-light" href="{% url 'MiCasillero_Alerta_list' %}">
+    Alerta Listing
+    </a>
+</p>
+    
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{form.errors}}
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="tipo_alerta">tipo_alerta: </label>
+      <input class="form-control col-sm-10"
+         id="tipo_alerta" type="text"
+         name="tipo_alerta" value="{{ object.tipo_alerta }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="mensaje">mensaje: </label>
+      <input class="form-control col-sm-10"
+         id="mensaje" type="text"
+         name="mensaje" value="{{ object.mensaje }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="fecha_envio">fecha_envio: </label>
+      <input class="form-control col-sm-10"
+         id="fecha_envio" type="datetime-local"
+         name="fecha_envio" value="{{ object.fecha_envio }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="estado">estado: </label>
+      <input class="form-control col-sm-10"
+         id="estado" type="text"
+         name="estado" value="{{ object.estado }}">
+  </div>
+  <input type="submit" value="Save" class="btn btn-primary">
+</form>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    
+<p>
+    <a class="btn btn-light" href="{% url 'MiCasillero_Factura_list' %}">
+    Factura Listing
+    </a>
+</p>
+    
+<table class="table">
+    <tr><td>flete</td><td>{{ object.flete }}</td></tr>
+    <tr><td>total_impuesto_dai</td><td>{{ object.total_impuesto_dai }}</td></tr>
+    <tr><td>total_impuesto_isc</td><td>{{ object.total_impuesto_isc }}</td></tr>
+    <tr><td>total_impuesto_ispc</td><td>{{ object.total_impuesto_ispc }}</td></tr>
+    <tr><td>total_impuesto_isv</td><td>{{ object.total_impuesto_isv }}</td></tr>
+    <tr><td>total_impuesto</td><td>{{ object.total_impuesto }}</td></tr>
+    <tr><td>monto_total</td><td>{{ object.monto_total }}</td></tr>
+    <tr><td>fecha_emision</td><td>{{ object.fecha_emision }}</td></tr>
+    <tr><td>estado_pago</td><td>{{ object.estado_pago }}</td></tr>
+</table>
+<a class="btn btn-primary" href="{{object.get_update_url}}">Edit</a>
+
+{% endblock %}

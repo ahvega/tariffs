@@ -1,0 +1,408 @@
+{% extends "base.html" %} {% load static %} {% block title %}Cotizador - SICARGA Box{% endblock %} {% block extra_head %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/htmx.org@1.5.0"></script>
+{{ form.media }}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+     :root {
+        --primary-color: #3b82f6;
+        --primary-hover: #2563eb;
+        --text-color: #1f2937;
+        --bg-color: #ffffff;
+        --card-bg: #ffffff;
+        --border-color: #e5e7eb;
+        --input-bg: #f9fafb;
+        --shadow-color: rgba(0, 0, 0, 0.1);
+    }
+    
+    .dark-mode {
+        --primary-color: #3b82f6;
+        --primary-hover: #60a5fa;
+        --text-color: #f3f4f6;
+        --bg-color: #111827;
+        --card-bg: #1f2937;
+        --border-color: #374151;
+        --input-bg: #374151;
+        --shadow-color: rgba(0, 0, 0, 0.5);
+    }
+    
+    body {
+        transition: background-color 0.3s ease;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+    }
+    
+    .card {
+        max-width: 800px;
+        margin: 0 auto 20px;
+        background-color: var(--card-bg);
+        border-radius: 8px;
+        box-shadow: 0 4px 6px var(--shadow-color);
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .select2-container {
+        width: 100% !important;
+    }
+    
+    .select2-container .select2-selection--single {
+        height: auto;
+        min-height: 38px;
+    }
+    
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 1.5;
+        padding: 0.5rem 1rem;
+        white-space: normal;
+    }
+    
+    .select2-results__option {
+        padding: 0.5rem 1rem;
+        line-height: 1.5;
+    }
+    
+    .keywords-tags {
+        margin-top: 0.25rem;
+        font-size: 0.875rem;
+        color: #666;
+    }
+    
+    .keyword-tag {
+        display: inline-block;
+        background: #f0f0f0;
+        padding: 0.125rem 0.5rem;
+        border-radius: 1rem;
+        margin: 0.125rem;
+    }
+    
+    .btn {
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .btn-primary {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+    }
+    
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        transform: translateY(-1px);
+    }
+    
+    .toggle-theme {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        color: var(--text-color);
+        font-size: 24px;
+        z-index: 1000;
+        padding: 8px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s ease;
+    }
+    
+    .toggle-theme:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+    
+    .section-title {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        padding-bottom: 4px;
+        border-bottom: 2px solid var(--primary-color);
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .fieldgroup {
+        display: grid;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .fieldgroup-3col {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .text-xs {
+        font-size: 12px;
+    }
+    
+    .text-error {
+        color: #ef4444;
+    }
+    
+    .bg-error {
+        background-color: rgba(239, 68, 68, 0.1);
+        padding: 4px 8px;
+        border-radius: 4px;
+    }
+    
+    .select2-option-container {
+        padding: 4px 0;
+        width: 100%;
+    }
+    
+    .option-content {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px;
+    }
+    
+    .option-description {
+        flex: 1;
+        min-width: 200px;
+        word-break: normal;
+        white-space: normal;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    
+    .option-percentage {
+        flex-shrink: 0;
+        font-weight: 600;
+    }
+    
+    .option-keywords {
+        margin-top: 6px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+    
+    .select2-selection-multilínea .select2-selection__rendered {
+        height: auto !important;
+        min-height: 38px;
+        overflow: visible !important;
+        word-wrap: break-word !important;
+        white-space: normal !important;
+        display: block;
+    }
+    
+    @media (max-width: 768px) {
+        .option-content {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .option-description {
+            width: 100%;
+        }
+    }
+    
+    .select2-container--open .select2-dropdown {
+        max-width: 100%;
+        width: auto !important;
+        min-width: 100%;
+    }
+    
+    .select2-selection__rendered {
+        white-space: normal !important;
+        text-overflow: inherit !important;
+        overflow: visible !important;
+        word-wrap: break-word !important;
+    }
+</style>
+{% endblock %} {% block content %}
+<div class="container mx-auto">
+    <div class="card">
+        <div class="flex justify-center bg-primary text-white text-center rounded-t-lg p-4">
+            <h2 class="text-xl font-bold">Cotizador</h2>
+        </div>
+        <div class="p-6">
+            <h3 class="text-lg font-semibold mb-2">Calcula el costo de tu envío en segundos</h3>
+            <p class="text-sm mb-4">Selecciona el tipo de producto, ingresa el precio, peso y dimensiones de tu paquete para obtener una cotización personalizada instantánea.</p>
+
+            <div class="mb-4 flex justify-between text-sm">
+                <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full">Disponibles: {{ total_partidas }}</span>
+                <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">Restringidas: {{ total_restricted }}</span>
+                <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full">Prohibidas: {{ total_prohibited }}</span>
+            </div>
+
+            <form id="cotizador-form" method="post" hx-post="{% url 'cotizar' %}" hx-target="#resumen" hx-swap="innerHTML" class="space-y-6">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="{{ form.descripcion_original.id_for_label }}" class="block text-sm font-bold mb-2">
+                        {{ form.descripcion_original.label }}
+                    </label> {{ form.descripcion_original }} {% if form.descripcion_original.help_text %}
+                    <p class="text-xs text-gray-500 mt-1">{{ form.descripcion_original.help_text }}</p>
+                    {% endif %} {% for error in form.descripcion_original.errors %}
+                    <div class="text-error bg-error text-sm mt-1">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.partida_arancelaria.id_for_label }}" class="block text-sm font-bold mb-2">
+                        {{ form.partida_arancelaria.label }}
+                    </label> {{ form.partida_arancelaria }} {% if form.partida_arancelaria.help_text %}
+                    <p class="text-xs text-gray-500 mt-1">{{ form.partida_arancelaria.help_text }}</p>
+                    {% endif %} {% for error in form.partida_arancelaria.errors %}
+                    <div class="text-error bg-error text-sm mt-1">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="fieldgroup fieldgroup-3col">
+                    <div class="form-control">
+                        <label class="label" for="valor">Valor Declarado</label>
+                        <div class="join w-full">
+                            <span class="join-item flex items-center px-3 bg-base-200 border border-r-0 rounded-l-lg">$</span>
+                            <input type="number" id="valor" name="valor" class="input input-bordered join-item flex-1 rounded-l-none" step="0.01" min="0" required placeholder="0.00">
+                            <span class="join-item flex items-center px-3 bg-base-200 border border-l-0">USD</span>
+                        </div>
+                    </div>
+                    <div class="form-control">
+                        <label class="label" for="peso">Peso</label>
+                        <input type="number" id="peso" name="peso" class="input input-bordered w-full" step="0.01" min="0" required placeholder="0.00">
+                    </div>
+                    <div class="form-control">
+                        <label class="label" for="unidad_peso">Unidad</label>
+                        <select id="unidad_peso" name="unidad_peso" class="select select-bordered w-full" title="Seleccione la unidad de peso">
+                            <option value="lb">Lbs.</option>
+                            <option value="kg">Kg.</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="fieldgroup fieldgroup-3col">
+                    <div class="form-control">
+                        <label class="label" for="largo">Largo</label>
+                        <input type="number" id="largo" name="largo" class="input input-bordered" step="0.1" min="0" placeholder="0.0">
+                    </div>
+                    <div class="form-control">
+                        <label class="label" for="ancho">Ancho</label>
+                        <input type="number" id="ancho" name="ancho" class="input input-bordered" step="0.1" min="0" placeholder="0.0">
+                    </div>
+                    <div class="form-control">
+                        <label class="label" for="alto">Alto</label>
+                        <input type="number" id="alto" name="alto" class="input input-bordered" step="0.1" min="0" placeholder="0.0">
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <button type="submit" class="btn btn-primary w-full">
+                        Calcular
+                    </button>
+                </div>
+            </form>
+            <div id="resumen" class="mt-6"></div>
+        </div>
+    </div>
+</div>
+{% endblock %} {% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Inicializar Select2 con AJAX
+        $('#partida_arancelaria').select2({
+            placeholder: 'Busque por código, descripción o palabras clave',
+            width: '100%',
+            minimumInputLength: 3, // Mínimo 3 caracteres para buscar
+            ajax: {
+                url: '{% url "buscar_partidas" %}', // URL de la vista de búsqueda
+                dataType: 'json',
+                delay: 250, // Esperar 250ms después de teclear
+                data: function(params) {
+                    return {
+                        q: params.term // Término de búsqueda
+                    };
+                },
+                processResults: function(data) {
+                    // Transforma la respuesta JSON al formato esperado por Select2
+                    return {
+                        results: data.results
+                    };
+                },
+                cache: true // Cachear resultados para la misma búsqueda
+            },
+            templateResult: function(data) {
+                // Formato de cómo se muestra cada opción en la lista desplegable
+                if (data.loading) return data.text;
+
+                var $container = $(
+                    '<div class="select2-option-container">' +
+                    '<div class="option-content">' +
+                    '<span class="option-code font-bold mr-2"></span>' +
+                    '<span class="option-description"></span>' +
+                    '</div>' +
+                    '<div class="option-keywords text-xs text-gray-500 mt-1"></div>' +
+                    '</div>'
+                );
+
+                $container.find(".option-code").text(data.codigo || '');
+                $container.find(".option-description").text(data.descripcion || '');
+
+                if (data.keywords && data.keywords.length > 0) {
+                    var keywordsHtml = data.keywords.map(function(kw) {
+                        return '<span class="keyword-tag">' + kw + '</span>';
+                    }).join(' ');
+                    $container.find(".option-keywords").html('Keywords: ' + keywordsHtml);
+                } else {
+                    $container.find(".option-keywords").remove(); // No mostrar si no hay keywords
+                }
+
+                return $container;
+            },
+            templateSelection: function(data) {
+                // Formato de cómo se muestra la opción seleccionada
+                return data.text || data.id; // Mostrar el texto o el ID si el texto no está
+            }
+            // Ya no necesitamos matcher ni sorter del lado del cliente
+        });
+
+        // Función para convertir peso entre kg y lb
+        function convertirPeso(forzarLb) {
+            const pesoInput = $('#peso');
+            const unidadPeso = $('#unidad_peso').val();
+            const peso = parseFloat(pesoInput.val());
+
+            if (!isNaN(peso)) {
+                if (unidadPeso === 'kg') {
+                    // Si cambia a kg y el valor estaba en lb, convertir a kg
+                    const pesoKg = peso * 0.453592;
+                    pesoInput.val(pesoKg.toFixed(2));
+                } else if (forzarLb) {
+                    // Si cambia a lb y el valor estaba en kg, convertir a lb
+                    const pesoLb = peso * 2.20462;
+                    pesoInput.val(pesoLb.toFixed(2));
+                }
+            }
+        }
+
+        // Manejar cambios en la unidad de peso
+        $('#unidad_peso').on('change', convertirPeso);
+
+        // Modificar el manejo del formulario para asegurar que el peso esté en libras antes de enviar
+        $('#cotizador-form').on('submit', function(e) {
+            // Forzar la conversión a libras si está en kg antes de enviar
+            if ($('#unidad_peso').val() === 'kg') {
+                convertirPeso(true); // Pasar true para asegurar conversión a lbs
+            }
+            // Continuar con el envío normal del formulario
+        });
+    });
+
+    document.body.addEventListener('htmx:afterSwap', function(evt) {
+        if (evt.detail.target.id === "resumen") {
+            document.getElementById("resumen").scrollIntoView({
+                behavior: "smooth"
+            });
+        }
+    });
+</script>
+{% endblock %}

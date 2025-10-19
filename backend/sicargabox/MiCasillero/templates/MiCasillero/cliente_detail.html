@@ -1,0 +1,23 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    
+<p>
+    <a class="btn btn-light" href="{% url 'MiCasillero_Cliente_list' %}">
+    Cliente Listing
+    </a>
+</p>
+    
+<table class="table">
+    <tr><td>nombres</td><td>{{ object.nombres }}</td></tr>
+    <tr><td>apellidos</td><td>{{ object.apellidos }}</td></tr>
+    <tr><td>direccion</td><td>{{ object.direccion }}</td></tr>
+    <tr><td>telefono</td><td>{{ object.telefono }}</td></tr>
+    <tr><td>correo_electronico</td><td>{{ object.correo_electronico }}</td></tr>
+    <tr><td>codigo_cliente</td><td>{{ object.codigo_cliente }}</td></tr>
+    <tr><td>fecha_registro</td><td>{{ object.fecha_registro }}</td></tr>
+</table>
+<a class="btn btn-primary" href="{{object.get_update_url}}">Edit</a>
+
+{% endblock %}

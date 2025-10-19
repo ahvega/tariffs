@@ -1,0 +1,20 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    
+<p>
+    <a class="btn btn-light" href="{% url 'MiCasillero_ParametroSistema_list' %}">
+    ParametroSistema Listing
+    </a>
+</p>
+    
+<table class="table">
+    <tr><td>nombre_parametro</td><td>{{ object.nombre_parametro }}</td></tr>
+    <tr><td>valor</td><td>{{ object.valor }}</td></tr>
+    <tr><td>tipo_dato</td><td>{{ object.tipo_dato }}</td></tr>
+    <tr><td>fecha_actualizacion</td><td>{{ object.fecha_actualizacion }}</td></tr>
+</table>
+<a class="btn btn-primary" href="{{object.get_update_url}}">Edit</a>
+
+{% endblock %}

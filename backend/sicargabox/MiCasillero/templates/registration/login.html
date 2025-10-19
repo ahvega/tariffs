@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static widget_tweaks %}
+
+{% block extra_head %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.5.0"></script>
+    {{ form.media }}
+{% endblock %}
+
+{% block title %}Iniciar Sesión - SICARGA Box{% endblock %}
+
+{% block content %}
+    <div class="max-w-xl mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
+        <h2 class="text-2xl font-bold mb-4">Iniciar Sesión</h2>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="space-y-2">
+                    <label for="{{ field.auto_id }}"
+                           class="block text-sm font-medium text-gray-400"
+                    >
+                        {{ field.label }}
+                    </label>
+                    <input class="input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900"
+                           type="{{ field.field.widget.input_type }}"
+                           name="{{ field.html_name }}"
+                           id="{{ field.auto_id }}"
+                           {% if field.field.required %}required{% endif %}
+                           value="{{ field.value|default:'' }}"
+                    >
+                    {% if field.errors %}
+                        <div class="text-sm text-red-600">{{ field.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit"
+                    class="btn btn-primary w-full mt-4"
+            >
+                Iniciar Sesión
+            </button>
+        <div id="error-message" class="text-red-600"></div>
+        </form>
+        <div class="text-center mt-4">
+            <a href="{% url 'register' %}" class="text-indigo-600 hover:text-indigo-700">¿No tienes una cuenta?
+                Regístrate</a>
+        </div>
+    </div>
+{% endblock %}

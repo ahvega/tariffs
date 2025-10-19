@@ -1,0 +1,81 @@
+{% load humanize %} {% load l10n %}
+<div class="p-1 bg-white rounded-lg shadow-lg text-gray-900" style="color:black; margin: -30px -16px -16px -16px; padding: 12px;">
+    <h3 class="text-xl font-bold mb-4" style="border-bottom:solid #696969 4px;">Detalle Cotización</h3>
+    <div class="mb-4">
+        <div class="flex justify-between" style="border-bottom:solid #696969 1px;">
+            <span class="font-semibold">Valor Declarado:</span>
+            <span class="text-right text-black">${{ valor_declarado|floatformat:2|intcomma }}</span>
+        </div>
+        <div class="flex justify-between" style="border-bottom:double #696969 3px;">
+            <span class="font-semibold">Valor CIF <small>(Valor en Aduana)</small>:</span>
+            <span class="text-right text-black font-semibold">${{ valor_cif|floatformat:2|intcomma }}</span>
+        </div>
+        <div class="flex justify-between" style="border-bottom:solid #696969 1px;">
+            <span class="font-semibold">Peso {% if peso_a_usar > peso %} volumétrico{% endif %}
+                <small>(Lbs.)</small>:</span>
+            <span class="text-right text-black font-semibold">{{ peso_a_usar|floatformat:2|intcomma }}</span>
+        </div>
+    </div>
+    <div class="mb-4" style="border-bottom:solid #696969 2px;">
+        <h4 class="text-lg font-bold">Partida Arancelaria</h4>
+    </div>
+    <div class="flex justify-between" style="border-bottom:solid #696969 1px;">
+        <span class="font-semibold">Item No:</span>
+        <span class="text-right text-black font-semibold">{{ partida_item_no }}</span>
+    </div>
+    <div class="flex justify-between" style="border-bottom:solid #696969 1px;">
+        <span class="font-semibold">Partida No:</span>
+        <span class="font-semibold">{{ partida_arancelaria_numero }}</span>
+    </div>
+    {% if descripcion_original %}
+    <div style="border-bottom:solid #696969 1px; padding: 4px 0;">
+        <span class="font-semibold">Descripción Original:</span>
+        <div class="text-sm bg-gray-100 p-2 mt-1 rounded">{{ descripcion_original }}</div>
+    </div>
+    {% endif %}
+    <div class="mb-4 flex justify-between" style="border-bottom:solid #696969 1px;">
+        <span class="font-semibold">Descripción Arancelaria:</span>
+        <small>{{ partida_descripcion }}</small>
+    </div>
+    <div class="mb-4" style="border-bottom:solid #696969 2px;">
+        <span class="font-semibold">Cargos:</span>
+        <ul class="list-none p-0">
+            <li class="flex justify-between" style="border-bottom:solid #696969 2px;">
+                <span class="font-semibold">Transporte <small>{{ peso_a_usar|floatformat:2|intcomma }} Lbs x {{ costo_por_libra }}/Lb </small>:</span>
+                <span class="text-right text-black font-semibold">${{ costo_transporte|floatformat:2|intcomma  }}</span>
+            </li>
+            <li class="flex justify-between" style="border-bottom:solid #696969 2px;">
+                <span class="font-semibold">Impuestos de Importación:</span>
+                <span class="text-right text-black font-semibold">${{ impuestos_importacion|floatformat:2|intcomma  }}</span>
+            </li>
+            <li class="flex justify-between text-xs px-4 mr-12">
+                <span class="font-medium">Impuesto DAI <small>{{ porcentaje_dai }}</small>:</span>
+                <span class="text-right text-black">${{ impuesto_dai|floatformat:2|intcomma  }}</span>
+            </li>
+            <li class="flex justify-between text-xs px-4 mr-12">
+                <span class="font-medium">Impuesto ISC <small>{{ porcentaje_isc }}</small>:</span>
+                <span class="text-right text-black">${{ impuesto_isc|floatformat:2|intcomma  }}</span>
+            </li>
+            <li class="flex justify-between text-xs px-4 mr-12">
+                <span class="font-medium">Impuesto ISPC <small>{{ porcentaje_ispc }}</small>:</span>
+                <span class="text-right text-black">${{ impuesto_ispc|floatformat:2|intcomma  }}</span>
+            </li>
+            <li class="flex justify-between" style="border-bottom:solid #696969 2px;">
+                <span class="font-semibold">Impuesto sobre Ventas <small>{{ porcentaje_isv }}</small>:</span>
+                <span class="text-right text-black font-semibold">${{ impuesto_isv|floatformat:2|intcomma  }}</span>
+            </li>
+        </ul>
+    </div>
+    <div class="flex justify-between" style="border-bottom:double #696969 3px;">
+        <span class="font-semibold">Cargos Totales:</span>
+        <span class="text-right text-black font-semibold">${{ cargos_totales|floatformat:2|intcomma  }}</span>
+    </div>
+    <div class="flex justify-between mt-4" style="border-bottom:double #696969 3px; margin-bottom: 40px;">
+        <span class="font-semibold">Total <small>(Incluido el valor del producto)</small>:</span>
+        <span class="text-right text-black font-semibold">${{ total_incluido_valor|floatformat:2|intcomma  }}</span>
+    </div>
+    <div style="background-color: lightskyblue; margin: -13px; padding: 12px; border-radius: 0 0 8px 8px;">
+        <small class="text-gray-600 font-light">Los valores cotizados son solo una estimación del flete y los cargos aduanales. El costo final
+            puede variar debido a multas y otros cargos imprevistos.</small>
+    </div>
+</div>

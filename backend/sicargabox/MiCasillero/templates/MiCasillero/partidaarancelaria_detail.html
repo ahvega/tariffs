@@ -1,0 +1,24 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    
+<p>
+    <a class="btn btn-light" href="{% url 'MiCasillero_PartidaArancelaria_list' %}">
+    PartidaArancelaria Listing
+    </a>
+</p>
+    
+<table class="table">
+    <tr><td>item_no</td><td>{{ object.item_no }}</td></tr>
+    <tr><td>descripcion</td><td>{{ object.descripcion }}</td></tr>
+    <tr><td>partida_arancelaria</td><td>{{ object.partida_arancelaria }}</td></tr>
+    <tr><td>impuesto_dai</td><td>{{ object.impuesto_dai }}</td></tr>
+    <tr><td>impuesto_isc</td><td>{{ object.impuesto_isc }}</td></tr>
+    <tr><td>impuesto_ispc</td><td>{{ object.impuesto_ispc }}</td></tr>
+    <tr><td>impuesto_isv</td><td>{{ object.impuesto_isv }}</td></tr>
+    <tr><td>fecha_actualizacion</td><td>{{ object.fecha_actualizacion }}</td></tr>
+</table>
+<a class="btn btn-primary" href="{{object.get_update_url}}">Edit</a>
+
+{% endblock %}

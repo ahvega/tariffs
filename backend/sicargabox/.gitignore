@@ -1,0 +1,56 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.sql
+*.sqlite3
+
+# PyCharm
+.idea/
+
+# Virtual environment
+venv/
+.env/
+*.env
+.Python
+
+# Node and npm
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Static files
+staticfiles/
+static/css/dist/*
+static/src/*
+
+# Media files
+media/
+
+# Local settings
+local_settings.py
+
+# MacOS
+.DS_Store
+
+# Translations
+*.mo
+*.po
+
+# Test coverage
+coverage/
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Deployment
+*.env.production
+*.env.staging
+*.env.local

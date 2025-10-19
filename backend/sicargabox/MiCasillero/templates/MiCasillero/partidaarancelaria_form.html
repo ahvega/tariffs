@@ -1,0 +1,66 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    
+<p>
+    <a class="btn btn-light" href="{% url 'MiCasillero_PartidaArancelaria_list' %}">
+    PartidaArancelaria Listing
+    </a>
+</p>
+    
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{form.errors}}
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="item_no">item_no: </label>
+      <input class="form-control col-sm-10"
+         id="item_no" type="text"
+         name="item_no" value="{{ object.item_no }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="descripcion">descripcion: </label>
+      <input class="form-control col-sm-10"
+         id="descripcion" type="text"
+         name="descripcion" value="{{ object.descripcion }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="partida_arancelaria">partida_arancelaria: </label>
+      <input class="form-control col-sm-10"
+         id="partida_arancelaria" type="text"
+         name="partida_arancelaria" value="{{ object.partida_arancelaria }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="impuesto_dai">impuesto_dai: </label>
+      <input class="form-control col-sm-10"
+         id="impuesto_dai" type="text"
+         name="impuesto_dai" value="{{ object.impuesto_dai }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="impuesto_isc">impuesto_isc: </label>
+      <input class="form-control col-sm-10"
+         id="impuesto_isc" type="text"
+         name="impuesto_isc" value="{{ object.impuesto_isc }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="impuesto_ispc">impuesto_ispc: </label>
+      <input class="form-control col-sm-10"
+         id="impuesto_ispc" type="text"
+         name="impuesto_ispc" value="{{ object.impuesto_ispc }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="impuesto_isv">impuesto_isv: </label>
+      <input class="form-control col-sm-10"
+         id="impuesto_isv" type="text"
+         name="impuesto_isv" value="{{ object.impuesto_isv }}">
+  </div>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="fecha_actualizacion">fecha_actualizacion: </label>
+      <input class="form-control col-sm-10"
+         id="fecha_actualizacion" type="datetime-local"
+         name="fecha_actualizacion" value="{{ object.fecha_actualizacion }}">
+  </div>
+  <input type="submit" value="Save" class="btn btn-primary">
+</form>
+
+{% endblock %}

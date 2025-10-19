@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Lista de Parámetros del Sistema{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg p-6">
+        <h2 class="text-2xl font-bold mb-6">Lista de Parámetros del Sistema</h2>
+        <div class="grid gap-4">
+            {% for object in object_list %}
+                <div class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg flex justify-between items-center">
+                    <a href="{{ object.get_absolute_url }}" class="text-blue-600 dark:text-blue-400 hover:underline">{{ object }}</a>
+                    <small class="ml-5 text-red-600 dark:text-red-400">
+                        <a href="{% url 'MiCasillero_ParametroSistema_delete' object.pk %}" class="hover:underline">(Eliminar)</a>
+                    </small>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="mt-6">
+            <a href="{% url 'MiCasillero_ParametroSistema_create' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Crear un nuevo Parámetro del Sistema
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

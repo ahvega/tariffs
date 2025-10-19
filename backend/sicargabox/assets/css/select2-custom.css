@@ -1,0 +1,12 @@
+.select2-results__option {
+    color: black;
+}
+
+.select2-results__option--highlighted[aria-selected] {
+    background-color: indigo;
+    color: white;
+}
+
+.select2-search__field {
+    color: black !important;
+}

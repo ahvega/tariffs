@@ -1,0 +1,26 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    
+<p>
+    <a class="btn btn-light" href="{% url 'MiCasillero_Articulo_list' %}">
+    Articulo Listing
+    </a>
+</p>
+    
+<table class="table">
+    <tr><td>valor_articulo</td><td>{{ object.valor_articulo }}</td></tr>
+    <tr><td>largo</td><td>{{ object.largo }}</td></tr>
+    <tr><td>ancho</td><td>{{ object.ancho }}</td></tr>
+    <tr><td>alto</td><td>{{ object.alto }}</td></tr>
+    <tr><td>peso</td><td>{{ object.peso }}</td></tr>
+    <tr><td>impuesto_dai</td><td>{{ object.impuesto_dai }}</td></tr>
+    <tr><td>impuesto_isc</td><td>{{ object.impuesto_isc }}</td></tr>
+    <tr><td>impuesto_ispc</td><td>{{ object.impuesto_ispc }}</td></tr>
+    <tr><td>impuesto_isv</td><td>{{ object.impuesto_isv }}</td></tr>
+    <tr><td>impuesto_total</td><td>{{ object.impuesto_total }}</td></tr>
+</table>
+<a class="btn btn-primary" href="{{object.get_update_url}}">Edit</a>
+
+{% endblock %}

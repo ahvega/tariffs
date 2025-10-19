@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}SICARGA Box - Home{% endblock %}
+
+{% block content %}
+    <h1>Bienvenido a SICARGA Box</h1>
+    {% if user.is_authenticated %}
+        <p>Hola, {{ user.username }}!</p>
+        <a href="{% url 'create_cotizacion' %}" class="btn btn-primary">Crear Cotización</a>
+    {% else %}
+        <a href="{% url 'login' %}" class="btn btn-primary">Iniciar Sesión</a>
+        <a href="{% url 'register' %}" class="btn btn-secondary">Registrarse</a>
+    {% endif %}
+{% endblock %}

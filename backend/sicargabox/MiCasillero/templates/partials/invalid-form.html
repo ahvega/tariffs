@@ -1,0 +1,13 @@
+<!-- partials/invalid-forms.html -->
+<div class="bg-white px-4 py-3 rounded relative shadow" role="alert">
+    <h4 class="text-lg font-bold mb-2 text-gray-700">Errores en el formulario:</h4>
+    <div class="block sm:inline">
+        <ul class="list-disc pl-5 space-y-2">
+            {% for field, errors in errors.items %}
+                {% for error in errors %}
+                    <li class=" text-gray-900">{{ field }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>

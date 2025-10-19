@@ -1,0 +1,20 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    
+<p>
+    <a class="btn btn-light" href="{% url 'MiCasillero_Alerta_list' %}">
+    Alerta Listing
+    </a>
+</p>
+    
+<table class="table">
+    <tr><td>tipo_alerta</td><td>{{ object.tipo_alerta }}</td></tr>
+    <tr><td>mensaje</td><td>{{ object.mensaje }}</td></tr>
+    <tr><td>fecha_envio</td><td>{{ object.fecha_envio }}</td></tr>
+    <tr><td>estado</td><td>{{ object.estado }}</td></tr>
+</table>
+<a class="btn btn-primary" href="{{object.get_update_url}}">Edit</a>
+
+{% endblock %}

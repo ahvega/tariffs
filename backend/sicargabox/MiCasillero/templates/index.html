@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="m-2"><h4>MiCasillero</h4></div>
+    <div class="m-2"><a class="btn btn-light" href="{% url 'MiCasillero_Alerta_list' %}">Alerta Listing</a></div>
+    <div class="m-2"><a class="btn btn-light" href="{% url 'MiCasillero_Articulo_list' %}">Articulo Listing</a></div>
+    <div class="m-2"><a class="btn btn-light" href="{% url 'MiCasillero_Cliente_list' %}">Cliente Listing</a></div>
+    <div class="m-2"><a class="btn btn-light" href="{% url 'MiCasillero_Cotizacion_list' %}">Cotizacion Listing</a>
+    </div>
+    <div class="m-2"><a class="btn btn-light" href="{% url 'MiCasillero_Envio_list' %}">Envio Listing</a></div>
+    <div class="m-2"><a class="btn btn-light" href="{% url 'MiCasillero_Factura_list' %}">Factura Listing</a></div>
+    <div class="m-2"><a class="btn btn-light" href="{% url 'MiCasillero_ParametroSistema_list' %}">ParametroSistema
+        Listing</a></div>
+    <div class="m-2"><a class="btn btn-light" href="{% url 'MiCasillero_PartidaArancelaria_list' %}">PartidaArancelaria
+        Listing</a></div>
+    <div class='container'>
+        <div class='card'>
+            <div class='card-body'>
+                <div><a href="{% url 'htmx' %}">HTMX UI</a></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
