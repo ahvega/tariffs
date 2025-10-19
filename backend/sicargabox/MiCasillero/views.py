@@ -30,7 +30,7 @@ def register(request):
     if request.method == 'POST':
         user_form = UserRegisterForm(request.POST)
         cliente_form = ClienteForm(request.POST)
-        if user_form.is_valid():
+        if user_form.is_valid() and cliente_form.is_valid():
             user = user_form.save()
             cliente = cliente_form.save(commit=False)
             cliente.user = user
@@ -41,7 +41,15 @@ def register(request):
             # Agregar el usuario creado al grupo UsuariosClientes
             grupo.user_set.add(user)
 
-            return HttpResponse('¡Registro exitoso! Ya puedes <a href="/login">iniciar sesión</a>.</p>'
+            # Automatically log in the user
+            login(request, user)
+
+            # Check if there's a quote in session
+            if 'current_quote' in request.session:
+                # Redirect to accept_quote to create the cotizacion
+                return redirect('accept_quote')
+
+            return HttpResponse('¡Registro exitoso! <a href="/">Ir al inicio</a></p>'
                                 '<p>Tu código de cliente es: <strong>{}</strong></p>'.format(cliente.codigo_cliente))
     else:
         user_form = UserRegisterForm()
@@ -56,6 +64,12 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+
+            # Check if there's a quote in session that needs to be associated
+            if 'current_quote' in request.session:
+                # Redirect to accept_quote to create the cotizacion
+                return redirect('accept_quote')
+
             # Redirigir al usuario a la página de inicio o a la página desde la que inició sesión
             next_url = request.GET.get('next', '/')
             if 'register' in next_url:
@@ -110,6 +124,27 @@ def cotizar(request):
             cargos_totales = articulo.impuesto_total + articulo.costo_transporte
             total_incluido_valor = articulo.valor_articulo + cargos_totales
 
+            # Store quote in session for anonymous users
+            quote_data = {
+                'valor_articulo': float(articulo.valor_articulo),
+                'peso': float(articulo.peso),
+                'largo': float(articulo.largo) if articulo.largo else None,
+                'ancho': float(articulo.ancho) if articulo.ancho else None,
+                'alto': float(articulo.alto) if articulo.alto else None,
+                'unidad_peso': articulo.unidad_peso,
+                'descripcion_original': articulo.descripcion_original,
+                'partida_arancelaria_id': articulo.partida_arancelaria.id if articulo.partida_arancelaria else None,
+                'impuesto_dai': float(articulo.impuesto_dai),
+                'impuesto_isc': float(articulo.impuesto_isc),
+                'impuesto_ispc': float(articulo.impuesto_ispc),
+                'impuesto_isv': float(articulo.impuesto_isv),
+                'impuesto_total': float(articulo.impuesto_total),
+                'costo_transporte': float(articulo.costo_transporte),
+                'total': float(total_incluido_valor),
+            }
+            request.session['current_quote'] = quote_data
+            request.session.modified = True
+
             context = {
                 'valor_declarado': articulo.valor_articulo,
                 'valor_cif': valor_cif,
@@ -132,7 +167,8 @@ def cotizar(request):
                 'partida_descripcion': articulo.partida_arancelaria,
                 'partida_arancelaria_numero': articulo.partida_numero,
                 'descripcion_original': articulo.descripcion_original,
-                'articulo': articulo
+                'articulo': articulo,
+                'is_authenticated': request.user.is_authenticated,
             }
             return render(request, 'partials/resumen.html', context)
         else:
@@ -249,7 +285,7 @@ def buscar_partidas(request):
         try:
             # Construir la consulta Elasticsearch
             search = PartidaArancelariaDocument.search()
-            
+
             # Usar multi_match para buscar en campos relevantes con fuzziness
             query = ES_Q(
                 'multi_match',
@@ -262,14 +298,14 @@ def buscar_partidas(request):
                 ],
                 fuzziness='AUTO' # Permitir errores tipográficos
             )
-            
+
             search = search.query(query)
-            
+
             # Limitar resultados (puedes hacerlo configurable o paginar)
-            search = search[:20] 
-            
+            search = search[:20]
+
             response = search.execute()
-            
+
             # Formatear resultados para Select2 AJAX
             results = [{
                 'id': hit.meta.id, # Usar el ID del modelo Django original
@@ -286,6 +322,60 @@ def buscar_partidas(request):
             pass # Devolver lista vacía en caso de error
 
     return JsonResponse({'results': results})
+
+
+def accept_quote(request):
+    """Vista para aceptar una cotización y redirigir a registro/login"""
+    # Check if there's a quote in the session
+    if 'current_quote' not in request.session:
+        return redirect('cotizador')
+
+    # If user is authenticated, create cotizacion and redirect to shipping request
+    if request.user.is_authenticated:
+        quote_data = request.session.get('current_quote')
+
+        try:
+            # Get or create cliente
+            cliente = Cliente.objects.get(user=request.user)
+
+            # Create cotizacion
+            cotizacion = Cotizacion.objects.create(cliente=cliente)
+            assign_perm('change_cotizacion', request.user, cotizacion)
+            assign_perm('delete_cotizacion', request.user, cotizacion)
+            assign_perm('view_cotizacion', request.user, cotizacion)
+
+            # Create articulo from quote data
+            partida = PartidaArancelaria.objects.get(id=quote_data['partida_arancelaria_id'])
+            articulo = Articulo.objects.create(
+                cotizacion=cotizacion,
+                valor_articulo=quote_data['valor_articulo'],
+                peso=quote_data['peso'],
+                largo=quote_data.get('largo'),
+                ancho=quote_data.get('ancho'),
+                alto=quote_data.get('alto'),
+                unidad_peso=quote_data['unidad_peso'],
+                descripcion_original=quote_data['descripcion_original'],
+                partida_arancelaria=partida,
+            )
+            articulo.calcular_impuestos()
+            articulo.save()
+
+            # Clear quote from session
+            del request.session['current_quote']
+            request.session.modified = True
+
+            # Redirect to view cotizacion
+            return redirect('view_cotizacion', cotizacion_id=cotizacion.id)
+
+        except Cliente.DoesNotExist:
+            # User doesn't have a cliente profile, redirect to complete registration
+            return redirect('register')
+        except Exception as e:
+            print(f"Error creating cotizacion: {e}")
+            return redirect('cotizador')
+
+    # If user is not authenticated, redirect to registration page
+    return redirect('register')
 
 
 # Las vistas de clase ya tienen la implementación de PermissionRequiredMixin

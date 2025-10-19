@@ -74,6 +74,7 @@ urlpatterns = (
     path('cotizador/', views.cotizador_view, name='cotizador'),
     path('cotizar/', views.cotizar, name='cotizar'),
     path('buscar-partidas/', views.buscar_partidas, name='buscar_partidas'),
+    path('accept-quote/', views.accept_quote, name='accept_quote'),
 
     path("htmx/Alerta/", htmx.HTMXAlertaListView.as_view(), name="MiCasillero_Alerta_htmx_list"),
     path("htmx/Alerta/create/", htmx.HTMXAlertaCreateView.as_view(), name="MiCasillero_Alerta_htmx_create"),

@@ -70,10 +70,28 @@
         <span class="font-semibold">Cargos Totales:</span>
         <span class="text-right text-black font-semibold">${{ cargos_totales|floatformat:2|intcomma  }}</span>
     </div>
-    <div class="flex justify-between mt-4" style="border-bottom:double #696969 3px; margin-bottom: 40px;">
+    <div class="flex justify-between mt-4" style="border-bottom:double #696969 3px; margin-bottom: 20px;">
         <span class="font-semibold">Total <small>(Incluido el valor del producto)</small>:</span>
         <span class="text-right text-black font-semibold">${{ total_incluido_valor|floatformat:2|intcomma  }}</span>
     </div>
+
+    {% if not is_authenticated %}
+    <div class="mb-4 text-center">
+        <a href="{% url 'accept_quote' %}" class="btn btn-success btn-lg w-full mb-2" style="background-color: #10b981; color: white; font-weight: bold; padding: 12px 24px; border-radius: 8px; text-decoration: none; display: block;">
+            ¡Aceptar Cotización y Crear Solicitud de Envío!
+        </a>
+        <p class="text-sm text-gray-700 mt-2">
+            ¿Ya tienes cuenta? <a href="{% url 'login' %}?next={% url 'accept_quote' %}" class="text-blue-600 font-semibold underline">Inicia sesión</a>
+        </p>
+    </div>
+    {% else %}
+    <div class="mb-4 text-center">
+        <a href="{% url 'accept_quote' %}" class="btn btn-success btn-lg w-full" style="background-color: #10b981; color: white; font-weight: bold; padding: 12px 24px; border-radius: 8px; text-decoration: none; display: block;">
+            Crear Solicitud de Envío
+        </a>
+    </div>
+    {% endif %}
+
     <div style="background-color: lightskyblue; margin: -13px; padding: 12px; border-radius: 0 0 8px 8px;">
         <small class="text-gray-600 font-light">Los valores cotizados son solo una estimación del flete y los cargos aduanales. El costo final
             puede variar debido a multas y otros cargos imprevistos.</small>
