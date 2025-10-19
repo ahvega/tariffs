@@ -312,7 +312,7 @@ def buscar_partidas(request):
                 'text': f"{hit.item_no} - {hit.descripcion}",
                 'codigo': hit.item_no,
                 'descripcion': hit.descripcion,
-                'keywords': getattr(hit, 'search_keywords', []),
+                'keywords': list(getattr(hit, 'search_keywords', [])),  # Convert AttrList to list
                 'score': hit.meta.score # Puntaje de relevancia de ES
             } for hit in response]
 
