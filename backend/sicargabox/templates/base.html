@@ -1,4 +1,4 @@
-<!DOCTYPE html> {% load static %} {% load tailwind_tags %}
+<!DOCTYPE html> {% load static %}
 <html lang="es" data-theme="coffee" style="scroll-padding-top: 5rem; scroll-behavior: smooth;">
 
 <head>
@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %}SICARGA Box{% endblock %}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;500;700&display=swap" rel="stylesheet"> {% tailwind_css %}
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}"> {% block extra_head %}{% endblock %}
     <style>
          :root {

@@ -14,10 +14,14 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('register/', views.register, name='register'),
-    path('login/', LoginView.as_view(), name='login'),
+    path('login/', views.login_view, name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('home/', views.home, name='home'),
     path('api/', include('api.urls')),
+    # Public quote calculator at root level for easy access
+    path('cotizador/', views.cotizador_view, name='cotizador_public'),
+    path('cotizar/', views.cotizar, name='cotizar_public'),
+    path('accept-quote/', views.accept_quote, name='accept_quote_public'),
 ]
 
 if settings.DEBUG:
