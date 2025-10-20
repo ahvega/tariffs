@@ -7,6 +7,7 @@ from django.http import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.views import generic
+from django.views.decorators.csrf import csrf_exempt
 from guardian.decorators import permission_required_or_403
 from guardian.mixins import PermissionRequiredMixin
 from guardian.shortcuts import assign_perm
@@ -176,6 +177,110 @@ def cotizar(request):
     else:
         error = "No es un GET"
         return render(request, 'partials/noget-error.html', {'error': error})
+
+
+@csrf_exempt
+def cotizar_json(request):
+    """
+    JSON API endpoint for quote calculation (for Next.js frontend)
+    """
+    if request.method == 'POST':
+        try:
+            # Parse JSON body
+            data = json.loads(request.body)
+
+            # Create form data with defaults for optional fields
+            form_data = {
+                'valor_articulo': data.get('valor'),
+                'peso': data.get('peso'),
+                'unidad_peso': data.get('unidad_peso', 'lb'),
+                'largo': data.get('largo', 1),  # Default to 1 if not provided
+                'ancho': data.get('ancho', 1),  # Default to 1 if not provided
+                'alto': data.get('alto', 1),    # Default to 1 if not provided
+                'descripcion_original': data.get('descripcion_original', ''),
+                'partida_arancelaria': data.get('partida_arancelaria'),
+            }
+
+            # Validate form
+            form = ArticuloForm(form_data)
+            if form.is_valid():
+                articulo = form.save(commit=False)
+                articulo.calcular_impuestos()
+
+                valor_cif = articulo.valor_articulo + articulo.costo_transporte
+                cargos_totales = articulo.impuesto_total + articulo.costo_transporte
+                total_incluido_valor = articulo.valor_articulo + cargos_totales
+
+                # Store quote in session for anonymous users
+                quote_data = {
+                    'valor_articulo': float(articulo.valor_articulo),
+                    'peso': float(articulo.peso),
+                    'largo': float(articulo.largo) if articulo.largo else None,
+                    'ancho': float(articulo.ancho) if articulo.ancho else None,
+                    'alto': float(articulo.alto) if articulo.alto else None,
+                    'unidad_peso': data.get('unidad_peso', 'lb'),  # Get from request data
+                    'descripcion_original': articulo.descripcion_original,
+                    'partida_arancelaria_id': articulo.partida_arancelaria.id if articulo.partida_arancelaria else None,
+                    'impuesto_dai': float(articulo.impuesto_dai),
+                    'impuesto_isc': float(articulo.impuesto_isc),
+                    'impuesto_ispc': float(articulo.impuesto_ispc),
+                    'impuesto_isv': float(articulo.impuesto_isv),
+                    'impuesto_total': float(articulo.impuesto_total),
+                    'costo_transporte': float(articulo.costo_transporte),
+                    'total': float(total_incluido_valor),
+                }
+                request.session['current_quote'] = quote_data
+                request.session.modified = True
+
+                # Return JSON response
+                response_data = {
+                    'success': True,
+                    'data': {
+                        'valor_declarado': float(articulo.valor_articulo),
+                        'valor_cif': float(valor_cif),
+                        'peso': float(articulo.peso),
+                        'peso_a_usar': float(articulo.peso_a_usar),
+                        'costo_por_libra': str(articulo.costo_flete_por_lb),
+                        'impuesto_dai': float(articulo.impuesto_dai),
+                        'impuesto_isc': float(articulo.impuesto_isc),
+                        'impuesto_ispc': float(articulo.impuesto_ispc),
+                        'impuestos_importacion': float(articulo.impuesto_total - articulo.impuesto_isv),
+                        'impuesto_isv': float(articulo.impuesto_isv),
+                        'costo_transporte': float(articulo.costo_transporte),
+                        'cargos_totales': float(cargos_totales),
+                        'total_incluido_valor': float(total_incluido_valor),
+                        'porcentaje_dai': str(articulo.porcentaje_dai),
+                        'porcentaje_isc': str(articulo.porcentaje_isc),
+                        'porcentaje_ispc': str(articulo.porcentaje_ispc),
+                        'porcentaje_isv': str(articulo.porcentaje_isv),
+                        'partida_item_no': articulo.partida_item_no,
+                        'partida_descripcion': str(articulo.partida_arancelaria),
+                        'partida_arancelaria_numero': articulo.partida_numero,
+                        'descripcion_original': articulo.descripcion_original,
+                    }
+                }
+                return JsonResponse(response_data)
+            else:
+                return JsonResponse({
+                    'success': False,
+                    'errors': form.errors
+                }, status=400)
+
+        except json.JSONDecodeError:
+            return JsonResponse({
+                'success': False,
+                'error': 'Invalid JSON'
+            }, status=400)
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'error': str(e)
+            }, status=500)
+    else:
+        return JsonResponse({
+            'success': False,
+            'error': 'Only POST method allowed'
+        }, status=405)
 
 
 @login_required

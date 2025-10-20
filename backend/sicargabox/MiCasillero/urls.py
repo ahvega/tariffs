@@ -73,6 +73,7 @@ urlpatterns = (
          name='partida_arancelaria_autocomplete'),
     path('cotizador/', views.cotizador_view, name='cotizador'),
     path('cotizar/', views.cotizar, name='cotizar'),
+    path('cotizar-json/', views.cotizar_json, name='cotizar_json'),
     path('buscar-partidas/', views.buscar_partidas, name='buscar_partidas'),
     path('accept-quote/', views.accept_quote, name='accept_quote'),
 
