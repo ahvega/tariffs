@@ -1,5 +1,6 @@
 import mimetypes
 from pathlib import Path
+from django.utils.translation import gettext_lazy as _
 
 mimetypes.add_type("application/javascript", ".js", True)
 
@@ -46,13 +47,14 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'SicargaBox.middleware.AdminDefaultLanguageMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
     'django_htmx.middleware.HtmxMiddleware',
 ]
 
@@ -176,7 +178,14 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
+# Ensure Django admin defaults to Spanish
 LANGUAGE_CODE = 'es'
+
+LANGUAGES = [
+    ('es', _('Español')),
+    ('en', _('English'))
+]
+
 
 USE_I18N = True
 USE_L10N = True

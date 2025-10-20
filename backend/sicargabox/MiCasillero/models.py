@@ -54,6 +54,12 @@ class ParametroSistema(models.Model):
         objects: 'ParametroSistemaManager'
     objects = ParametroSistemaManager()
 
+    class Meta:
+        ordering = ['nombre_parametro']
+        verbose_name = "Parámetro del Sistema"
+        verbose_name_plural = "Parámetros del Sistema"
+
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
@@ -97,7 +103,7 @@ class PartidaArancelaria(models.Model):
     impuesto_isc = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     impuesto_ispc = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     impuesto_isv = models.DecimalField(max_digits=5, decimal_places=2, default=0)
-    
+
     # New fields for courier-specific information
     courier_category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='ALLOWED')
     restrictions = models.JSONField(default=list, blank=True)
@@ -105,20 +111,23 @@ class PartidaArancelaria(models.Model):
     max_weight_allowed = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
     requires_special_handling = models.BooleanField(default=False)
     special_instructions = models.TextField(blank=True)
-    
+
     # Search optimization fields
     search_keywords = models.JSONField(default=list, blank=True, null=True)  # Para keywords generados por AI
     search_vector = SearchVectorField(null=True)  # Campo para búsqueda de texto completo
     parent_category = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
-    
+
     class Meta:
+        ordering = ['item_no']
+        verbose_name = "Partida Arancelaria"
+        verbose_name_plural = "Partidas Arancelarias"
         indexes = [
             models.Index(fields=['item_no']),
             models.Index(fields=['descripcion']),
             models.Index(fields=['courier_category']),
             GinIndex(fields=['search_vector'], name='partida_search_vector_idx'),
         ]
-        
+
     def update_search_vector(self):
         """Actualiza el vector de búsqueda combinando descripción y keywords"""
         # Crear vector con diferentes pesos para cada campo
@@ -127,10 +136,10 @@ class PartidaArancelaria(models.Model):
             # Convertir la lista de keywords a texto
             keywords_text = ' '.join(self.search_keywords)
             vector = vector + SearchVector(F('search_keywords'), weight='B')
-        
+
         # Actualizar el campo search_vector
         self.search_vector = vector
-        
+
     def save(self, *args, **kwargs):
         # Asegurarse de que search_keywords sea una lista válida
         if self.search_keywords is None:
@@ -155,7 +164,7 @@ class PartidaArancelaria(models.Model):
             PartidaArancelaria.objects.filter(pk=self.pk).update(
                 search_vector=SearchVector('descripcion', weight='A') + SearchVector('search_keywords', weight='B')
             )
-    
+
     def generate_search_keywords(self):
         """Generate additional search keywords for the item"""
         # This could be enhanced with AI-generated keywords
@@ -319,6 +328,11 @@ class Cotizacion(models.Model):
     total_estimado = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     session_key = models.CharField(max_length=40, blank=True)
 
+    class Meta:
+        ordering = ['-fecha_creacion']
+        verbose_name = "Cotización"
+        verbose_name_plural = "Cotizaciones"
+
     def save(self, *args, **kwargs):
         if self.fecha_creacion is None:
             self.fecha_creacion = timezone.now()
@@ -399,6 +413,12 @@ class Envio(models.Model):
     fecha_entrega = models.DateTimeField(null=True, blank=True)
     fecha_actualizacion = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ['-fecha_solicitud']
+        verbose_name = "Envío"
+        verbose_name_plural = "Envíos"
+
+
     def save(self, *args, **kwargs):
         # Calcular el volumen total de los artículos
         volumen_total = sum(
@@ -465,6 +485,8 @@ class StatusUpdate(models.Model):
 
     class Meta:
         ordering = ['-fecha']
+        verbose_name = "Actualización de Estado"
+        verbose_name_plural = "Actualizaciones de Estado"
 
 
 class Factura(models.Model):
@@ -488,6 +510,11 @@ class Factura(models.Model):
     monto_total = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     fecha_emision = models.DateTimeField(auto_now_add=True)
     estado_pago = models.CharField(max_length=20, choices=ESTADO_PAGO_CHOICES)
+
+    class Meta:
+        ordering = ['-fecha_emision']
+        verbose_name = "Factura"
+        verbose_name_plural = "Facturas"
 
     def save(self, *args, **kwargs):
         # Obtener los valores de la cotización asociada
@@ -551,6 +578,11 @@ class Alerta(models.Model):
     mensaje = models.TextField()
     fecha_envio = models.DateTimeField(auto_now_add=True)
     estado = models.CharField(max_length=20, choices=ESTADO_ALERTA_CHOICES)
+
+    class Meta:
+        ordering = ['-fecha_envio']
+        verbose_name = "Alerta"
+        verbose_name_plural = "Alertas"
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -619,6 +651,11 @@ class Articulo(models.Model):
         help_text="Razón de la corrección manual"
     )
 
+    class Meta:
+        ordering = ['id']
+        verbose_name = "Artículo"
+        verbose_name_plural = "Artículos"
+
     FACTOR_VOL = 166  # Factor de volumen estándar en pulgadas cúbicas por libra
 
     @property
@@ -675,10 +712,18 @@ class Articulo(models.Model):
         return self.peso_a_usar * self.costo_flete_por_lb
 
     def calcular_impuestos(self):
-        impuesto_dai = self.valor_articulo * (self.porcentaje_dai / 100)
-        impuesto_isc = self.valor_articulo * (self.porcentaje_isc / 100)
-        impuesto_ispc = self.valor_articulo * (self.porcentaje_ispc / 100)
-        impuesto_isv = self.valor_articulo * (self.porcentaje_isv / 100)
+        # Valor CIF = Valor del artículo + Costo de transporte
+        valor_cif = self.valor_articulo + self.costo_transporte
+
+        # DAI, ISC, ISPC se calculan sobre el valor CIF
+        impuesto_dai = valor_cif * (self.porcentaje_dai / 100)
+        impuesto_isc = valor_cif * (self.porcentaje_isc / 100)
+        impuesto_ispc = valor_cif * (self.porcentaje_ispc / 100)
+
+        # Base imponible para ISV = CIF + DAI + ISC + ISPC
+        base_isv = valor_cif + impuesto_dai + impuesto_isc + impuesto_ispc
+        impuesto_isv = base_isv * (self.porcentaje_isv / 100)
+
         impuesto_total = (
                 impuesto_dai +
                 impuesto_isc +
