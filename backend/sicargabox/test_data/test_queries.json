@@ -1,0 +1,283 @@
+{
+  "metadata": {
+    "created": "2025-10-20",
+    "purpose": "Baseline evaluation of Elasticsearch search keyword quality",
+    "total_queries": 100,
+    "total_categories": 20,
+    "queries_per_category": 5,
+    "language": "es-HN",
+    "target_audience": "Honduras customers searching for tariff codes"
+  },
+  "categories": {
+    "electronics_computers": {
+      "description": "Electrónicos y computadoras",
+      "queries": [
+        "laptop",
+        "mouse inalámbrico",
+        "teclado mecánico",
+        "monitor 27 pulgadas",
+        "disco duro externo"
+      ],
+      "expected_partida_patterns": ["8471", "8473"]
+    },
+    "electronics_mobile": {
+      "description": "Electrónicos móviles y accesorios",
+      "queries": [
+        "celular",
+        "auriculares bluetooth",
+        "cargador de teléfono",
+        "cable USB-C",
+        "funda para iphone"
+      ],
+      "expected_partida_patterns": ["8517", "8544"]
+    },
+    "electronics_audio": {
+      "description": "Audio y video",
+      "queries": [
+        "bocinas bluetooth",
+        "audífonos inalámbricos",
+        "micrófono usb",
+        "cámara web",
+        "cable HDMI"
+      ],
+      "expected_partida_patterns": ["8518", "8525", "8544"]
+    },
+    "clothing_mens": {
+      "description": "Ropa de hombre",
+      "queries": [
+        "camisa de hombre",
+        "pantalón jean",
+        "zapatos deportivos",
+        "chaqueta de cuero",
+        "gorra"
+      ],
+      "expected_partida_patterns": ["6203", "6205", "6401", "6501", "4203"]
+    },
+    "clothing_womens": {
+      "description": "Ropa de mujer",
+      "queries": [
+        "vestido",
+        "blusa de mujer",
+        "zapatos de tacón",
+        "bolso de mano",
+        "cartera de cuero"
+      ],
+      "expected_partida_patterns": ["6204", "6206", "6402", "4202"]
+    },
+    "toys_games": {
+      "description": "Juguetes y juegos",
+      "queries": [
+        "muñeca barbie",
+        "carrito de control remoto",
+        "lego",
+        "peluche",
+        "rompecabezas"
+      ],
+      "expected_partida_patterns": ["9503"]
+    },
+    "sports_equipment": {
+      "description": "Equipos deportivos",
+      "queries": [
+        "balón de fútbol",
+        "raqueta de tenis",
+        "pesas",
+        "bicicleta",
+        "cuerda para saltar"
+      ],
+      "expected_partida_patterns": ["9506", "8712"]
+    },
+    "home_kitchen": {
+      "description": "Hogar y cocina",
+      "queries": [
+        "licuadora",
+        "olla de presión",
+        "sartén antiadherente",
+        "platos de cerámica",
+        "juego de cubiertos"
+      ],
+      "expected_partida_patterns": ["8509", "7615", "6911", "8215"]
+    },
+    "home_furniture": {
+      "description": "Muebles",
+      "queries": [
+        "silla de oficina",
+        "mesa de centro",
+        "estante de madera",
+        "colchón",
+        "almohada"
+      ],
+      "expected_partida_patterns": ["9401", "9403", "9404"]
+    },
+    "beauty_cosmetics": {
+      "description": "Belleza y cosméticos",
+      "queries": [
+        "maquillaje",
+        "perfume",
+        "crema facial",
+        "shampoo",
+        "esmalte de uñas"
+      ],
+      "expected_partida_patterns": ["3304", "3305", "3307"]
+    },
+    "health_personal_care": {
+      "description": "Salud y cuidado personal",
+      "queries": [
+        "vitaminas",
+        "termómetro digital",
+        "tensiómetro",
+        "pasta de dientes",
+        "cepillo eléctrico"
+      ],
+      "expected_partida_patterns": ["9018", "3306", "8509"]
+    },
+    "baby_products": {
+      "description": "Productos para bebé",
+      "queries": [
+        "pañales desechables",
+        "biberón",
+        "coche para bebé",
+        "asiento de carro",
+        "monitor de bebé"
+      ],
+      "expected_partida_patterns": ["9619", "3923", "8716", "8525"]
+    },
+    "books_media": {
+      "description": "Libros y medios",
+      "queries": [
+        "libro",
+        "revista",
+        "DVD",
+        "audiolibro",
+        "enciclopedia"
+      ],
+      "expected_partida_patterns": ["4901", "4902", "8523"]
+    },
+    "office_supplies": {
+      "description": "Útiles de oficina",
+      "queries": [
+        "impresora",
+        "papel bond",
+        "bolígrafos",
+        "calculadora",
+        "archivador"
+      ],
+      "expected_partida_patterns": ["8443", "4802", "9608", "8470"]
+    },
+    "automotive": {
+      "description": "Automotriz",
+      "queries": [
+        "llantas",
+        "batería de carro",
+        "filtro de aceite",
+        "limpia parabrisas",
+        "bocina de carro"
+      ],
+      "expected_partida_patterns": ["4011", "8507", "8421", "8512"]
+    },
+    "tools_hardware": {
+      "description": "Herramientas y ferretería",
+      "queries": [
+        "taladro eléctrico",
+        "martillo",
+        "destornillador",
+        "llave inglesa",
+        "sierra"
+      ],
+      "expected_partida_patterns": ["8467", "8205"]
+    },
+    "jewelry_watches": {
+      "description": "Joyería y relojes",
+      "queries": [
+        "reloj de pulsera",
+        "anillo de oro",
+        "collar de plata",
+        "aretes",
+        "pulsera"
+      ],
+      "expected_partida_patterns": ["9102", "7113", "7116"]
+    },
+    "pet_supplies": {
+      "description": "Suministros para mascotas",
+      "queries": [
+        "comida para perros",
+        "collar para perro",
+        "juguete para gatos",
+        "pecera",
+        "correa"
+      ],
+      "expected_partida_patterns": ["2309", "4201", "9508", "7013"]
+    },
+    "outdoor_camping": {
+      "description": "Camping y actividades al aire libre",
+      "queries": [
+        "tienda de campaña",
+        "sleeping bag",
+        "linterna recargable",
+        "mochila",
+        "navaja"
+      ],
+      "expected_partida_patterns": ["6306", "8513", "4202", "8211"]
+    },
+    "musical_instruments": {
+      "description": "Instrumentos musicales",
+      "queries": [
+        "guitarra eléctrica",
+        "teclado musical",
+        "batería",
+        "micrófono de escenario",
+        "amplificador"
+      ],
+      "expected_partida_patterns": ["9207", "8518"]
+    }
+  },
+  "test_scenarios": {
+    "spanish_only": {
+      "description": "Queries in Spanish (primary use case)",
+      "examples": ["camisa", "zapatos", "laptop"]
+    },
+    "english_spanish_mix": {
+      "description": "Mixed language queries (common in Honduras)",
+      "examples": ["sleeping bag", "smartphone", "mouse inalámbrico"]
+    },
+    "specific_brands": {
+      "description": "Brand-specific searches",
+      "examples": ["iphone", "barbie", "lego"]
+    },
+    "generic_terms": {
+      "description": "Generic product categories",
+      "examples": ["ropa", "juguetes", "electrónicos"]
+    },
+    "technical_specs": {
+      "description": "Searches with technical specifications",
+      "examples": ["monitor 27 pulgadas", "disco duro externo", "cable USB-C"]
+    }
+  },
+  "evaluation_criteria": {
+    "precision_at_5": {
+      "description": "Percentage of relevant results in top 5",
+      "target": ">= 90%",
+      "acceptable": ">= 80%",
+      "needs_improvement": "< 80%"
+    },
+    "mean_reciprocal_rank": {
+      "description": "Average position of first relevant result",
+      "target": ">= 0.8",
+      "acceptable": ">= 0.6",
+      "needs_improvement": "< 0.6"
+    },
+    "zero_result_rate": {
+      "description": "Percentage of queries returning no results",
+      "target": "< 5%",
+      "acceptable": "< 10%",
+      "needs_improvement": ">= 10%"
+    }
+  },
+  "notes": [
+    "All queries represent real user search patterns observed in similar systems",
+    "Honduras users often mix English and Spanish in searches",
+    "Brand names are commonly searched (iPhone, Barbie, Lego, etc.)",
+    "Technical specifications should match correctly (USB-C, HDMI, Bluetooth)",
+    "Expected partida patterns are approximate - actual matches may vary",
+    "Focus is on ALLOWED category partidas (not RESTRICTED/PROHIBITED)"
+  ]
+}
