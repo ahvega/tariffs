@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  redis:
+    build: .
+    container_name: sicargabox-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      # Persist Redis data
+      - redis-data:/data
+      # Custom configuration
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
+    networks:
+      - sicargabox-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+  # Optional: Redis Commander (Web UI for Redis)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: sicargabox-redis-ui
+    restart: unless-stopped
+    depends_on:
+      - redis
+    ports:
+      - "8081:8081"
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    networks:
+      - sicargabox-network
+
+volumes:
+  redis-data:
+    driver: local
+
+networks:
+  sicargabox-network:
+    driver: bridge

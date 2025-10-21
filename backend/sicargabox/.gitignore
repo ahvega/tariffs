@@ -54,3 +54,4 @@ coverage/
 *.env.production
 *.env.staging
 *.env.local
+nul
