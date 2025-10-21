@@ -36,7 +36,7 @@ class Command(BaseCommand):
             '--api-provider',
             type=str,
             default='deepseek',
-            choices=['openai', 'deepseek'],
+            choices=['openai', 'deepseek', 'anthropic'],
             help='Proveedor de API a utilizar',
         )
 
@@ -123,6 +123,11 @@ class Command(BaseCommand):
                 api_key=os.environ.get('DEEPSEEK_API_KEY'),
                 http_client=httpx.Client(),
             )
+        elif api_provider == 'anthropic':
+            from anthropic import Anthropic
+            client = Anthropic(
+                api_key=os.environ.get('ANTHROPIC_API_KEY'),
+            )
         else:  # openai
             client = OpenAI(
                 api_key=os.environ.get('OPENAI_API_KEY'),
@@ -131,7 +136,12 @@ class Command(BaseCommand):
 
     def get_model_name(self, api_provider):
         """Retorna el nombre del modelo según el proveedor."""
-        return "deepseek-chat" if api_provider == "deepseek" else "gpt-3.5-turbo"
+        if api_provider == "deepseek":
+            return "deepseek-chat"
+        elif api_provider == "anthropic":
+            return "claude-3-5-sonnet-20241022"
+        else:
+            return "gpt-3.5-turbo"
 
     def generate_keywords_with_ai(self, context, api_provider):
         """Usa AI para generar keywords basados en el contexto."""
@@ -164,11 +174,27 @@ class Command(BaseCommand):
                 4. Incluya variaciones regionales de los términos
                 5. Incluya términos de búsqueda frecuentes del usuario final
 
-                IMPORTANTE: 
+                IMPORTANTE - BILINGUAL KEYWORDS (ENGLISH + SPANISH):
+                Los usuarios copian descripciones de facturas estadounidenses (Amazon, eBay, etc.) en INGLÉS.
+
+                REQUERIMIENTOS OBLIGATORIOS:
+                - Keywords en INGLÉS Y ESPAÑOL (ambos idiomas son obligatorios)
+                - Preservar términos técnicos exactos: "USB-C", "HDMI", "bluetooth 5.0", "LED", "GPS"
+                - Incluir nombres de marcas comunes: "iPhone", "Samsung", "Nike", "Adidas"
+                - Incluir números de modelo cuando relevante: "iPhone 15 Pro", "Galaxy S24"
+                - Usuarios buscan en inglés, español, y mezcla de ambos idiomas
+
+                EJEMPLOS DE KEYWORDS BILINGUAL:
+                - Computadoras: ["laptop", "notebook", "computer", "pc", "computadora", "ordenador", "laptop computer"]
+                - Teléfonos: ["smartphone", "phone", "mobile phone", "celular", "teléfono móvil", "iPhone", "android"]
+                - Cables: ["USB-C cable", "cable USB-C", "HDMI", "HDMI cable", "charging cable", "cable de carga"]
+                - Ropa: ["shoes", "sneakers", "zapatos", "tenis", "running shoes", "zapatillas"]
+
+                IMPORTANTE:
                 - NO incluyas términos relacionados con: {json.dumps(excluded_terms, indent=2, ensure_ascii=False)}
                 - NO incluyas términos relacionados con: {current['exception_term']}
                 - Responde SOLO con el array JSON, sin markdown, sin explicaciones.
-                Ejemplo: ["keyword1", "keyword2", "keyword3"]
+                Ejemplo: ["laptop", "notebook", "computer", "computadora", "pc", "ordenador"]
                 """
             else:
                 prompt = f"""
@@ -188,10 +214,25 @@ class Command(BaseCommand):
                 4. Incluya variaciones regionales de los términos
                 5. Incluya términos de búsqueda frecuentes del usuario final
 
-                IMPORTANTE: 
+                IMPORTANTE - BILINGUAL KEYWORDS (ENGLISH + SPANISH):
+                Los usuarios copian descripciones de facturas estadounidenses (Amazon, eBay, etc.) en INGLÉS.
+
+                REQUERIMIENTOS OBLIGATORIOS:
+                - Keywords en INGLÉS Y ESPAÑOL (ambos idiomas son obligatorios)
+                - Preservar términos técnicos exactos: "USB-C", "HDMI", "bluetooth 5.0", "LED", "GPS"
+                - Incluir nombres de marcas comunes cuando relevante
+                - Usuarios frecuentemente buscan productos electrónicos/tecnológicos en inglés
+                - Incluir variaciones comunes en ambos idiomas
+
+                EJEMPLOS DE KEYWORDS BILINGUAL:
+                - Electrónica: ["headphones", "earbuds", "auriculares", "audífonos", "wireless", "inalámbrico", "AirPods"]
+                - Accesorios: ["case", "cover", "funda", "protector", "screen protector", "mica"]
+                - Deportes: ["backpack", "mochila", "sports bag", "bolsa deportiva", "gym bag"]
+
+                IMPORTANTE:
                 - NO incluyas términos relacionados con: {json.dumps(excluded_terms, indent=2, ensure_ascii=False)}
                 - Responde SOLO con el array JSON, sin markdown, sin explicaciones.
-                Ejemplo: ["keyword1", "keyword2", "keyword3"]
+                Ejemplo: ["headphones", "earbuds", "auriculares", "audífonos", "wireless headphones"]
                 """
         elif current['is_specific_in_parent']:
             # Para partidas con descripción específica en la padre
@@ -211,8 +252,23 @@ class Command(BaseCommand):
             4. Incluya variaciones regionales
             5. Incluya términos de búsqueda frecuentes del usuario final
 
+            IMPORTANTE - BILINGUAL KEYWORDS (ENGLISH + SPANISH):
+            Los usuarios copian descripciones de facturas estadounidenses (Amazon, eBay, etc.) en INGLÉS.
+
+            REQUERIMIENTOS OBLIGATORIOS:
+            - Keywords en INGLÉS Y ESPAÑOL (ambos idiomas son obligatorios)
+            - Generar equivalentes en inglés de "{current['specific_desc']}"
+            - Incluir nombres de marcas comunes si son relevantes para "{current['specific_desc']}"
+            - Preservar términos técnicos: "USB-C", "HDMI", "bluetooth", "wifi", "LED", "GPS"
+            - Productos tecnológicos frecuentemente buscados en inglés
+
+            EJEMPLOS DE KEYWORDS BILINGUAL:
+            - Si es "teclados": ["keyboard", "teclado", "mechanical keyboard", "teclado mecánico", "wireless keyboard", "gaming keyboard"]
+            - Si es "cargadores": ["charger", "cargador", "power adapter", "adaptador", "USB charger", "wall charger"]
+            - Si es "calzado deportivo": ["sports shoes", "sneakers", "running shoes", "zapatos deportivos", "tenis", "zapatillas"]
+
             IMPORTANTE: Responde SOLO con el array JSON, sin markdown, sin explicaciones.
-            Ejemplo: ["keyword1", "keyword2", "keyword3"]
+            Ejemplo: ["keyboard", "teclado", "mechanical keyboard", "teclado mecánico", "wireless keyboard"]
             """
         else:
             # Para partidas normales
@@ -234,25 +290,57 @@ class Command(BaseCommand):
             4. Incluya variaciones regionales
             5. Incluya términos de búsqueda frecuentes del usuario final
 
+            IMPORTANTE - BILINGUAL KEYWORDS (ENGLISH + SPANISH):
+            Los usuarios copian descripciones de facturas estadounidenses (Amazon, eBay, etc.) en INGLÉS.
+
+            REQUERIMIENTOS OBLIGATORIOS:
+            - Keywords en INGLÉS Y ESPAÑOL (ambos idiomas son obligatorios)
+            - Generar equivalentes en inglés de los productos
+            - Preservar términos técnicos exactos: "USB-C", "HDMI", "bluetooth", "wifi", "LED", "GPS", "NFC"
+            - Incluir nombres de marcas comunes cuando relevante: "iPhone", "Samsung", "Nike", "Adidas", "Sony"
+            - Usuarios frecuentemente buscan: "laptop", "smartphone", "mouse inalámbrico", "wireless headphones"
+            - Incluir números de modelo cuando sea común: "iPhone 15", "Galaxy S24", "AirPods Pro"
+
+            EJEMPLOS DE KEYWORDS BILINGUAL:
+            - Computadoras: ["laptop", "notebook", "computer", "pc", "computadora", "ordenador", "MacBook", "Chromebook"]
+            - Smartphones: ["smartphone", "phone", "mobile", "celular", "teléfono", "iPhone", "Galaxy", "android phone"]
+            - Audio: ["headphones", "earbuds", "auriculares", "audífonos", "AirPods", "wireless earbuds", "bluetooth headphones"]
+            - Accesorios tech: ["cable", "charger", "USB-C", "HDMI", "cargador", "cable de carga", "power bank", "adaptador"]
+            - Ropa: ["shoes", "sneakers", "jacket", "zapatos", "tenis", "chaqueta", "hoodie", "sudadera"]
+
             IMPORTANTE: Responde SOLO con el array JSON, sin markdown, sin explicaciones.
-            Ejemplo: ["keyword1", "keyword2", "keyword3"]
+            Ejemplo: ["laptop", "notebook", "computer", "computadora", "pc", "MacBook", "laptop computer"]
             """
 
         client = self.get_ai_client(api_provider)
         model = self.get_model_name(api_provider)
-        
+        system_message = "Eres un experto en clasificación arancelaria y comercio internacional. Genera máximo 30 keywords relevantes EN ESPAÑOL E INGLÉS (bilingual) para usuarios en Honduras que buscan productos copiando descripciones de facturas estadounidenses. Responde solo con arrays JSON puros, sin formato markdown."
+
         try:
-            response = client.chat.completions.create(
-                model=model,
-                messages=[
-                    {"role": "system", "content": "Eres un experto en clasificación arancelaria y comercio internacional. Genera máximo 30 keywords relevantes. Responde solo con arrays JSON puros, sin formato markdown."},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=0.7,
-                max_tokens=800
-            )
-            
-            response_text = response.choices[0].message.content.strip()
+            if api_provider == 'anthropic':
+                # Anthropic API format
+                response = client.messages.create(
+                    model=model,
+                    max_tokens=1200,
+                    temperature=0.7,
+                    system=system_message,
+                    messages=[
+                        {"role": "user", "content": prompt}
+                    ]
+                )
+                response_text = response.content[0].text.strip()
+            else:
+                # OpenAI/DeepSeek API format
+                response = client.chat.completions.create(
+                    model=model,
+                    messages=[
+                        {"role": "system", "content": system_message},
+                        {"role": "user", "content": prompt}
+                    ],
+                    temperature=0.7,
+                    max_tokens=1200
+                )
+                response_text = response.choices[0].message.content.strip()
             
             try:
                 # Limpiar la respuesta de cualquier formato markdown
@@ -292,7 +380,13 @@ class Command(BaseCommand):
         api_provider = options['api_provider']
         
         # Verificar API key
-        api_key = os.environ.get('DEEPSEEK_API_KEY' if api_provider == 'deepseek' else 'OPENAI_API_KEY')
+        if api_provider == 'deepseek':
+            api_key = os.environ.get('DEEPSEEK_API_KEY')
+        elif api_provider == 'anthropic':
+            api_key = os.environ.get('ANTHROPIC_API_KEY')
+        else:
+            api_key = os.environ.get('OPENAI_API_KEY')
+
         if not api_key:
             self.stdout.write(self.style.ERROR(f'No se encontró la API key para {api_provider}'))
             return
