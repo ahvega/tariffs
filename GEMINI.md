@@ -24,7 +24,8 @@ The system is built with a modern technology stack, including a Django backend, 
 * **Mobile:** React Native (planned)
 * **Database:** PostgreSQL
 * **Search:** Elasticsearch
-* **Real-time Communication:** Django Channels (likely for notifications and tracking updates)
+* **Real-time Communication:** Django Channels, Celery with Redis (for background tasks and real-time updates)
+* **AI Integrations:** OpenAI, DeepSeek, Anthropic (for semantic search, keyword generation, and embeddings)
 * **API Documentation:** OpenAPI (Swagger) generated with `drf-spectacular`.
 
 ## Building and Running the Project
@@ -99,9 +100,9 @@ pytest
 * **Permissions:** The API uses a permission-based system, where staff users have access to all data, while regular users can only view their own information.
 * **Search and AI:** The project uses a sophisticated hybrid search system that combines traditional keyword-based search with modern semantic search. This is powered by Elasticsearch and a custom-built AI engine.
   * **Elasticsearch:** Used for full-text search with features like fuzzy matching and a Spanish language analyzer.
-  * **Semantic Search:** Item descriptions are converted into vector embeddings, which are then used to find semantically similar tariff classifications.
+  * **Semantic Search:** Item descriptions are converted into vector embeddings, which are then used to find semantically similar tariff classifications. This involves new data models like `ItemPartidaMapping` (for learning from user selections) and `PartidaArancelariaEmbedding` (for storing vector embeddings).
   * **AI-Powered Keyword Generation:** The system uses a management command (`generate_search_keywords`) to generate additional search keywords for each tariff item using AI (OpenAI or DeepSeek). These keywords enrich the search index and improve the accuracy of the keyword-based search.
-  * **Continuous Learning:** The system learns from user selections and staff corrections, continuously improving its accuracy over time.
+  * **Continuous Learning:** The system learns from user selections and staff corrections, continuously improving its accuracy over time. This is facilitated by Celery background tasks that analyze new mappings and enrich the search index.
   * **Hierarchical Data:** The `PartidaArancelaria` data is hierarchical, with each item having a `parent_category`. However, the `partida_arancelaria` field itself is not a concatenated path of the hierarchy. The search and matching logic should take this hierarchical structure into account to provide contextually relevant results.
 * **AI Integration:** The system is designed to incorporate AI for suggesting tariff classifications and generating search keywords. This is a key feature that should be maintained and enhanced.
 * **HTMX:** The use of `django-htmx` suggests that some parts of the traditional Django application may use HTMX for dynamic updates without a full frontend framework. This is likely for the admin or staff-facing interfaces.
@@ -122,3 +123,5 @@ This project is organized into a master development plan and several detailed su
 * **Elasticsearch Admin:** [ELASTICSEARCH_ADMIN_MANAGEMENT.md](./ELASTICSEARCH_ADMIN_MANAGEMENT.md)
 * **Customer Portal:** [FRONTEND_CUSTOMER_PORTAL.md](./FRONTEND_CUSTOMER_PORTAL.md)
 * **Staff Portal:** [FRONTEND_STAFF_PORTAL.md](./FRONTEND_STAFF_PORTAL.md)
+* **Search Keyword Improvement:** [SEARCH_KEYWORD_IMPROVEMENT_PLAN.md](./SEARCH_KEYWORD_IMPROVEMENT_PLAN.md)
+* **AI Semantic Matching Design:** [AI_SEMANTIC_MATCHING_DESIGN.md](./AI_SEMANTIC_MATCHING_DESIGN.md)
