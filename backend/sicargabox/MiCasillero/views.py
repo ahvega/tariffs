@@ -189,11 +189,18 @@ def cotizar_json(request):
             # Parse JSON body
             data = json.loads(request.body)
 
+            # Convert peso to lbs if unit is kg
+            peso = data.get('peso')
+            unidad_peso = data.get('unidad_peso', 'lb')
+            if unidad_peso == 'kg':
+                # Convert kg to lbs (1 kg = 2.20462 lbs)
+                peso = round(float(peso) * 2.20462, 2)
+
             # Create form data with defaults for optional fields
             form_data = {
                 'valor_articulo': data.get('valor'),
-                'peso': data.get('peso'),
-                'unidad_peso': data.get('unidad_peso', 'lb'),
+                'peso': peso,  # Already converted to lbs if necessary
+                'unidad_peso': unidad_peso,
                 'largo': data.get('largo', 1),  # Default to 1 if not provided
                 'ancho': data.get('ancho', 1),  # Default to 1 if not provided
                 'alto': data.get('alto', 1),    # Default to 1 if not provided
@@ -238,8 +245,15 @@ def cotizar_json(request):
                     'data': {
                         'valor_declarado': float(articulo.valor_articulo),
                         'valor_cif': float(valor_cif),
-                        'peso': float(articulo.peso),
+                        'peso': float(articulo.peso),  # This is in lbs after conversion
+                        'peso_original': float(data.get('peso')),  # Original peso submitted
+                        'unidad_peso': unidad_peso,  # Original unit submitted
+                        'peso_volumetrico': float(articulo.peso_volumetrico),
                         'peso_a_usar': float(articulo.peso_a_usar),
+                        'largo': float(articulo.largo),
+                        'ancho': float(articulo.ancho),
+                        'alto': float(articulo.alto),
+                        'factor_volumetrico': float(articulo.FACTOR_VOL),
                         'costo_por_libra': str(articulo.costo_flete_por_lb),
                         'impuesto_dai': float(articulo.impuesto_dai),
                         'impuesto_isc': float(articulo.impuesto_isc),

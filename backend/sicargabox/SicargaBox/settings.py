@@ -260,6 +260,12 @@ REST_FRAMEWORK = {
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Next.js development server
+    "http://localhost:3001",  # Next.js development server (alternate port)
+    "http://localhost:3002",  # Next.js development server (alternate port)
+    "http://localhost:3003",  # Next.js development server (alternate port)
+    "http://localhost:3004",  # Next.js development server (alternate port)
+    "http://localhost:3005",  # Next.js development server (alternate port)
+    "http://localhost:3006",  # Next.js development server (alternate port)
 ]
 
 CORS_ALLOW_CREDENTIALS = True
