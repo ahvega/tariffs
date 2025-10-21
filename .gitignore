@@ -136,3 +136,11 @@ dump.rdb
 
 # User settings (keep sample, ignore actual)
 user-settings.json
+
+# Redis / Docker (additional entries)
+docker/redis/.env
+docker/redis/data/
+docker/redis/*.rdb
+docker/redis/*.aof
+docker/redis/*.log
+docker/redis/backup-*.rdb
