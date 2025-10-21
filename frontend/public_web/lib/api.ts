@@ -27,8 +27,15 @@ interface SearchResult {
 export interface QuoteCalculation {
   valor_declarado: number;
   valor_cif: number;
-  peso: number;
+  peso: number;  // Peso in lbs (converted if needed)
+  peso_original: number;  // Original peso submitted
+  unidad_peso: 'lb' | 'kg';  // Original unit submitted
+  peso_volumetrico: number;
   peso_a_usar: number;
+  largo: number;
+  ancho: number;
+  alto: number;
+  factor_volumetrico: number;
   costo_por_libra: string;
   impuesto_dai: number;
   impuesto_isc: number;

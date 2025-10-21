@@ -21,6 +21,40 @@ export default function QuoteResults({ quote }: QuoteResultsProps) {
     }).format(value);
   };
 
+  const parsePartidaHierarchy = (descripcion: string) => {
+    const parts = descripcion.split("|").map(p => p.trim()).filter(p => p);
+
+    if (parts.length === 0) return null;
+
+    // parts[0] = Partida, parts[1] = Parent, parts[2] = Grandparent
+    return {
+      partida: parts[0] || "",
+      parent: parts[1] || null,
+      grandparent: parts[2] || null,
+    };
+  };
+
+  const formatPartidaBreadcrumb = () => {
+    const hierarchy = parsePartidaHierarchy(quote.partida_descripcion);
+
+    if (!hierarchy) return null;
+
+    const parts = [];
+    if (hierarchy.grandparent) parts.push(hierarchy.grandparent);
+    if (hierarchy.parent) parts.push(hierarchy.parent);
+    parts.push(hierarchy.partida);
+
+    return parts.map((part, index) => {
+      const isLast = index === parts.length - 1;
+      return (
+        <span key={index}>
+          {isLast ? <strong><span className="font-mono">{part}</span></strong> : <span className="font-mono">{part}</span>}
+          {!isLast && <span className="mx-1">›</span>}
+        </span>
+      );
+    });
+  };
+
   return (
     <div className="max-w-4xl mx-auto mt-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6">
       <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
@@ -45,7 +79,7 @@ export default function QuoteResults({ quote }: QuoteResultsProps) {
           </svg>
           <div>
             <h3 className="font-bold text-gray-700 dark:text-gray-300">Total a Pagar</h3>
-            <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+            <div className="font-mono text-3xl font-bold text-blue-600 dark:text-blue-400">
               {formatCurrency(quote.total_incluido_valor)}
             </div>
           </div>
@@ -64,20 +98,34 @@ export default function QuoteResults({ quote }: QuoteResultsProps) {
               {quote.descripcion_original}
             </div>
           </div>
-          <div className="flex justify-between py-3 border-b border-gray-200 dark:border-gray-700">
-            <span className="text-gray-600 dark:text-gray-400">Partida Arancelaria:</span>
-            <div className="font-medium text-gray-900 dark:text-white">{quote.partida_item_no}</div>
-          </div>
-          <div className="flex justify-between py-3 border-b border-gray-200 dark:border-gray-700">
-            <span className="text-gray-600 dark:text-gray-400">Valor Declarado:</span>
-            <div className="font-medium text-gray-900 dark:text-white">
-              {formatCurrency(quote.valor_declarado)}
+          <div className="py-3 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-400">Partida Arancelaria:</span>
+              <div className="font-medium font-mono text-gray-900 dark:text-white">{quote.partida_item_no}</div>
+            </div>
+            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              {formatPartidaBreadcrumb()}
             </div>
           </div>
           <div className="flex justify-between py-3 border-b border-gray-200 dark:border-gray-700">
-            <span className="text-gray-600 dark:text-gray-400">Peso a Usar:</span>
-            <div className="font-medium text-gray-900 dark:text-white">
-              {formatWeight(quote.peso_a_usar)} lb
+            <span className="text-gray-600 dark:text-gray-400">Valor Declarado:</span>
+            <div className="font-medium font-mono text-gray-900 dark:text-white">
+              {formatCurrency(quote.valor_declarado)}
+            </div>
+          </div>
+          <div className="py-3 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-400">Peso a Usar:</span>
+              <div className="font-medium font-mono text-gray-900 dark:text-white">
+                {formatWeight(quote.peso_a_usar)} lb
+              </div>
+            </div>
+            <div className="text-sm font-mono text-gray-500 dark:text-gray-400 mt-1">
+              {quote.peso_a_usar === quote.peso ? (
+                'Peso Declarado'
+              ) : (
+                `Peso Volumétrico = ${formatWeight(quote.largo)} × ${formatWeight(quote.ancho)} × ${formatWeight(quote.alto)} ÷ ${quote.factor_volumetrico}`
+              )}
             </div>
           </div>
         </div>
@@ -93,12 +141,12 @@ export default function QuoteResults({ quote }: QuoteResultsProps) {
           {/* Transport Cost */}
           <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
             <div>
-              <div className="font-medium text-gray-900 dark:text-white">Costo de Transporte</div>
+              <div className="font-medium font-mono text-gray-900 dark:text-white">Costo de Transporte</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">
                 {formatWeight(quote.peso_a_usar)} lb × ${quote.costo_por_libra}
               </div>
             </div>
-            <div className="font-bold text-gray-900 dark:text-white">
+            <div className="font-bold font-mono text-gray-900 dark:text-white">
               {formatCurrency(quote.costo_transporte)}
             </div>
           </div>
@@ -106,12 +154,12 @@ export default function QuoteResults({ quote }: QuoteResultsProps) {
           {/* CIF Value */}
           <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
             <div>
-              <div className="font-medium text-gray-900 dark:text-white">Valor CIF</div>
+              <div className="font-medium font-mono text-gray-900 dark:text-white">Valor CIF</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">
                 Valor para cálculo de impuestos
               </div>
             </div>
-            <div className="font-bold text-gray-900 dark:text-white">
+            <div className="font-bold font-mono text-gray-900 dark:text-white">
               {formatCurrency(quote.valor_cif)}
             </div>
           </div>
@@ -127,20 +175,20 @@ export default function QuoteResults({ quote }: QuoteResultsProps) {
             <div className="pl-4 space-y-2">
               {quote.impuesto_dai > 0 && (
                 <div className="flex justify-between text-sm py-2 border-b border-gray-100 dark:border-gray-700">
-                  <span className="text-gray-600 dark:text-gray-400">DAI ({quote.porcentaje_dai}%)</span>
-                  <span className="text-gray-900 dark:text-white">{formatCurrency(quote.impuesto_dai)}</span>
+                  <span className="font-mono text-gray-600 dark:text-gray-400">DAI ({quote.porcentaje_dai}%)</span>
+                  <span className="font-mono text-gray-900 dark:text-white">{formatCurrency(quote.impuesto_dai)}</span>
                 </div>
               )}
               {quote.impuesto_isc > 0 && (
                 <div className="flex justify-between text-sm py-2 border-b border-gray-100 dark:border-gray-700">
-                  <span className="text-gray-600 dark:text-gray-400">ISC ({quote.porcentaje_isc}%)</span>
-                  <span className="text-gray-900 dark:text-white">{formatCurrency(quote.impuesto_isc)}</span>
+                  <span className="font-mono text-gray-600 dark:text-gray-400">ISC ({quote.porcentaje_isc}%)</span>
+                  <span className="font-mono text-gray-900 dark:text-white">{formatCurrency(quote.impuesto_isc)}</span>
                 </div>
               )}
               {quote.impuesto_ispc > 0 && (
                 <div className="flex justify-between text-sm py-2 border-b border-gray-100 dark:border-gray-700">
-                  <span className="text-gray-600 dark:text-gray-400">ISPC ({quote.porcentaje_ispc}%)</span>
-                  <span className="text-gray-900 dark:text-white">{formatCurrency(quote.impuesto_ispc)}</span>
+                  <span className="font-mono text-gray-600 dark:text-gray-400">ISPC ({quote.porcentaje_ispc}%)</span>
+                  <span className="font-mono text-gray-900 dark:text-white">{formatCurrency(quote.impuesto_ispc)}</span>
                 </div>
               )}
             </div>
@@ -151,31 +199,36 @@ export default function QuoteResults({ quote }: QuoteResultsProps) {
             <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
               <div>
                 <div className="font-medium text-gray-900 dark:text-white">ISV (Impuesto Sobre Ventas)</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">{quote.porcentaje_isv}%</div>
+                <div className="text-sm font-mono text-gray-600 dark:text-gray-400">{quote.porcentaje_isv}%</div>
               </div>
-              <div className="font-bold text-gray-900 dark:text-white">
+              <div className="font-bold font-mono text-gray-900 dark:text-white">
                 {formatCurrency(quote.impuesto_isv)}
               </div>
             </div>
           )}
 
-          {/* Total Charges */}
-          <div className="flex justify-between items-center p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg mt-3">
-            <div className="font-bold text-lg text-gray-900 dark:text-white">Cargos Totales</div>
-            <div className="font-bold text-lg text-gray-900 dark:text-white">
+          {/* Total Charges - HIGHLIGHTED */}
+          <div className="flex justify-between items-center p-4 bg-blue-600 dark:bg-blue-700 text-white rounded-lg mt-3">
+            <div>
+              <div className="font-mono font-bold text-xl">Cargos Totales</div>
+              <div className="text-sm opacity-90">
+                (Transporte + Impuestos)
+              </div>
+            </div>
+            <div className="font-mono font-bold text-2xl">
               {formatCurrency(quote.cargos_totales)}
             </div>
           </div>
 
           {/* Grand Total */}
-          <div className="flex justify-between items-center p-4 bg-blue-600 dark:bg-blue-700 text-white rounded-lg mt-3">
+          <div className="flex justify-between items-center p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg mt-3">
             <div>
-              <div className="font-bold text-xl">Total Incluido Valor</div>
-              <div className="text-sm opacity-90">
+              <div className="font-mono font-bold text-lg text-gray-900 dark:text-white">Total Incluido Valor</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">
                 Valor del producto + cargos
               </div>
             </div>
-            <div className="font-bold text-2xl">
+            <div className="font-mono font-bold text-lg text-gray-900 dark:text-white">
               {formatCurrency(quote.total_incluido_valor)}
             </div>
           </div>
