@@ -1,0 +1,1708 @@
+{
+  "metadata": {
+    "timestamp": "2025-10-21T00:14:04.219883",
+    "test_file": {
+      "created": "2025-10-20",
+      "purpose": "Baseline evaluation of Elasticsearch search keyword quality",
+      "total_queries": 100,
+      "total_categories": 20,
+      "queries_per_category": 5,
+      "language": "es-HN",
+      "target_audience": "Honduras customers searching for tariff codes"
+    }
+  },
+  "metrics": {
+    "overall": {
+      "total_queries": 100,
+      "zero_results": 100,
+      "zero_result_rate": 1.0,
+      "precision_at_k": 0.0,
+      "mrr": 0.0,
+      "k": 5
+    },
+    "categories": {
+      "electronics_computers": {
+        "total_queries": 5,
+        "zero_results": 5,
+        "zero_result_rate": 1.0,
+        "precision_at_k": 0.0,
+        "mrr": 0.0,
+        "category_name": "Electrónicos y computadoras"
+      },
+      "electronics_mobile": {
+        "total_queries": 5,
+        "zero_results": 5,
+        "zero_result_rate": 1.0,
+        "precision_at_k": 0.0,
+        "mrr": 0.0,
+        "category_name": "Electrónicos móviles y accesorios"
+      },
+      "electronics_audio": {
+        "total_queries": 5,
+        "zero_results": 5,
+        "zero_result_rate": 1.0,
+        "precision_at_k": 0.0,
+        "mrr": 0.0,
+        "category_name": "Audio y video"
+      },
+      "clothing_mens": {
+        "total_queries": 5,
+        "zero_results": 5,
+        "zero_result_rate": 1.0,
+        "precision_at_k": 0.0,
+        "mrr": 0.0,
+        "category_name": "Ropa de hombre"
+      },
+      "clothing_womens": {
+        "total_queries": 5,
+        "zero_results": 5,
+        "zero_result_rate": 1.0,
+        "precision_at_k": 0.0,
+        "mrr": 0.0,
+        "category_name": "Ropa de mujer"
+      },
+      "toys_games": {
+        "total_queries": 5,
+        "zero_results": 5,
+        "zero_result_rate": 1.0,
+        "precision_at_k": 0.0,
+        "mrr": 0.0,
+        "category_name": "Juguetes y juegos"
+      },
+      "sports_equipment": {
+        "total_queries": 5,
+        "zero_results": 5,
+        "zero_result_rate": 1.0,
+        "precision_at_k": 0.0,
+        "mrr": 0.0,
+        "category_name": "Equipos deportivos"
+      },
+      "home_kitchen": {
+        "total_queries": 5,
+        "zero_results": 5,
+        "zero_result_rate": 1.0,
+        "precision_at_k": 0.0,
+        "mrr": 0.0,
+        "category_name": "Hogar y cocina"
+      },
+      "home_furniture": {
+        "total_queries": 5,
+        "zero_results": 5,
+        "zero_result_rate": 1.0,
+        "precision_at_k": 0.0,
+        "mrr": 0.0,
+        "category_name": "Muebles"
+      },
+      "beauty_cosmetics": {
+        "total_queries": 5,
+        "zero_results": 5,
+        "zero_result_rate": 1.0,
+        "precision_at_k": 0.0,
+        "mrr": 0.0,
+        "category_name": "Belleza y cosméticos"
+      },
+      "health_personal_care": {
+        "total_queries": 5,
+        "zero_results": 5,
+        "zero_result_rate": 1.0,
+        "precision_at_k": 0.0,
+        "mrr": 0.0,
+        "category_name": "Salud y cuidado personal"
+      },
+      "baby_products": {
+        "total_queries": 5,
+        "zero_results": 5,
+        "zero_result_rate": 1.0,
+        "precision_at_k": 0.0,
+        "mrr": 0.0,
+        "category_name": "Productos para bebé"
+      },
+      "books_media": {
+        "total_queries": 5,
+        "zero_results": 5,
+        "zero_result_rate": 1.0,
+        "precision_at_k": 0.0,
+        "mrr": 0.0,
+        "category_name": "Libros y medios"
+      },
+      "office_supplies": {
+        "total_queries": 5,
+        "zero_results": 5,
+        "zero_result_rate": 1.0,
+        "precision_at_k": 0.0,
+        "mrr": 0.0,
+        "category_name": "Útiles de oficina"
+      },
+      "automotive": {
+        "total_queries": 5,
+        "zero_results": 5,
+        "zero_result_rate": 1.0,
+        "precision_at_k": 0.0,
+        "mrr": 0.0,
+        "category_name": "Automotriz"
+      },
+      "tools_hardware": {
+        "total_queries": 5,
+        "zero_results": 5,
+        "zero_result_rate": 1.0,
+        "precision_at_k": 0.0,
+        "mrr": 0.0,
+        "category_name": "Herramientas y ferretería"
+      },
+      "jewelry_watches": {
+        "total_queries": 5,
+        "zero_results": 5,
+        "zero_result_rate": 1.0,
+        "precision_at_k": 0.0,
+        "mrr": 0.0,
+        "category_name": "Joyería y relojes"
+      },
+      "pet_supplies": {
+        "total_queries": 5,
+        "zero_results": 5,
+        "zero_result_rate": 1.0,
+        "precision_at_k": 0.0,
+        "mrr": 0.0,
+        "category_name": "Suministros para mascotas"
+      },
+      "outdoor_camping": {
+        "total_queries": 5,
+        "zero_results": 5,
+        "zero_result_rate": 1.0,
+        "precision_at_k": 0.0,
+        "mrr": 0.0,
+        "category_name": "Camping y actividades al aire libre"
+      },
+      "musical_instruments": {
+        "total_queries": 5,
+        "zero_results": 5,
+        "zero_result_rate": 1.0,
+        "precision_at_k": 0.0,
+        "mrr": 0.0,
+        "category_name": "Instrumentos musicales"
+      }
+    },
+    "timestamp": "2025-10-21T00:14:04.219883",
+    "test_file": {
+      "created": "2025-10-20",
+      "purpose": "Baseline evaluation of Elasticsearch search keyword quality",
+      "total_queries": 100,
+      "total_categories": 20,
+      "queries_per_category": 5,
+      "language": "es-HN",
+      "target_audience": "Honduras customers searching for tariff codes"
+    }
+  },
+  "results": [
+    {
+      "query": "laptop",
+      "category": "electronics_computers",
+      "category_name": "Electrónicos y computadoras",
+      "expected_patterns": [
+        "8471",
+        "8473"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "mouse inalámbrico",
+      "category": "electronics_computers",
+      "category_name": "Electrónicos y computadoras",
+      "expected_patterns": [
+        "8471",
+        "8473"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "teclado mecánico",
+      "category": "electronics_computers",
+      "category_name": "Electrónicos y computadoras",
+      "expected_patterns": [
+        "8471",
+        "8473"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "monitor 27 pulgadas",
+      "category": "electronics_computers",
+      "category_name": "Electrónicos y computadoras",
+      "expected_patterns": [
+        "8471",
+        "8473"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "disco duro externo",
+      "category": "electronics_computers",
+      "category_name": "Electrónicos y computadoras",
+      "expected_patterns": [
+        "8471",
+        "8473"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "celular",
+      "category": "electronics_mobile",
+      "category_name": "Electrónicos móviles y accesorios",
+      "expected_patterns": [
+        "8517",
+        "8544"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "auriculares bluetooth",
+      "category": "electronics_mobile",
+      "category_name": "Electrónicos móviles y accesorios",
+      "expected_patterns": [
+        "8517",
+        "8544"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "cargador de teléfono",
+      "category": "electronics_mobile",
+      "category_name": "Electrónicos móviles y accesorios",
+      "expected_patterns": [
+        "8517",
+        "8544"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "cable USB-C",
+      "category": "electronics_mobile",
+      "category_name": "Electrónicos móviles y accesorios",
+      "expected_patterns": [
+        "8517",
+        "8544"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "funda para iphone",
+      "category": "electronics_mobile",
+      "category_name": "Electrónicos móviles y accesorios",
+      "expected_patterns": [
+        "8517",
+        "8544"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "bocinas bluetooth",
+      "category": "electronics_audio",
+      "category_name": "Audio y video",
+      "expected_patterns": [
+        "8518",
+        "8525",
+        "8544"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "audífonos inalámbricos",
+      "category": "electronics_audio",
+      "category_name": "Audio y video",
+      "expected_patterns": [
+        "8518",
+        "8525",
+        "8544"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "micrófono usb",
+      "category": "electronics_audio",
+      "category_name": "Audio y video",
+      "expected_patterns": [
+        "8518",
+        "8525",
+        "8544"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "cámara web",
+      "category": "electronics_audio",
+      "category_name": "Audio y video",
+      "expected_patterns": [
+        "8518",
+        "8525",
+        "8544"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "cable HDMI",
+      "category": "electronics_audio",
+      "category_name": "Audio y video",
+      "expected_patterns": [
+        "8518",
+        "8525",
+        "8544"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "camisa de hombre",
+      "category": "clothing_mens",
+      "category_name": "Ropa de hombre",
+      "expected_patterns": [
+        "6203",
+        "6205",
+        "6401",
+        "6501",
+        "4203"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "pantalón jean",
+      "category": "clothing_mens",
+      "category_name": "Ropa de hombre",
+      "expected_patterns": [
+        "6203",
+        "6205",
+        "6401",
+        "6501",
+        "4203"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "zapatos deportivos",
+      "category": "clothing_mens",
+      "category_name": "Ropa de hombre",
+      "expected_patterns": [
+        "6203",
+        "6205",
+        "6401",
+        "6501",
+        "4203"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "chaqueta de cuero",
+      "category": "clothing_mens",
+      "category_name": "Ropa de hombre",
+      "expected_patterns": [
+        "6203",
+        "6205",
+        "6401",
+        "6501",
+        "4203"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "gorra",
+      "category": "clothing_mens",
+      "category_name": "Ropa de hombre",
+      "expected_patterns": [
+        "6203",
+        "6205",
+        "6401",
+        "6501",
+        "4203"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "vestido",
+      "category": "clothing_womens",
+      "category_name": "Ropa de mujer",
+      "expected_patterns": [
+        "6204",
+        "6206",
+        "6402",
+        "4202"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "blusa de mujer",
+      "category": "clothing_womens",
+      "category_name": "Ropa de mujer",
+      "expected_patterns": [
+        "6204",
+        "6206",
+        "6402",
+        "4202"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "zapatos de tacón",
+      "category": "clothing_womens",
+      "category_name": "Ropa de mujer",
+      "expected_patterns": [
+        "6204",
+        "6206",
+        "6402",
+        "4202"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "bolso de mano",
+      "category": "clothing_womens",
+      "category_name": "Ropa de mujer",
+      "expected_patterns": [
+        "6204",
+        "6206",
+        "6402",
+        "4202"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "cartera de cuero",
+      "category": "clothing_womens",
+      "category_name": "Ropa de mujer",
+      "expected_patterns": [
+        "6204",
+        "6206",
+        "6402",
+        "4202"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "muñeca barbie",
+      "category": "toys_games",
+      "category_name": "Juguetes y juegos",
+      "expected_patterns": [
+        "9503"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "carrito de control remoto",
+      "category": "toys_games",
+      "category_name": "Juguetes y juegos",
+      "expected_patterns": [
+        "9503"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "lego",
+      "category": "toys_games",
+      "category_name": "Juguetes y juegos",
+      "expected_patterns": [
+        "9503"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "peluche",
+      "category": "toys_games",
+      "category_name": "Juguetes y juegos",
+      "expected_patterns": [
+        "9503"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "rompecabezas",
+      "category": "toys_games",
+      "category_name": "Juguetes y juegos",
+      "expected_patterns": [
+        "9503"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "balón de fútbol",
+      "category": "sports_equipment",
+      "category_name": "Equipos deportivos",
+      "expected_patterns": [
+        "9506",
+        "8712"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "raqueta de tenis",
+      "category": "sports_equipment",
+      "category_name": "Equipos deportivos",
+      "expected_patterns": [
+        "9506",
+        "8712"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "pesas",
+      "category": "sports_equipment",
+      "category_name": "Equipos deportivos",
+      "expected_patterns": [
+        "9506",
+        "8712"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "bicicleta",
+      "category": "sports_equipment",
+      "category_name": "Equipos deportivos",
+      "expected_patterns": [
+        "9506",
+        "8712"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "cuerda para saltar",
+      "category": "sports_equipment",
+      "category_name": "Equipos deportivos",
+      "expected_patterns": [
+        "9506",
+        "8712"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "licuadora",
+      "category": "home_kitchen",
+      "category_name": "Hogar y cocina",
+      "expected_patterns": [
+        "8509",
+        "7615",
+        "6911",
+        "8215"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "olla de presión",
+      "category": "home_kitchen",
+      "category_name": "Hogar y cocina",
+      "expected_patterns": [
+        "8509",
+        "7615",
+        "6911",
+        "8215"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "sartén antiadherente",
+      "category": "home_kitchen",
+      "category_name": "Hogar y cocina",
+      "expected_patterns": [
+        "8509",
+        "7615",
+        "6911",
+        "8215"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "platos de cerámica",
+      "category": "home_kitchen",
+      "category_name": "Hogar y cocina",
+      "expected_patterns": [
+        "8509",
+        "7615",
+        "6911",
+        "8215"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "juego de cubiertos",
+      "category": "home_kitchen",
+      "category_name": "Hogar y cocina",
+      "expected_patterns": [
+        "8509",
+        "7615",
+        "6911",
+        "8215"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "silla de oficina",
+      "category": "home_furniture",
+      "category_name": "Muebles",
+      "expected_patterns": [
+        "9401",
+        "9403",
+        "9404"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "mesa de centro",
+      "category": "home_furniture",
+      "category_name": "Muebles",
+      "expected_patterns": [
+        "9401",
+        "9403",
+        "9404"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "estante de madera",
+      "category": "home_furniture",
+      "category_name": "Muebles",
+      "expected_patterns": [
+        "9401",
+        "9403",
+        "9404"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "colchón",
+      "category": "home_furniture",
+      "category_name": "Muebles",
+      "expected_patterns": [
+        "9401",
+        "9403",
+        "9404"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "almohada",
+      "category": "home_furniture",
+      "category_name": "Muebles",
+      "expected_patterns": [
+        "9401",
+        "9403",
+        "9404"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "maquillaje",
+      "category": "beauty_cosmetics",
+      "category_name": "Belleza y cosméticos",
+      "expected_patterns": [
+        "3304",
+        "3305",
+        "3307"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "perfume",
+      "category": "beauty_cosmetics",
+      "category_name": "Belleza y cosméticos",
+      "expected_patterns": [
+        "3304",
+        "3305",
+        "3307"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "crema facial",
+      "category": "beauty_cosmetics",
+      "category_name": "Belleza y cosméticos",
+      "expected_patterns": [
+        "3304",
+        "3305",
+        "3307"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "shampoo",
+      "category": "beauty_cosmetics",
+      "category_name": "Belleza y cosméticos",
+      "expected_patterns": [
+        "3304",
+        "3305",
+        "3307"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "esmalte de uñas",
+      "category": "beauty_cosmetics",
+      "category_name": "Belleza y cosméticos",
+      "expected_patterns": [
+        "3304",
+        "3305",
+        "3307"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "vitaminas",
+      "category": "health_personal_care",
+      "category_name": "Salud y cuidado personal",
+      "expected_patterns": [
+        "9018",
+        "3306",
+        "8509"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "termómetro digital",
+      "category": "health_personal_care",
+      "category_name": "Salud y cuidado personal",
+      "expected_patterns": [
+        "9018",
+        "3306",
+        "8509"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "tensiómetro",
+      "category": "health_personal_care",
+      "category_name": "Salud y cuidado personal",
+      "expected_patterns": [
+        "9018",
+        "3306",
+        "8509"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "pasta de dientes",
+      "category": "health_personal_care",
+      "category_name": "Salud y cuidado personal",
+      "expected_patterns": [
+        "9018",
+        "3306",
+        "8509"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "cepillo eléctrico",
+      "category": "health_personal_care",
+      "category_name": "Salud y cuidado personal",
+      "expected_patterns": [
+        "9018",
+        "3306",
+        "8509"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "pañales desechables",
+      "category": "baby_products",
+      "category_name": "Productos para bebé",
+      "expected_patterns": [
+        "9619",
+        "3923",
+        "8716",
+        "8525"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "biberón",
+      "category": "baby_products",
+      "category_name": "Productos para bebé",
+      "expected_patterns": [
+        "9619",
+        "3923",
+        "8716",
+        "8525"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "coche para bebé",
+      "category": "baby_products",
+      "category_name": "Productos para bebé",
+      "expected_patterns": [
+        "9619",
+        "3923",
+        "8716",
+        "8525"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "asiento de carro",
+      "category": "baby_products",
+      "category_name": "Productos para bebé",
+      "expected_patterns": [
+        "9619",
+        "3923",
+        "8716",
+        "8525"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "monitor de bebé",
+      "category": "baby_products",
+      "category_name": "Productos para bebé",
+      "expected_patterns": [
+        "9619",
+        "3923",
+        "8716",
+        "8525"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "libro",
+      "category": "books_media",
+      "category_name": "Libros y medios",
+      "expected_patterns": [
+        "4901",
+        "4902",
+        "8523"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "revista",
+      "category": "books_media",
+      "category_name": "Libros y medios",
+      "expected_patterns": [
+        "4901",
+        "4902",
+        "8523"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "DVD",
+      "category": "books_media",
+      "category_name": "Libros y medios",
+      "expected_patterns": [
+        "4901",
+        "4902",
+        "8523"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "audiolibro",
+      "category": "books_media",
+      "category_name": "Libros y medios",
+      "expected_patterns": [
+        "4901",
+        "4902",
+        "8523"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "enciclopedia",
+      "category": "books_media",
+      "category_name": "Libros y medios",
+      "expected_patterns": [
+        "4901",
+        "4902",
+        "8523"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "impresora",
+      "category": "office_supplies",
+      "category_name": "Útiles de oficina",
+      "expected_patterns": [
+        "8443",
+        "4802",
+        "9608",
+        "8470"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "papel bond",
+      "category": "office_supplies",
+      "category_name": "Útiles de oficina",
+      "expected_patterns": [
+        "8443",
+        "4802",
+        "9608",
+        "8470"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "bolígrafos",
+      "category": "office_supplies",
+      "category_name": "Útiles de oficina",
+      "expected_patterns": [
+        "8443",
+        "4802",
+        "9608",
+        "8470"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "calculadora",
+      "category": "office_supplies",
+      "category_name": "Útiles de oficina",
+      "expected_patterns": [
+        "8443",
+        "4802",
+        "9608",
+        "8470"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "archivador",
+      "category": "office_supplies",
+      "category_name": "Útiles de oficina",
+      "expected_patterns": [
+        "8443",
+        "4802",
+        "9608",
+        "8470"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "llantas",
+      "category": "automotive",
+      "category_name": "Automotriz",
+      "expected_patterns": [
+        "4011",
+        "8507",
+        "8421",
+        "8512"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "batería de carro",
+      "category": "automotive",
+      "category_name": "Automotriz",
+      "expected_patterns": [
+        "4011",
+        "8507",
+        "8421",
+        "8512"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "filtro de aceite",
+      "category": "automotive",
+      "category_name": "Automotriz",
+      "expected_patterns": [
+        "4011",
+        "8507",
+        "8421",
+        "8512"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "limpia parabrisas",
+      "category": "automotive",
+      "category_name": "Automotriz",
+      "expected_patterns": [
+        "4011",
+        "8507",
+        "8421",
+        "8512"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "bocina de carro",
+      "category": "automotive",
+      "category_name": "Automotriz",
+      "expected_patterns": [
+        "4011",
+        "8507",
+        "8421",
+        "8512"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "taladro eléctrico",
+      "category": "tools_hardware",
+      "category_name": "Herramientas y ferretería",
+      "expected_patterns": [
+        "8467",
+        "8205"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "martillo",
+      "category": "tools_hardware",
+      "category_name": "Herramientas y ferretería",
+      "expected_patterns": [
+        "8467",
+        "8205"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "destornillador",
+      "category": "tools_hardware",
+      "category_name": "Herramientas y ferretería",
+      "expected_patterns": [
+        "8467",
+        "8205"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "llave inglesa",
+      "category": "tools_hardware",
+      "category_name": "Herramientas y ferretería",
+      "expected_patterns": [
+        "8467",
+        "8205"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "sierra",
+      "category": "tools_hardware",
+      "category_name": "Herramientas y ferretería",
+      "expected_patterns": [
+        "8467",
+        "8205"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "reloj de pulsera",
+      "category": "jewelry_watches",
+      "category_name": "Joyería y relojes",
+      "expected_patterns": [
+        "9102",
+        "7113",
+        "7116"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "anillo de oro",
+      "category": "jewelry_watches",
+      "category_name": "Joyería y relojes",
+      "expected_patterns": [
+        "9102",
+        "7113",
+        "7116"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "collar de plata",
+      "category": "jewelry_watches",
+      "category_name": "Joyería y relojes",
+      "expected_patterns": [
+        "9102",
+        "7113",
+        "7116"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "aretes",
+      "category": "jewelry_watches",
+      "category_name": "Joyería y relojes",
+      "expected_patterns": [
+        "9102",
+        "7113",
+        "7116"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "pulsera",
+      "category": "jewelry_watches",
+      "category_name": "Joyería y relojes",
+      "expected_patterns": [
+        "9102",
+        "7113",
+        "7116"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "comida para perros",
+      "category": "pet_supplies",
+      "category_name": "Suministros para mascotas",
+      "expected_patterns": [
+        "2309",
+        "4201",
+        "9508",
+        "7013"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "collar para perro",
+      "category": "pet_supplies",
+      "category_name": "Suministros para mascotas",
+      "expected_patterns": [
+        "2309",
+        "4201",
+        "9508",
+        "7013"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "juguete para gatos",
+      "category": "pet_supplies",
+      "category_name": "Suministros para mascotas",
+      "expected_patterns": [
+        "2309",
+        "4201",
+        "9508",
+        "7013"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "pecera",
+      "category": "pet_supplies",
+      "category_name": "Suministros para mascotas",
+      "expected_patterns": [
+        "2309",
+        "4201",
+        "9508",
+        "7013"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "correa",
+      "category": "pet_supplies",
+      "category_name": "Suministros para mascotas",
+      "expected_patterns": [
+        "2309",
+        "4201",
+        "9508",
+        "7013"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "tienda de campaña",
+      "category": "outdoor_camping",
+      "category_name": "Camping y actividades al aire libre",
+      "expected_patterns": [
+        "6306",
+        "8513",
+        "4202",
+        "8211"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "sleeping bag",
+      "category": "outdoor_camping",
+      "category_name": "Camping y actividades al aire libre",
+      "expected_patterns": [
+        "6306",
+        "8513",
+        "4202",
+        "8211"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "linterna recargable",
+      "category": "outdoor_camping",
+      "category_name": "Camping y actividades al aire libre",
+      "expected_patterns": [
+        "6306",
+        "8513",
+        "4202",
+        "8211"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "mochila",
+      "category": "outdoor_camping",
+      "category_name": "Camping y actividades al aire libre",
+      "expected_patterns": [
+        "6306",
+        "8513",
+        "4202",
+        "8211"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "navaja",
+      "category": "outdoor_camping",
+      "category_name": "Camping y actividades al aire libre",
+      "expected_patterns": [
+        "6306",
+        "8513",
+        "4202",
+        "8211"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "guitarra eléctrica",
+      "category": "musical_instruments",
+      "category_name": "Instrumentos musicales",
+      "expected_patterns": [
+        "9207",
+        "8518"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "teclado musical",
+      "category": "musical_instruments",
+      "category_name": "Instrumentos musicales",
+      "expected_patterns": [
+        "9207",
+        "8518"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "batería",
+      "category": "musical_instruments",
+      "category_name": "Instrumentos musicales",
+      "expected_patterns": [
+        "9207",
+        "8518"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "micrófono de escenario",
+      "category": "musical_instruments",
+      "category_name": "Instrumentos musicales",
+      "expected_patterns": [
+        "9207",
+        "8518"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    },
+    {
+      "query": "amplificador",
+      "category": "musical_instruments",
+      "category_name": "Instrumentos musicales",
+      "expected_patterns": [
+        "9207",
+        "8518"
+      ],
+      "results": [],
+      "num_results": 0,
+      "is_zero_result": true,
+      "relevant_in_top_k": 0,
+      "first_relevant_position": 0
+    }
+  ]
+}

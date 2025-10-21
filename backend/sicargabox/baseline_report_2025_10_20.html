@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Quality Evaluation Report - 2025-10-21 00:14:04</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: system-ui, -apple-system, sans-serif; background: #f3f4f6; padding: 2rem; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        header { background: #1f2937; color: white; padding: 2rem; border-radius: 8px 8px 0 0; }
+        header h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+        header p { opacity: 0.8; }
+        .summary { padding: 2rem; border-bottom: 1px solid #e5e7eb; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+        .metric-card { border: 1px solid #e5e7eb; padding: 1.5rem; border-radius: 8px; }
+        .metric-card h3 { font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem; text-transform: uppercase; }
+        .metric-card .value { font-size: 2.5rem; font-weight: bold; margin-bottom: 0.25rem; }
+        .metric-card .subtitle { color: #6b7280; font-size: 0.875rem; }
+        .quality-badge { display: inline-block; background: #ef4444; color: white; padding: 0.5rem 1rem; border-radius: 6px; font-weight: bold; }
+        .section { padding: 2rem; border-bottom: 1px solid #e5e7eb; }
+        .section h2 { font-size: 1.5rem; margin-bottom: 1.5rem; color: #1f2937; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
+        th { background: #f9fafb; font-weight: 600; color: #374151; }
+        .progress-bar { height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; background: #3b82f6; transition: width 0.3s ease; }
+        .good { color: #22c55e; }
+        .warning { color: #eab308; }
+        .error { color: #ef4444; }
+        .query-result { margin-bottom: 1rem; padding: 1rem; border: 1px solid #e5e7eb; border-radius: 6px; }
+        .query-result .query-text { font-weight: 600; margin-bottom: 0.5rem; }
+        .query-result .result-item { padding: 0.5rem; margin: 0.25rem 0; background: #f9fafb; border-radius: 4px; font-size: 0.875rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 Search Quality Evaluation Report</h1>
+            <p>Generated: 2025-10-21 00:14:04</p>
+            <p>Test Dataset: 100 queries across 20 categories</p>
+        </header>
+
+        <div class="summary">
+            <h2 style="margin-bottom: 1.5rem;">Overall Quality: <span class="quality-badge">NEEDS IMPROVEMENT</span></h2>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h3>Total Queries</h3>
+                    <div class="value">100</div>
+                    <div class="subtitle">Test queries executed</div>
+                </div>
+
+                <div class="metric-card">
+                    <h3>Precision@5</h3>
+                    <div class="value" style="color: #ef4444">0.0%</div>
+                    <div class="subtitle">Relevant results in top 5</div>
+                </div>
+
+                <div class="metric-card">
+                    <h3>Mean Reciprocal Rank</h3>
+                    <div class="value error">0.000</div>
+                    <div class="subtitle">Position of first relevant result</div>
+                </div>
+
+                <div class="metric-card">
+                    <h3>Zero-Result Rate</h3>
+                    <div class="value error">100.0%</div>
+                    <div class="subtitle">100 queries with no results</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Category Performance</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Queries</th>
+                        <th>Precision@5</th>
+                        <th>MRR</th>
+                        <th>Zero Results</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td>Electrónicos y computadoras</td>
+                        <td>5</td>
+                        <td class="error">0.0%</td>
+                        <td>0.000</td>
+                        <td>5</td>
+                    </tr>
+
+                    <tr>
+                        <td>Electrónicos móviles y accesorios</td>
+                        <td>5</td>
+                        <td class="error">0.0%</td>
+                        <td>0.000</td>
+                        <td>5</td>
+                    </tr>
+
+                    <tr>
+                        <td>Audio y video</td>
+                        <td>5</td>
+                        <td class="error">0.0%</td>
+                        <td>0.000</td>
+                        <td>5</td>
+                    </tr>
+
+                    <tr>
+                        <td>Ropa de hombre</td>
+                        <td>5</td>
+                        <td class="error">0.0%</td>
+                        <td>0.000</td>
+                        <td>5</td>
+                    </tr>
+
+                    <tr>
+                        <td>Ropa de mujer</td>
+                        <td>5</td>
+                        <td class="error">0.0%</td>
+                        <td>0.000</td>
+                        <td>5</td>
+                    </tr>
+
+                    <tr>
+                        <td>Juguetes y juegos</td>
+                        <td>5</td>
+                        <td class="error">0.0%</td>
+                        <td>0.000</td>
+                        <td>5</td>
+                    </tr>
+
+                    <tr>
+                        <td>Equipos deportivos</td>
+                        <td>5</td>
+                        <td class="error">0.0%</td>
+                        <td>0.000</td>
+                        <td>5</td>
+                    </tr>
+
+                    <tr>
+                        <td>Hogar y cocina</td>
+                        <td>5</td>
+                        <td class="error">0.0%</td>
+                        <td>0.000</td>
+                        <td>5</td>
+                    </tr>
+
+                    <tr>
+                        <td>Muebles</td>
+                        <td>5</td>
+                        <td class="error">0.0%</td>
+                        <td>0.000</td>
+                        <td>5</td>
+                    </tr>
+
+                    <tr>
+                        <td>Belleza y cosméticos</td>
+                        <td>5</td>
+                        <td class="error">0.0%</td>
+                        <td>0.000</td>
+                        <td>5</td>
+                    </tr>
+
+                    <tr>
+                        <td>Salud y cuidado personal</td>
+                        <td>5</td>
+                        <td class="error">0.0%</td>
+                        <td>0.000</td>
+                        <td>5</td>
+                    </tr>
+
+                    <tr>
+                        <td>Productos para bebé</td>
+                        <td>5</td>
+                        <td class="error">0.0%</td>
+                        <td>0.000</td>
+                        <td>5</td>
+                    </tr>
+
+                    <tr>
+                        <td>Libros y medios</td>
+                        <td>5</td>
+                        <td class="error">0.0%</td>
+                        <td>0.000</td>
+                        <td>5</td>
+                    </tr>
+
+                    <tr>
+                        <td>Útiles de oficina</td>
+                        <td>5</td>
+                        <td class="error">0.0%</td>
+                        <td>0.000</td>
+                        <td>5</td>
+                    </tr>
+
+                    <tr>
+                        <td>Automotriz</td>
+                        <td>5</td>
+                        <td class="error">0.0%</td>
+                        <td>0.000</td>
+                        <td>5</td>
+                    </tr>
+
+                    <tr>
+                        <td>Herramientas y ferretería</td>
+                        <td>5</td>
+                        <td class="error">0.0%</td>
+                        <td>0.000</td>
+                        <td>5</td>
+                    </tr>
+
+                    <tr>
+                        <td>Joyería y relojes</td>
+                        <td>5</td>
+                        <td class="error">0.0%</td>
+                        <td>0.000</td>
+                        <td>5</td>
+                    </tr>
+
+                    <tr>
+                        <td>Suministros para mascotas</td>
+                        <td>5</td>
+                        <td class="error">0.0%</td>
+                        <td>0.000</td>
+                        <td>5</td>
+                    </tr>
+
+                    <tr>
+                        <td>Camping y actividades al aire libre</td>
+                        <td>5</td>
+                        <td class="error">0.0%</td>
+                        <td>0.000</td>
+                        <td>5</td>
+                    </tr>
+
+                    <tr>
+                        <td>Instrumentos musicales</td>
+                        <td>5</td>
+                        <td class="error">0.0%</td>
+                        <td>0.000</td>
+                        <td>5</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Problem Queries (100 queries)</h2>
+            <p style="margin-bottom: 1.5rem; color: #6b7280;">Queries with zero results or no relevant results in top 5</p>
+
+            <div class="query-result">
+                <div class="query-text">"laptop" <span style="color: #6b7280;">(Electrónicos y computadoras)</span></div>
+<p class="error">⚠ Zero results returned</p>
+            </div>
+
+            <div class="query-result">
+                <div class="query-text">"mouse inalámbrico" <span style="color: #6b7280;">(Electrónicos y computadoras)</span></div>
+<p class="error">⚠ Zero results returned</p>
+            </div>
+
+            <div class="query-result">
+                <div class="query-text">"teclado mecánico" <span style="color: #6b7280;">(Electrónicos y computadoras)</span></div>
+<p class="error">⚠ Zero results returned</p>
+            </div>
+
+            <div class="query-result">
+                <div class="query-text">"monitor 27 pulgadas" <span style="color: #6b7280;">(Electrónicos y computadoras)</span></div>
+<p class="error">⚠ Zero results returned</p>
+            </div>
+
+            <div class="query-result">
+                <div class="query-text">"disco duro externo" <span style="color: #6b7280;">(Electrónicos y computadoras)</span></div>
+<p class="error">⚠ Zero results returned</p>
+            </div>
+
+            <div class="query-result">
+                <div class="query-text">"celular" <span style="color: #6b7280;">(Electrónicos móviles y accesorios)</span></div>
+<p class="error">⚠ Zero results returned</p>
+            </div>
+
+            <div class="query-result">
+                <div class="query-text">"auriculares bluetooth" <span style="color: #6b7280;">(Electrónicos móviles y accesorios)</span></div>
+<p class="error">⚠ Zero results returned</p>
+            </div>
+
+            <div class="query-result">
+                <div class="query-text">"cargador de teléfono" <span style="color: #6b7280;">(Electrónicos móviles y accesorios)</span></div>
+<p class="error">⚠ Zero results returned</p>
+            </div>
+
+            <div class="query-result">
+                <div class="query-text">"cable USB-C" <span style="color: #6b7280;">(Electrónicos móviles y accesorios)</span></div>
+<p class="error">⚠ Zero results returned</p>
+            </div>
+
+            <div class="query-result">
+                <div class="query-text">"funda para iphone" <span style="color: #6b7280;">(Electrónicos móviles y accesorios)</span></div>
+<p class="error">⚠ Zero results returned</p>
+            </div>
+
+            <div class="query-result">
+                <div class="query-text">"bocinas bluetooth" <span style="color: #6b7280;">(Audio y video)</span></div>
+<p class="error">⚠ Zero results returned</p>
+            </div>
+
+            <div class="query-result">
+                <div class="query-text">"audífonos inalámbricos" <span style="color: #6b7280;">(Audio y video)</span></div>
+<p class="error">⚠ Zero results returned</p>
+            </div>
+
+            <div class="query-result">
+                <div class="query-text">"micrófono usb" <span style="color: #6b7280;">(Audio y video)</span></div>
+<p class="error">⚠ Zero results returned</p>
+            </div>
+
+            <div class="query-result">
+                <div class="query-text">"cámara web" <span style="color: #6b7280;">(Audio y video)</span></div>
+<p class="error">⚠ Zero results returned</p>
+            </div>
+
+            <div class="query-result">
+                <div class="query-text">"cable HDMI" <span style="color: #6b7280;">(Audio y video)</span></div>
+<p class="error">⚠ Zero results returned</p>
+            </div>
+
+            <div class="query-result">
+                <div class="query-text">"camisa de hombre" <span style="color: #6b7280;">(Ropa de hombre)</span></div>
+<p class="error">⚠ Zero results returned</p>
+            </div>
+
+            <div class="query-result">
+                <div class="query-text">"pantalón jean" <span style="color: #6b7280;">(Ropa de hombre)</span></div>
+<p class="error">⚠ Zero results returned</p>
+            </div>
+
+            <div class="query-result">
+                <div class="query-text">"zapatos deportivos" <span style="color: #6b7280;">(Ropa de hombre)</span></div>
+<p class="error">⚠ Zero results returned</p>
+            </div>
+
+            <div class="query-result">
+                <div class="query-text">"chaqueta de cuero" <span style="color: #6b7280;">(Ropa de hombre)</span></div>
+<p class="error">⚠ Zero results returned</p>
+            </div>
+
+            <div class="query-result">
+                <div class="query-text">"gorra" <span style="color: #6b7280;">(Ropa de hombre)</span></div>
+<p class="error">⚠ Zero results returned</p>
+            </div>
+
+        </div>
+
+        <div class="section">
+            <h2>Recommendations</h2>
+
+            <p>❌ <strong>Current keywords need significant improvement.</strong> Regeneration strongly recommended.</p>
+            <ul style="margin-top: 1rem; margin-left: 2rem; line-height: 1.8;">
+                <li>Run AI model comparison immediately to identify best model</li>
+                <li>Execute full keyword regeneration for all 100 partidas</li>
+                <li>Estimated cost for full regeneration: $20-135 (depending on model chosen)</li>
+                <li>Expected improvement: Precision@5 could increase to 85-95%</li>
+            </ul>
+
+        </div>
+
+        <footer style="padding: 2rem; background: #f9fafb; text-align: center; color: #6b7280; border-radius: 0 0 8px 8px;">
+            <p>Generated by SicargaBox Search Quality Evaluation Tool</p>
+            <p style="margin-top: 0.5rem;">🤖 Claude Code</p>
+        </footer>
+    </div>
+</body>
+</html>
