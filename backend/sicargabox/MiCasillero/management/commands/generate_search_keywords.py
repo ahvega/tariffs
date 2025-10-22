@@ -421,9 +421,14 @@ class Command(BaseCommand):
             for partida in batch:
                 context = self.get_context_for_partida(partida)
                 keywords = self.generate_keywords_with_ai(context, api_provider)
-                
-                self.stdout.write(f'\nPartida: {partida.descripcion}')
-                self.stdout.write(f'Keywords generados: {json.dumps(keywords, ensure_ascii=False)}')
+
+                # Use ensure_ascii=True to avoid Unicode encoding errors in Windows console
+                try:
+                    self.stdout.write(f'\nPartida: {partida.descripcion}')
+                    self.stdout.write(f'Keywords generados: {json.dumps(keywords, ensure_ascii=True)}')
+                except UnicodeEncodeError:
+                    # Fallback: just report success without printing keywords
+                    self.stdout.write(f'\nPartida ID {partida.id}: Keywords generated successfully')
                 
                 if not options['dry_run']:
                     with transaction.atomic():
