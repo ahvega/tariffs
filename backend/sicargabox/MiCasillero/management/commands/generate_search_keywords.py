@@ -39,6 +39,12 @@ class Command(BaseCommand):
             choices=['openai', 'deepseek', 'anthropic'],
             help='Proveedor de API a utilizar',
         )
+        parser.add_argument(
+            '--limit',
+            type=int,
+            default=None,
+            help='Número máximo total de partidas a procesar (opcional)',
+        )
 
     def get_context_for_partida(self, partida):
         """Obtiene el contexto relevante de una partida."""
@@ -57,9 +63,10 @@ class Command(BaseCommand):
         # Obtener partidas relacionadas basadas en la descripción padre
         if parent_desc:
             # Obtener todas las partidas que comparten la misma descripción padre
+            # Limitar a 20 siblings para evitar exceder el límite de contexto (131K tokens)
             siblings = PartidaArancelaria.objects.filter(
                 descripcion__contains=parent_desc
-            ).exclude(id=partida.id).order_by('item_no')
+            ).exclude(id=partida.id).order_by('item_no')[:20]
             
             # Obtener las descripciones específicas de las partidas hermanas
             sibling_specific_descs = [
@@ -378,7 +385,8 @@ class Command(BaseCommand):
         batch_size = options['batch_size']
         start_from = options['start_from']
         api_provider = options['api_provider']
-        
+        limit = options['limit']
+
         # Verificar API key
         if api_provider == 'deepseek':
             api_key = os.environ.get('DEEPSEEK_API_KEY')
@@ -390,14 +398,20 @@ class Command(BaseCommand):
         if not api_key:
             self.stdout.write(self.style.ERROR(f'No se encontró la API key para {api_provider}'))
             return
-        
+
         # Obtener todas las partidas
         partidas = PartidaArancelaria.objects.filter(
             id__gte=start_from
         ).order_by('id')
-        
+
+        # Aplicar límite si se especificó
+        if limit:
+            partidas = partidas[:limit]
+
         total_partidas = partidas.count()
         self.stdout.write(f'Total de partidas a procesar: {total_partidas}')
+        if limit:
+            self.stdout.write(f'Límite aplicado: {limit} partidas')
         
         # Procesar en lotes
         for i in range(0, total_partidas, batch_size):

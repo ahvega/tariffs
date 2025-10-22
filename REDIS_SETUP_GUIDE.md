@@ -1,12 +1,13 @@
 # Redis Setup Guide for SicargaBox
 
-**Complete step-by-step guide to set up Redis using Docker**
+## **Complete step-by-step guide to set up Redis using Docker**
 
 ---
 
 ## What You'll Get
 
 After following this guide:
+
 - ✅ Redis running in Docker container
 - ✅ Accessible at `localhost:6379`
 - ✅ Data persisted across restarts
@@ -20,10 +21,12 @@ After following this guide:
 ### 1. Install Docker Desktop
 
 **Windows:**
-1. Download: https://www.docker.com/products/docker-desktop/
+
+1. Download: [Docker Desktop]<https://www.docker.com/products/docker-desktop/>
 2. Run installer
 3. Restart computer
 4. Verify installation:
+
    ```bash
    docker --version
    docker-compose --version
@@ -42,6 +45,7 @@ cd E:/MyDevTools/tariffs/docker/redis
 ```
 
 **Verify files exist:**
+
 ```bash
 dir
 # Should see:
@@ -73,7 +77,8 @@ docker-compose up -d
 ```
 
 **Expected output:**
-```
+
+```bash
 Creating network "redis_sicargabox-network" ... done
 Creating volume "redis_redis-data" ... done
 Creating sicargabox-redis ... done
@@ -92,7 +97,8 @@ docker-compose ps
 ```
 
 **Expected output:**
-```
+
+```bash
 Name                   State    Ports
 sicargabox-redis       Up       0.0.0.0:6379->6379/tcp
 sicargabox-redis-ui    Up       0.0.0.0:8081->8081/tcp
@@ -121,15 +127,17 @@ docker exec -it sicargabox-redis redis-cli GET test
 
 ### Step 6: Access Redis Commander (Web UI)
 
-Open browser: http://localhost:8081
+Open browser: <http://localhost:8081>
 
 **What you'll see:**
+
 - Redis server connection (local)
 - Database selection (db0, db1, etc.)
 - Key browser
 - Command console
 
 **Try it:**
+
 1. Click on "db0"
 2. You should see the "test" key from Step 5
 3. Click "test" to view its value
@@ -143,7 +151,7 @@ Open browser: http://localhost:8081
 docker-compose logs -f redis
 ```
 
-**Press Ctrl+C to exit logs view**
+## **Press Ctrl+C to exit logs view**
 
 ---
 
@@ -272,7 +280,8 @@ python manage.py migrate django_celery_beat
 ```
 
 **Expected output:**
-```
+
+```bash
 Running migrations:
   Applying django_celery_results.0001_initial... OK
   Applying django_celery_results.0002_add_task_name_args_kwargs... OK
@@ -328,7 +337,8 @@ celery -A SicargaBox worker -l info -P solo
 **Note:** `-P solo` is for Windows. Linux/Mac can omit this flag.
 
 **Expected output:**
-```
+
+```bash
  -------------- celery@HOSTNAME v5.3.x
 ---- **** -----
 --- * ***  * -- Windows-10
@@ -377,7 +387,8 @@ print(f"Result: {result.get(timeout=10)}")
 ```
 
 **In Celery worker terminal, you should see:**
-```
+
+```bash
 [2025-10-20 10:05:00,000: INFO/MainProcess] Task SicargaBox.celery.debug_task[abc-123] received
 [2025-10-20 10:05:00,000: INFO/MainProcess] Task SicargaBox.celery.debug_task[abc-123] succeeded
 ```
@@ -441,7 +452,7 @@ celery -A SicargaBox beat -l info
 
 ### Monitor Tasks
 
-**Web UI:** http://localhost:8081
+**Web UI:** <http://localhost:8081>
 
 **Redis CLI:**
 
@@ -502,10 +513,12 @@ docker exec -it sicargabox-redis redis-cli ping
 ### Task Queue Not Processing
 
 **Ensure Celery worker is running:**
+
 - Check terminal where you ran `celery -A SicargaBox worker`
 - Look for "ready" message
 
 **Check Redis:**
+
 ```bash
 # List pending tasks
 docker exec -it sicargabox-redis redis-cli LLEN celery
@@ -607,10 +620,10 @@ docker-compose down
 
 ## Resources
 
-- Redis Documentation: https://redis.io/docs/
-- Celery Documentation: https://docs.celeryq.dev/
-- Docker Documentation: https://docs.docker.com/
-- Django-Celery-Results: https://pypi.org/project/django-celery-results/
+- Redis Documentation: <https://redis.io/docs/>
+- Celery Documentation: <https://docs.celeryq.dev/>
+- Docker Documentation: <https://docs.docker.com/>
+- Django-Celery-Results: <https://pypi.org/project/django-celery-results/>
 
 ---
 
