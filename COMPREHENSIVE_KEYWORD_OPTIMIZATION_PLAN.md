@@ -1,5 +1,6 @@
 # Comprehensive Keyword Optimization Plan
-# SicargaBox Tariff Classification System
+
+## SicargaBox Tariff Classification System
 
 **Date:** 2025-10-21
 **Version:** 1.0
@@ -25,6 +26,7 @@
 ## Executive Summary
 
 This plan optimizes keyword generation for 7,524 tariff partidas using:
+
 - **Immediate**: Bilingual keywords (all partidas, $2-3, DeepSeek)
 - **Short-term**: Tiered quality approach (top 200 with Claude $12, rest with DeepSeek)
 - **Medium-term**: RAG enhancement for ambiguous categories
@@ -49,10 +51,12 @@ This plan optimizes keyword generation for 7,524 tariff partidas using:
 - **6403.99** = Other footwear (sneakers, athletic shoes) ✅ VERIFIED
 
 **The Harmonized System (HS)** is an international standard maintained by the World Customs Organization (WCO):
+
 - First 6 digits: Universal across 200+ countries
 - Digits 7-10: Country-specific refinements (Honduras customizations)
 
 **Source of my knowledge:**
+
 - HS codes are standardized international tariff nomenclature
 - Chapter 84 = Electrical machinery (computers, phones, chargers)
 - Chapter 85 = Electrical equipment and parts
@@ -60,6 +64,7 @@ This plan optimizes keyword generation for 7,524 tariff partidas using:
 - Chapter 61-63 = Apparel & clothing accessories
 
 I used **actual international HS codes** based on:
+
 1. WCO Harmonized System structure
 2. Common e-commerce product categories
 3. Courier industry shipping statistics
@@ -71,7 +76,8 @@ I used **actual international HS codes** based on:
 Based on your database analysis:
 
 **Primary Pattern (99.3% of codes):**
-```
+
+```bash
 XXXX.XX.XX.XX (4 parts with dots)
 Example: 8471.30.00.00
 Structure:
@@ -82,6 +88,7 @@ Structure:
 ```
 
 **Edge Cases Found:**
+
 - 5-part codes: 37 occurrences (XXXX.XX.XX.XX.XX)
 - Irregular codes: 21 occurrences (various patterns)
 - These require special handling in the migration script
@@ -91,20 +98,25 @@ Structure:
 ## Phase 0: Immediate Actions (This Week)
 
 ### Objective
+
 Generate bilingual keywords for ALL 7,524 partidas as baseline
 
 ### Tasks
 
 #### Task 0.1: Complete DeepSeek Test Run ✅ IN PROGRESS
+
 - **Status**: Currently running
 - **Command**:
+
   ```bash
   python manage.py generate_search_keywords --dry-run --batch-size=10 --api-provider=deepseek
   ```
+
 - **Verification**: Check bilingual output quality
 - **Duration**: Already running, wait for completion
 
 #### Task 0.2: Execute Full Regeneration with DeepSeek
+
 - **Duration**: 90 minutes
 - **Cost**: $2-3
 - **Expected Quality**: 88-92% Precision@5
@@ -112,12 +124,14 @@ Generate bilingual keywords for ALL 7,524 partidas as baseline
 **Steps:**
 
 1. **Stop Django development server** (to avoid file conflicts):
+
    ```bash
    # Kill all Python Django processes
    taskkill /F /IM python.exe /FI "WINDOWTITLE eq *runserver*"
    ```
 
 2. **Run full regeneration** (remove --dry-run):
+
    ```bash
    cd E:/MyDevTools/tariffs/backend/sicargabox
 
@@ -128,6 +142,7 @@ Generate bilingual keywords for ALL 7,524 partidas as baseline
    ```
 
 3. **Monitor progress** (in separate terminal):
+
    ```bash
    # Watch database updates in real-time
    python manage.py shell -c "
@@ -144,11 +159,13 @@ Generate bilingual keywords for ALL 7,524 partidas as baseline
    ```
 
 4. **Rebuild Elasticsearch index**:
+
    ```bash
    python manage.py search_index --rebuild
    ```
 
 5. **Run evaluation**:
+
    ```bash
    python manage.py evaluate_search_quality \
      --output=reports/post_bilingual_baseline.html \
@@ -156,7 +173,8 @@ Generate bilingual keywords for ALL 7,524 partidas as baseline
    ```
 
 **Expected Results:**
-```
+
+```bash
 Baseline (Spanish-only):
 - Precision@5: 0%
 - Zero-result rate: 100%
@@ -167,7 +185,9 @@ After Bilingual (DeepSeek):
 ```
 
 #### Task 0.3: Document Results
+
 Create `PHASE_0_BILINGUAL_BASELINE_RESULTS.md` with:
+
 - Sample keywords from different categories
 - Quality assessment
 - Identified weak categories for Phase 2 enhancement
@@ -176,7 +196,8 @@ Create `PHASE_0_BILINGUAL_BASELINE_RESULTS.md` with:
 
 ## Phase 1: Hierarchy Enhancement (Week 2)
 
-### Objective
+### Objective Phase 1
+
 Add hierarchy metadata fields to PartidaArancelaria model without table restructuring
 
 ### Task 1.1: Create Django Migration
@@ -487,7 +508,8 @@ for p in samples:
 
 ## Phase 2: Trend-Based Prioritization (Weeks 2-3)
 
-### Objective
+### Objective Phase 2
+
 Identify top 200-500 most common courier items and generate premium keywords
 
 ### Task 2.1: Analyze Historical Quote Data
@@ -627,7 +649,7 @@ python manage.py analyze_quote_trends --months=6
 **Manual Research Steps:**
 
 1. **US Census International Trade Data**
-   - Visit: https://usatrade.census.gov/
+   - Visit: <https://usatrade.census.gov/>
    - Filter: Exports to Honduras
    - Categories: Small packages (<$2500)
    - Download top HS codes
@@ -718,14 +740,15 @@ class Command(BaseCommand):
 
 ## Phase 3: RAG Implementation (Weeks 3-5)
 
-### Objective
+### Objective Phase 3
+
 Enhance keyword generation for ambiguous categories using "Notas Explicativas"
 
 ### Task 3.1: n8n Prototype RAG Workflow
 
 **Architecture Diagram:**
 
-```
+```bash
 ┌─────────────────────────────────────────────────────────────┐
 │                    n8n RAG Workflow                         │
 └─────────────────────────────────────────────────────────────┘
@@ -826,12 +849,13 @@ Enhance keyword generation for ambiguous categories using "Notas Explicativas"
 **Setup Instructions:**
 
 1. Install n8n:
+
    ```bash
    npm install n8n -g
    n8n start
    ```
 
-2. Import workflow JSON in n8n UI (http://localhost:5678)
+2. Import workflow JSON in n8n UI (<http://localhost:5678>)
 
 3. Configure credentials:
    - Supabase API credentials
@@ -839,6 +863,7 @@ Enhance keyword generation for ambiguous categories using "Notas Explicativas"
    - PostgreSQL connection
 
 4. Test webhook:
+
    ```bash
    curl -X POST http://localhost:5678/webhook/generate-keywords \
      -H "Content-Type: application/json" \
@@ -1055,19 +1080,20 @@ vecs==0.4.0
 
 ### Task 3.3: Supabase Vector Store Setup
 
-**Step 1: Create Supabase Project**
-1. Go to https://supabase.com
+#### **Step 1: Create Supabase Project**
+
+1. Go to <https://supabase.com>
 2. Create new project: "sicargabox-vectors"
 3. Note your project URL and API keys
 
-**Step 2: Enable pgvector Extension**
+#### **Step 2: Enable pgvector Extension**
 
 ```sql
 -- Run in Supabase SQL Editor
 CREATE EXTENSION IF NOT EXISTS vector;
 ```
 
-**Step 3: Create Vector Tables**
+#### **Step 3: Create Vector Tables**
 
 ```sql
 -- Table for Notas Explicativas embeddings
@@ -1118,7 +1144,7 @@ AS $$
 $$;
 ```
 
-**Step 4: Load Notas Explicativas Documents**
+#### **Step 4: Load Notas Explicativas Documents**
 
 **File**: `scripts/load_notas_to_supabase.py`
 
@@ -1250,7 +1276,7 @@ python scripts/load_notas_to_supabase.py
 | **Backups** | Included with Postgres | Extra cost | Manual |
 | **Managed Hosting** | ✅ Yes | ✅ Yes | ⚠️ Cloud option |
 
-**RECOMMENDATION: Supabase**
+#### **RECOMMENDATION: Supabase**
 
 **Why Supabase is best for your use case:**
 
@@ -1261,6 +1287,7 @@ python scripts/load_notas_to_supabase.py
 5. **Django integration**: Direct SQL queries if needed
 
 **When to switch:**
+
 - If you need >2M vectors (unlikely for tariff notes)
 - If latency <10ms is critical (not necessary here)
 - If you process >10K queries/day (Pinecone scales better)
@@ -1386,18 +1413,21 @@ def refine_underperforming_keywords():
 ### Expected ROI
 
 **Before Implementation:**
+
 - Precision@5: 0%
 - Zero-result rate: 100%
 - User frustration: High
 - Manual support queries: ~50/week
 
 **After Implementation:**
+
 - Precision@5: 88-96% (overall 90%)
 - Zero-result rate: <5%
 - User satisfaction: High
 - Manual support queries: ~5/week
 
 **Value Generated:**
+
 - 90% reduction in support queries: **10 hours/week saved** ($400/month @ $10/hour)
 - Improved quote conversion: **+20% more quotes accepted**
 - Better UX: Competitive advantage
@@ -1486,4 +1516,4 @@ DEEPSEEK_API_KEY=sk-...
 
 ---
 
-**END OF COMPREHENSIVE PLAN**
+#### **END OF COMPREHENSIVE PLAN**

@@ -70,6 +70,7 @@ python manage.py generate_search_keywords \
 ```
 
 **Expected Output**:
+
 ```json
 {
   "item_no": "8471.30.00.00",
@@ -92,6 +93,7 @@ python manage.py generate_search_keywords \
 ### Step 2: Validate Quality
 
 Check that keywords include:
+
 - ✅ Spanish terms: "computadora", "portátil"
 - ✅ English terms: "laptop", "computer", "notebook"
 - ✅ Technical terms: "USB-C", "HDMI", "bluetooth"
@@ -116,6 +118,7 @@ python manage.py evaluate_search_quality \
 ```
 
 **Expected Results**:
+
 - Precision@5: 0% → **85-95%** ✅
 - Zero-result rate: 100% → **<5%** ✅
 - MRR: 0.000 → **>0.80** ✅
@@ -134,6 +137,7 @@ python manage.py generate_search_keywords \
 ```
 
 **Monitor progress**:
+
 ```bash
 # In another terminal, watch database updates
 cd E:/MyDevTools/tariffs/backend/sicargabox
@@ -214,11 +218,13 @@ Add after line 238:
 **Partida**: 8471.30.00.00 (Portable computers)
 
 **Old (Spanish-only)**:
+
 ```json
 ["computadora portátil", "ordenador portátil", "pc portátil", "notebook"]
 ```
 
 **New (Bilingual)**:
+
 ```json
 [
   "computadora portátil", "laptop", "notebook", "computer", "pc",
@@ -232,11 +238,13 @@ Add after line 238:
 **Partida**: 8517.12.00.00 (Mobile phones)
 
 **Old**:
+
 ```json
 ["teléfono móvil", "celular", "teléfono celular", "móvil"]
 ```
 
 **New**:
+
 ```json
 [
   "teléfono móvil", "celular", "smartphone", "phone", "mobile phone",
@@ -249,11 +257,13 @@ Add after line 238:
 **Partida**: 6403.99.00.00 (Other footwear)
 
 **Old**:
+
 ```json
 ["calzado", "zapatos", "zapato deportivo", "tenis", "zapatillas"]
 ```
 
 **New**:
+
 ```json
 [
   "calzado", "zapatos", "shoes", "footwear", "sneakers", "tennis shoes",
@@ -270,6 +280,7 @@ Add after line 238:
 **Cause**: System message not updated or prompt unclear
 
 **Fix**: Add explicit examples in prompt:
+
 ```python
 EXAMPLE OUTPUT (required format):
 ["laptop", "computadora", "notebook", "computer", "pc", "ordenador"]
@@ -283,6 +294,7 @@ NOT this (Spanish-only):
 **Cause**: Prompt not specific enough about product
 
 **Fix**: Emphasize product-specific terms:
+
 ```python
 Focus on SPECIFIC terms for "{current['specific_desc']}"
 NOT generic terms like "electrónico", "producto", "artículo"
@@ -316,11 +328,13 @@ Before full regeneration, validate 10 sample partidas have:
 **Pricing**: $0.14 input / $0.55 output per 1M tokens
 
 **Per Partida**:
+
 - Input: ~500 tokens (context + prompt)
 - Output: ~200 tokens (30-40 keywords)
 - Cost: ~$0.0003 per partida
 
 **Full Regeneration (7,524 partidas)**:
+
 - Total cost: **$20-30**
 - Duration: 60-90 minutes
 - Quality: 90-92% Precision@5 expected
@@ -330,6 +344,7 @@ Before full regeneration, validate 10 sample partidas have:
 **Pricing**: $0.15 input / $0.60 output per 1M tokens
 
 **Full Regeneration**:
+
 - Total cost: **$25-35**
 - Quality: 92-94% Precision@5 expected
 
@@ -338,6 +353,7 @@ Before full regeneration, validate 10 sample partidas have:
 **Pricing**: $3.00 input / $15.00 output per 1M tokens
 
 **Full Regeneration**:
+
 - Total cost: **$120-150**
 - Quality: 94-96% Precision@5 expected
 
