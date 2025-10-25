@@ -96,26 +96,67 @@ class PartidaArancelaria(models.Model):
         ('PROHIBITED', 'Articulos prohibidos para Courier'),
     ]
 
-    item_no = models.CharField(max_length=50)
-    descripcion = models.CharField(max_length=1255)
-    partida_arancelaria = models.CharField(max_length=50)
-    impuesto_dai = models.DecimalField(max_digits=5, decimal_places=2, default=0)
-    impuesto_isc = models.DecimalField(max_digits=5, decimal_places=2, default=0)
-    impuesto_ispc = models.DecimalField(max_digits=5, decimal_places=2, default=0)
-    impuesto_isv = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    item_no = models.CharField(max_length=50, verbose_name="Item No")
+    descripcion = models.CharField(max_length=1255, verbose_name="Descripción", help_text="Partida | Partida Padre | Partida Abuelo")
+    partida_arancelaria = models.CharField(max_length=50, verbose_name="Partida Arancelaria", help_text="Código HS completo")
+    impuesto_dai = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Impuesto DAI", help_text="Derechos Arancelarios a la Importación")
+    impuesto_isc = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Impuesto ISC", help_text="Impuesto Selectivo al Consumo")
+    impuesto_ispc = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Impuesto ISPC", help_text="Impuesto de Solidaridad para la Protección del Consumidor")
+    impuesto_isv = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Impuesto ISV", help_text="Impuesto Sobre Ventas")
 
     # New fields for courier-specific information
-    courier_category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='ALLOWED')
-    restrictions = models.JSONField(default=list, blank=True)
-    package_type = models.CharField(max_length=100, blank=True)
-    max_weight_allowed = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
-    requires_special_handling = models.BooleanField(default=False)
-    special_instructions = models.TextField(blank=True)
+    courier_category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='ALLOWED', verbose_name="Categoría de Courier")
+    restrictions = models.JSONField(default=list, blank=True, verbose_name="Restricciones")  # Lista de restricciones específicas
+    package_type = models.CharField(max_length=100, blank=True, verbose_name="Tipo de Paquete")
+    max_weight_allowed = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True, verbose_name="Peso Máximo Permitido")
+    requires_special_handling = models.BooleanField(default=False, verbose_name="Requiere Manejo Especial")
+    special_instructions = models.TextField(blank=True, verbose_name="Instrucciones Especiales")
 
     # Search optimization fields
-    search_keywords = models.JSONField(default=list, blank=True, null=True)  # Para keywords generados por AI
-    search_vector = SearchVectorField(null=True)  # Campo para búsqueda de texto completo
-    parent_category = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
+    search_keywords = models.JSONField(default=list, blank=True, null=True, help_text="Palabras clave para mejorar la búsqueda", verbose_name="Palabras Clave de Búsqueda")  # Para keywords generados por AI
+    search_vector = SearchVectorField(null=True, verbose_name="Vector de Búsqueda") # Campo para búsqueda de texto completo
+
+    # Hierarchy fields for sibling detection and "Los demás" keyword generation
+    chapter_code = models.CharField(
+        max_length=4,
+        blank=True,
+        null=True,
+        help_text='Primeros 4 dígitos (e.g., "0101", "8471")',
+        db_index=True,
+        verbose_name="Código de Capítulo"
+    )
+    heading_code = models.CharField(
+        max_length=15,
+        blank=True,
+        null=True,
+        help_text='Capítulo + subencabezado (e.g., "0101.21", "8471.30")',
+        db_index=True,
+        verbose_name="Código de Encabezado"
+    )
+    parent_item_no = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+        help_text='Código de partida padre',
+        verbose_name="Código de Partida Padre"
+    )
+    grandparent_item_no = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+        help_text='Código de partida abuelo',
+        verbose_name="Código de Partida Abuelo"
+    )
+    hierarchy_level = models.IntegerField(
+        default=4,
+        help_text='Nivel de jerarquía (1=Capítulo, 2=Encabezado, 3=Subencabezado, 4=Partida detallada)',
+        verbose_name="Nivel de Jerarquía"
+    )
+    is_leaf_node = models.BooleanField(
+        default=True,
+        help_text='Indica si es un nodo hoja (sin subpartidas)',
+        verbose_name="¿Es de Último Nivel?"
+    )
 
     class Meta:
         ordering = ['item_no']
@@ -125,6 +166,9 @@ class PartidaArancelaria(models.Model):
             models.Index(fields=['item_no']),
             models.Index(fields=['descripcion']),
             models.Index(fields=['courier_category']),
+            models.Index(fields=['chapter_code'], name='partida_chapter_idx'),
+            models.Index(fields=['heading_code'], name='partida_heading_idx'),
+            models.Index(fields=['hierarchy_level'], name='partida_level_idx'),
             GinIndex(fields=['search_vector'], name='partida_search_vector_idx'),
         ]
 
@@ -212,17 +256,17 @@ class Cliente(models.Model):
         id: int
         pk: int
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    nombres = models.CharField(max_length=255)
-    apellidos = models.CharField(max_length=255)
-    telefono = models.CharField(max_length=20)
-    correo_electronico = models.EmailField(unique=True)
-    nombre_corto = models.CharField(max_length=50, blank=True)  # Este campo se generará programáticamente
-    direccion = models.CharField(max_length=255)
-    ciudad = models.CharField(max_length=50, default='San Pedro Sula')
-    departamento = models.CharField(max_length=50, default='Cortés')
-    pais = models.CharField(max_length=50, default='Honduras')
-    codigo_cliente = models.CharField(max_length=13, unique=True)
-    fecha_registro = models.DateTimeField(auto_now_add=True)
+    nombres = models.CharField(max_length=255, verbose_name="Nombres")
+    apellidos = models.CharField(max_length=255, verbose_name="Apellidos")
+    telefono = models.CharField(max_length=20, verbose_name="Teléfono")
+    correo_electronico = models.EmailField(unique=True, verbose_name="Correo Electrónico")
+    nombre_corto = models.CharField(max_length=50, blank=True, verbose_name="Nombre Corto")  # Este campo se generará programáticamente
+    direccion = models.CharField(max_length=255, verbose_name="Dirección")
+    ciudad = models.CharField(max_length=50, default='San Pedro Sula', verbose_name="Ciudad")
+    departamento = models.CharField(max_length=50, default='Cortés', verbose_name="Departamento")
+    pais = models.CharField(max_length=50, default='Honduras', verbose_name="País")
+    codigo_cliente = models.CharField(max_length=13, unique=True, verbose_name="Código de Cliente")
+    fecha_registro = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Registro")
 
     def save(self, *args, **kwargs):
         # Generar nombre_corto
@@ -318,15 +362,15 @@ class Cotizacion(models.Model):
         ('Expirada', 'Expirada'),
     ]
 
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, null=True, blank=True)  # Null for anonymous
-    fecha_creacion = models.DateTimeField(auto_now_add=True)
-    fecha_expiracion = models.DateTimeField()  # Auto-calculate (fecha_creacion + días de validez from ParametroSistema)
-    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='Pendiente')
-    subtotal_articulos = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    total_flete = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    total_impuestos = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    total_estimado = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    session_key = models.CharField(max_length=40, blank=True)
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Cliente")  # Null for anonymous
+    fecha_creacion = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Creación")
+    fecha_expiracion = models.DateTimeField(verbose_name="Fecha de Expiración")  # Auto-calculate (fecha_creacion + días de validez from ParametroSistema)
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='Pendiente', verbose_name="Estado")
+    subtotal_articulos = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Subtotal Artículos")
+    total_flete = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Total Flete")
+    total_impuestos = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Total Impuestos")
+    total_estimado = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Total Estimado")
+    session_key = models.CharField(max_length=40, blank=True, verbose_name="Session Key")
 
     class Meta:
         ordering = ['-fecha_creacion']
@@ -391,27 +435,27 @@ class Envio(models.Model):
         ('Entregado', 'Entregado al Cliente'),
     ]
 
-    cotizacion = models.ForeignKey(Cotizacion, on_delete=models.CASCADE)
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    tracking_number_original = models.CharField(max_length=50)  # From retailer
-    tracking_number_sicarga = models.CharField(max_length=50, unique=True)  # Internal
-    estado_envio = models.CharField(max_length=50, choices=ESTADO_ENVIO_CHOICES, default='Solicitado')
-    peso_estimado = models.DecimalField(max_digits=8, decimal_places=2)
-    peso_real = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
-    largo_real = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    ancho_real = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    alto_real = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    factura_compra = models.FileField(upload_to='invoices/', null=True, blank=True)
-    foto_paquete = models.ImageField(upload_to='packages/', null=True, blank=True)
-    direccion_entrega = models.CharField(max_length=255)
-    instrucciones_especiales = models.TextField(blank=True)
-    fecha_solicitud = models.DateTimeField(auto_now_add=True)
-    fecha_recibido_miami = models.DateTimeField(null=True, blank=True)
-    fecha_salida_miami = models.DateTimeField(null=True, blank=True)
-    fecha_llegada_honduras = models.DateTimeField(null=True, blank=True)
-    fecha_liberacion_aduana = models.DateTimeField(null=True, blank=True)
-    fecha_entrega = models.DateTimeField(null=True, blank=True)
-    fecha_actualizacion = models.DateTimeField(auto_now=True)
+    cotizacion = models.ForeignKey(Cotizacion, on_delete=models.CASCADE, verbose_name="Cotización")
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, verbose_name="Cliente")
+    tracking_number_original = models.CharField(max_length=50, verbose_name="Tracking No. Original")  # From retailer
+    tracking_number_sicarga = models.CharField(max_length=50, unique=True, verbose_name="Tracking No. Sicarga")  # Internal
+    estado_envio = models.CharField(max_length=50, choices=ESTADO_ENVIO_CHOICES, default='Solicitado', verbose_name="Estado de Envío")
+    peso_estimado = models.DecimalField(max_digits=8, decimal_places=2, verbose_name="Peso Estimado")
+    peso_real = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True, verbose_name="Peso Real")
+    largo_real = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, verbose_name="Largo Real")
+    ancho_real = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, verbose_name="Ancho Real")
+    alto_real = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, verbose_name="Alto Real")
+    factura_compra = models.FileField(upload_to='invoices/', null=True, blank=True, verbose_name="Factura de Compra")
+    foto_paquete = models.ImageField(upload_to='packages/', null=True, blank=True, verbose_name="Foto del Paquete")
+    direccion_entrega = models.CharField(max_length=255, verbose_name="Dirección de Entrega")
+    instrucciones_especiales = models.TextField(blank=True, verbose_name="Instrucciones Especiales")
+    fecha_solicitud = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Solicitud")
+    fecha_recibido_miami = models.DateTimeField(null=True, blank=True, verbose_name="Fecha de Recepción en Miami")
+    fecha_salida_miami = models.DateTimeField(null=True, blank=True, verbose_name="Fecha de Salida de Miami")
+    fecha_llegada_honduras = models.DateTimeField(null=True, blank=True, verbose_name="Fecha de Llegada a Honduras")
+    fecha_liberacion_aduana = models.DateTimeField(null=True, blank=True, verbose_name="Fecha de Liberación de Aduana")
+    fecha_entrega = models.DateTimeField(null=True, blank=True, verbose_name="Fecha de Entrega")
+    fecha_actualizacion = models.DateTimeField(auto_now=True, verbose_name="Fecha de Actualización")
 
     class Meta:
         ordering = ['-fecha_solicitud']
@@ -475,13 +519,13 @@ class Envio(models.Model):
 
 
 class StatusUpdate(models.Model):
-    envio = models.ForeignKey(Envio, on_delete=models.CASCADE, related_name='status_history')
-    estado_anterior = models.CharField(max_length=50, blank=True)
-    estado_nuevo = models.CharField(max_length=50)
-    actualizado_por = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    fecha = models.DateTimeField(auto_now_add=True)
-    notas = models.TextField(blank=True)
-    ubicacion = models.CharField(max_length=100, blank=True)
+    envio = models.ForeignKey(Envio, on_delete=models.CASCADE, related_name='status_history', verbose_name="Envío")
+    estado_anterior = models.CharField(max_length=50, blank=True, verbose_name="Estado Anterior")
+    estado_nuevo = models.CharField(max_length=50, verbose_name="Estado Nuevo")
+    actualizado_por = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name="Actualizado Por")
+    fecha = models.DateTimeField(auto_now_add=True, verbose_name="Fecha")
+    notas = models.TextField(blank=True, verbose_name="Notas")
+    ubicacion = models.CharField(max_length=100, blank=True, verbose_name="Ubicación")
 
     class Meta:
         ordering = ['-fecha']
@@ -499,17 +543,17 @@ class Factura(models.Model):
         ('Cancelada', 'Cancelada'),
     ]
 
-    envio = models.ForeignKey(Envio, on_delete=models.CASCADE)
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    flete = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    total_impuesto_dai = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    total_impuesto_isc = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    total_impuesto_ispc = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    total_impuesto_isv = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    total_impuesto = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    monto_total = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    fecha_emision = models.DateTimeField(auto_now_add=True)
-    estado_pago = models.CharField(max_length=20, choices=ESTADO_PAGO_CHOICES)
+    envio = models.ForeignKey(Envio, on_delete=models.CASCADE, verbose_name="Envío")
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, verbose_name="Cliente")
+    flete = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name="Flete")
+    total_impuesto_dai = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name="Total Impuesto DAI")
+    total_impuesto_isc = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name="Total Impuesto ISC")
+    total_impuesto_ispc = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name="Total Impuesto ISPC")
+    total_impuesto_isv = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name="Total Impuesto ISV")
+    total_impuesto = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name="Total Impuesto")
+    monto_total = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name="Monto Total")
+    fecha_emision = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Emisión")
+    estado_pago = models.CharField(max_length=20, choices=ESTADO_PAGO_CHOICES, verbose_name="Estado de Pago")
 
     class Meta:
         ordering = ['-fecha_emision']
@@ -572,12 +616,12 @@ class Alerta(models.Model):
         ('Error', 'Error'),
     ]
 
-    envio = models.ForeignKey(Envio, on_delete=models.CASCADE)
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    tipo_alerta = models.CharField(max_length=50, choices=TIPO_ALERTA_CHOICES)
-    mensaje = models.TextField()
-    fecha_envio = models.DateTimeField(auto_now_add=True)
-    estado = models.CharField(max_length=20, choices=ESTADO_ALERTA_CHOICES)
+    envio = models.ForeignKey(Envio, on_delete=models.CASCADE, verbose_name="Envío")
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, verbose_name="Cliente")
+    tipo_alerta = models.CharField(max_length=50, choices=TIPO_ALERTA_CHOICES, verbose_name="Tipo de Alerta")
+    mensaje = models.TextField(verbose_name="Mensaje")
+    fecha_envio = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Envío")
+    estado = models.CharField(max_length=20, choices=ESTADO_ALERTA_CHOICES, verbose_name="Estado")
 
     class Meta:
         ordering = ['-fecha_envio']
@@ -617,38 +661,42 @@ class Articulo(models.Model):
     if TYPE_CHECKING:
         id: int
         pk: int
-    cotizacion = models.ForeignKey(Cotizacion, on_delete=models.CASCADE, related_name='articulos')
-    descripcion_original = models.CharField(max_length=255, help_text="Descripción del producto según la factura de compra")
-    valor_articulo = models.DecimalField(max_digits=10, decimal_places=2)
-    largo = models.DecimalField(max_digits=5, decimal_places=2)
-    ancho = models.DecimalField(max_digits=5, decimal_places=2)
-    alto = models.DecimalField(max_digits=5, decimal_places=2)
-    peso = models.DecimalField(max_digits=5, decimal_places=2)
-    partida_arancelaria = models.ForeignKey(PartidaArancelaria, on_delete=models.CASCADE)
-    impuesto_dai = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, default=0)
-    impuesto_isc = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, default=0)
-    impuesto_ispc = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, default=0)
-    impuesto_isv = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, default=0)
-    impuesto_total = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, default=0)
+    cotizacion = models.ForeignKey(Cotizacion, on_delete=models.CASCADE, related_name='articulos', verbose_name="Cotización")
+    descripcion_original = models.CharField(max_length=255, help_text="Descripción del producto según la factura de compra", verbose_name="Descripción Original")
+    valor_articulo = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Valor Artículo")
+    largo = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="Largo")
+    ancho = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="Ancho")
+    alto = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="Alto")
+    peso = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="Peso")
+    partida_arancelaria = models.ForeignKey(PartidaArancelaria, on_delete=models.CASCADE, verbose_name="Partida Arancelaria")
+    impuesto_dai = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, default=0, verbose_name="Impuesto DAI")
+    impuesto_isc = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, default=0, verbose_name="Impuesto ISC")
+    impuesto_ispc = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, default=0, verbose_name="Impuesto ISPC")
+    impuesto_isv = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, default=0, verbose_name="Impuesto ISV")
+    impuesto_total = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, default=0, verbose_name="Impuesto Total")
 
     # AI matching fields
     ai_suggested_partidas = models.JSONField(
         null=True,
         blank=True,
-        help_text="Top 5 sugerencias del sistema AI: [{partida_id, score, reason}, ...]"
+        help_text="Top 5 sugerencias del sistema AI: [{partida_id, score, reason}, ...]",
+        verbose_name="Sugerencias de Partidas por AI"
     )
     ai_confidence_score = models.FloatField(
         null=True,
         blank=True,
-        help_text="Nivel de confianza de la sugerencia seleccionada (0-1)"
+        help_text="Nivel de confianza de la sugerencia seleccionada (0-1)",
+        verbose_name="Nivel de Confianza"
     )
     was_manually_corrected = models.BooleanField(
         default=False,
-        help_text="¿Fue corregida manualmente por el personal?"
+        help_text="¿Fue corregida manualmente por el personal?",
+        verbose_name="Corregida Manualmente"
     )
     correction_reason = models.TextField(
         blank=True,
-        help_text="Razón de la corrección manual"
+        help_text="Razón de la corrección manual",
+        verbose_name="Razón de la Corrección"
     )
 
     class Meta:
@@ -778,38 +826,45 @@ class ItemPartidaMapping(models.Model):
     # Item information
     item_description_original = models.CharField(
         max_length=500,
-        help_text="Descripción del producto como aparece en la factura del cliente"
+        help_text="Descripción del producto como aparece en la factura del cliente",
+        verbose_name="Descripción Original"
     )
     item_description_normalized = models.CharField(
         max_length=500,
         db_index=True,
-        help_text="Descripción normalizada (lowercase, sin caracteres especiales)"
+        help_text="Descripción normalizada (lowercase, sin caracteres especiales)",
+        verbose_name="Descripción Normalizada"
     )
     item_embedding = models.JSONField(
         null=True,
         blank=True,
-        help_text="Vector embedding del item para búsqueda semántica"
+        help_text="Vector embedding del item para búsqueda semántica",
+        verbose_name="Vector Embedding"
     )
 
     # Matched partida
     partida_arancelaria = models.ForeignKey(
         PartidaArancelaria,
         on_delete=models.CASCADE,
-        related_name='item_mappings'
+        related_name='item_mappings',
+        verbose_name="Partida Arancelaria"
     )
 
     # Match quality metrics
     confidence_score = models.FloatField(
         default=0,
-        help_text="Nivel de confianza de la sugerencia AI (0-1)"
+        help_text="Nivel de confianza de la sugerencia AI (0-1)",
+        verbose_name="Nivel de Confianza"
     )
     ranking_position = models.IntegerField(
         default=1,
-        help_text="Posición en las sugerencias (1=primera sugerencia, 2=segunda, etc.)"
+        help_text="Posición en las sugerencias (1=primera sugerencia, 2=segunda, etc.)",
+        verbose_name="Posición en Sugerencias"
     )
     was_ai_suggestion = models.BooleanField(
         default=True,
-        help_text="¿Fue sugerido por el sistema AI?"
+        help_text="¿Fue sugerido por el sistema AI?",
+        verbose_name="Sugerido por AI"
     )
 
     # Context
@@ -818,32 +873,39 @@ class ItemPartidaMapping(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='partida_selections'
+        related_name='partida_selections',
+        help_text="Usuario que seleccionó esta partida",
+        verbose_name="Seleccionado por"
     )
     is_staff_verified = models.BooleanField(
         default=False,
-        help_text="¿Seleccionado/verificado por personal administrativo?"
+        help_text="¿Seleccionado/verificado por personal administrativo?",
+        verbose_name="Verificado por Staff"
     )
     articulo = models.ForeignKey(
         Articulo,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='partida_mapping'
+        related_name='partida_mapping',
+        help_text="Artículo asociado a este mapeo",
+        verbose_name="Artículo"
     )
 
     # Metadata
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, help_text="Fecha y hora de creación", verbose_name="Fecha de Creación")
     session_key = models.CharField(
         max_length=40,
         blank=True,
-        help_text="Session key para usuarios anónimos"
+        help_text="Session key para usuarios anónimos",
+        verbose_name="Session Key"
     )
 
     # Validation tracking
     staff_override = models.BooleanField(
         default=False,
-        help_text="¿Fue corregido por el personal?"
+        help_text="¿Fue corregido por el staff?",
+        verbose_name="Corrección por Staff"
     )
     override_from = models.ForeignKey(
         PartidaArancelaria,
@@ -851,11 +913,13 @@ class ItemPartidaMapping(models.Model):
         null=True,
         blank=True,
         related_name='overridden_mappings',
-        help_text="Partida original antes de la corrección"
+        help_text="Partida original antes de la corrección",
+        verbose_name="Corrección de Partida"
     )
     override_reason = models.TextField(
         blank=True,
-        help_text="Razón de la corrección"
+        help_text="Razón de la corrección",
+        verbose_name="Razón de la Corrección"
     )
 
     class Meta:
@@ -898,30 +962,35 @@ class PartidaArancelariaEmbedding(models.Model):
     partida_arancelaria = models.OneToOneField(
         PartidaArancelaria,
         on_delete=models.CASCADE,
-        related_name='embedding_data'
+        related_name='embedding_data',
+        verbose_name="Partida Arancelaria"
     )
 
     # Embedding vector (1536 dimensiones para OpenAI text-embedding-3-small)
     embedding_vector = models.JSONField(
-        help_text="Vector de embedding (1536 dimensiones)"
+        help_text="Vector de embedding (1536 dimensiones)",
+        verbose_name="Vector de Embedding"
     )
     embedding_model = models.CharField(
         max_length=50,
         default='text-embedding-3-small',
-        help_text="Modelo usado para generar el embedding"
+        help_text="Modelo usado para generar el embedding",
+        verbose_name="Modelo de Embedding"
     )
 
     # Texto combinado usado para generar el embedding
     embedding_text = models.TextField(
-        help_text="Texto combinado: descripción + keywords + términos aprendidos"
+        help_text="Texto combinado: descripción + keywords + términos aprendidos",
+        verbose_name="Texto de Embedding"
     )
 
     # Metadata
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Creación")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Fecha de Actualización")
     version = models.IntegerField(
         default=1,
-        help_text="Versión del embedding, se incrementa con cada actualización"
+        help_text="Versión del embedding, se incrementa con cada actualización",
+        verbose_name="Versión"
     )
 
     class Meta:

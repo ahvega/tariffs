@@ -28,7 +28,20 @@ class PartidaArancelariaAdminForm(forms.ModelForm):
     class Meta:
         model = models.PartidaArancelaria
         fields = "__all__"
-
+        widgets = {
+            "descripcion": forms.Textarea(attrs={
+                "rows": 3,
+                "style": "width:100%;",  # full row
+            }),
+            "restrictions": forms.Textarea(attrs={
+                "rows": 3,
+                "style": "width:100%;",  # full row
+            }),
+            "special_instructions": forms.Textarea(attrs={
+                "rows": 3,
+                "style": "width:100%;",  # full row
+            }),
+        }
 
 class PartidaArancelariaAdmin(GuardedModelAdmin):
     form = PartidaArancelariaAdminForm
@@ -45,15 +58,17 @@ class PartidaArancelariaAdmin(GuardedModelAdmin):
     ]
     list_filter = ['courier_category', 'requires_special_handling']
     search_fields = ['item_no', 'descripcion', 'partida_arancelaria', 'search_keywords']
-    readonly_fields = ['search_keywords']
+    readonly_fields = ['chapter_code', 'heading_code', 'parent_item_no', 'hierarchy_level']
     fieldsets = (
-        ('Basic Information', {
-            'fields': ('item_no', 'descripcion', 'partida_arancelaria')
+        ('Información Básica', {
+            'fields': ('item_no', 'descripcion', 'partida_arancelaria'),
+            'classes': ('collapse',)
         }),
-        ('Tax Rates', {
-            'fields': ('impuesto_dai', 'impuesto_isc', 'impuesto_ispc', 'impuesto_isv')
+        ('Información Fiscal', {
+            'fields': ('impuesto_dai', 'impuesto_isc', 'impuesto_ispc', 'impuesto_isv'),
+            'classes': ('collapse',)
         }),
-        ('Courier Settings', {
+        ('Configuración de Courier', {
             'fields': (
                 'courier_category',
                 'restrictions',
@@ -61,10 +76,17 @@ class PartidaArancelariaAdmin(GuardedModelAdmin):
                 'max_weight_allowed',
                 'requires_special_handling',
                 'special_instructions'
-            )
+            ),
+            'classes': ('collapse',)
         }),
-        ('Search Optimization', {
-            'fields': ('search_keywords', 'parent_category'),
+        ('Jerarquía y Búsqueda', {
+            'fields': (
+                'chapter_code',
+                'heading_code',
+                'parent_item_no',
+                'hierarchy_level',
+                'search_keywords'
+            ),
             'classes': ('collapse',)
         })
     )
