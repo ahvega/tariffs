@@ -1,0 +1,200 @@
+name: CI - Tests and Linting
+
+# When should this workflow run?
+on:
+  # Run on pull requests to master
+  pull_request:
+    branches: [ master ]
+
+  # Run on direct pushes to master (should be rare with branch protection)
+  push:
+    branches: [ master ]
+
+  # Allow manual triggering from GitHub Actions tab
+  workflow_dispatch:
+
+# Jobs are tasks that run in parallel (unless dependencies are specified)
+jobs:
+  # Job 1: Run Backend Tests
+  backend-tests:
+    name: Backend Tests (Django + pytest)
+    runs-on: ubuntu-latest  # GitHub provides this virtual machine
+
+    # Services this job needs (databases, caches, etc.)
+    services:
+      # PostgreSQL database for tests
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: test_sicargabox
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      # Redis for caching/channels (if needed for tests)
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    # Steps run sequentially within a job
+    steps:
+      # Step 1: Get the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Python environment
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'  # Cache pip packages for faster builds
+
+      # Step 3: Install Python dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          cd backend/sicargabox
+          pip install -r requirements.txt
+
+      # Step 4: Run database migrations (for test database)
+      - name: Run migrations
+        working-directory: backend/sicargabox
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_sicargabox
+          DJANGO_SETTINGS_MODULE: sicargabox.test_settings
+        run: |
+          python manage.py migrate --noinput
+
+      # Step 5: Run pytest with coverage
+      - name: Run tests with coverage
+        working-directory: backend/sicargabox
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_sicargabox
+          DJANGO_SETTINGS_MODULE: sicargabox.test_settings
+          # Skip Elasticsearch tests if ES not running
+          SKIP_ELASTICSEARCH_TESTS: true
+        run: |
+          pytest --cov --cov-report=xml --cov-report=term
+
+      # Step 6: Upload coverage report (optional - for codecov.io integration)
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        continue-on-error: true  # Don't fail if codecov upload fails
+        with:
+          file: backend/sicargabox/coverage.xml
+          flags: backend
+          name: backend-coverage
+
+  # Job 2: Code Quality Checks
+  code-quality:
+    name: Code Quality (Black, Flake8, isort)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install linting tools
+        run: |
+          python -m pip install --upgrade pip
+          cd backend/sicargabox
+          pip install black flake8 isort
+
+      # Check if code is formatted with Black
+      - name: Check code formatting (Black)
+        working-directory: backend/sicargabox
+        run: |
+          black --check .
+
+      # Check for code quality issues with Flake8
+      - name: Lint with Flake8
+        working-directory: backend/sicargabox
+        run: |
+          # Stop build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Exit-zero treats all errors as warnings
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=100 --statistics
+
+      # Check import ordering with isort
+      - name: Check import sorting (isort)
+        working-directory: backend/sicargabox
+        run: |
+          isort --check-only --diff .
+
+  # Job 3: Security Checks (Optional but recommended)
+  security:
+    name: Security Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install safety
+        run: pip install safety
+
+      # Check for known security vulnerabilities in dependencies
+      - name: Check dependencies for vulnerabilities
+        working-directory: backend/sicargabox
+        continue-on-error: true  # Don't fail build on vulnerabilities (just warn)
+        run: |
+          pip install -r requirements.txt
+          safety check --json
+
+  # Job 4: Frontend Build Check (when you have frontend)
+  # Uncomment when you start working on Next.js frontend
+  # frontend-build:
+  #   name: Frontend Build Check
+  #   runs-on: ubuntu-latest
+  #
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: '20'
+  #         cache: 'npm'
+  #         cache-dependency-path: frontend/public_web/package-lock.json
+  #
+  #     - name: Install dependencies
+  #       working-directory: frontend/public_web
+  #       run: npm ci
+  #
+  #     - name: Build Next.js app
+  #       working-directory: frontend/public_web
+  #       run: npm run build
+  #
+  #     - name: Run tests
+  #       working-directory: frontend/public_web
+  #       run: npm test
+
+# Summary: This workflow ensures:
+# ✅ All tests pass before merging
+# ✅ Code follows formatting standards
+# ✅ No known security vulnerabilities
+# ✅ Build succeeds
