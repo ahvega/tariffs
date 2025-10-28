@@ -29,66 +29,95 @@ class PartidaArancelariaAdminForm(forms.ModelForm):
         model = models.PartidaArancelaria
         fields = "__all__"
         widgets = {
-            "descripcion": forms.Textarea(attrs={
-                "rows": 3,
-                "style": "width:100%;",  # full row
-            }),
-            "restrictions": forms.Textarea(attrs={
-                "rows": 3,
-                "style": "width:100%;",  # full row
-            }),
-            "special_instructions": forms.Textarea(attrs={
-                "rows": 3,
-                "style": "width:100%;",  # full row
-            }),
+            "descripcion": forms.Textarea(
+                attrs={
+                    "rows": 3,
+                    "style": "width:100%;",  # full row
+                }
+            ),
+            "restrictions": forms.Textarea(
+                attrs={
+                    "rows": 3,
+                    "style": "width:100%;",  # full row
+                }
+            ),
+            "special_instructions": forms.Textarea(
+                attrs={
+                    "rows": 3,
+                    "style": "width:100%;",  # full row
+                }
+            ),
         }
+
 
 class PartidaArancelariaAdmin(GuardedModelAdmin):
     form = PartidaArancelariaAdminForm
     list_display = [
-        'item_no',
-        'descripcion',
-        'partida_arancelaria',
-        'impuesto_dai',
-        'impuesto_isc',
-        'impuesto_ispc',
-        'impuesto_isv',
-        'courier_category',
-        'requires_special_handling'
+        "item_no",
+        "descripcion",
+        "partida_arancelaria",
+        "impuesto_dai",
+        "impuesto_isc",
+        "impuesto_ispc",
+        "impuesto_isv",
+        "courier_category",
+        "requires_special_handling",
     ]
-    list_filter = ['courier_category', 'requires_special_handling']
-    search_fields = ['item_no', 'descripcion', 'partida_arancelaria', 'search_keywords']
-    readonly_fields = ['chapter_code', 'heading_code', 'parent_item_no', 'hierarchy_level']
+    list_filter = ["courier_category", "requires_special_handling"]
+    search_fields = ["item_no", "descripcion", "partida_arancelaria", "search_keywords"]
+    readonly_fields = [
+        "chapter_code",
+        "heading_code",
+        "parent_item_no",
+        "hierarchy_level",
+    ]
     fieldsets = (
-        ('Información Básica', {
-            'fields': ('item_no', 'descripcion', 'partida_arancelaria'),
-            'classes': ('collapse',)
-        }),
-        ('Información Fiscal', {
-            'fields': ('impuesto_dai', 'impuesto_isc', 'impuesto_ispc', 'impuesto_isv'),
-            'classes': ('collapse',)
-        }),
-        ('Configuración de Courier', {
-            'fields': (
-                'courier_category',
-                'restrictions',
-                'package_type',
-                'max_weight_allowed',
-                'requires_special_handling',
-                'special_instructions'
-            ),
-            'classes': ('collapse',)
-        }),
-        ('Jerarquía y Búsqueda', {
-            'fields': (
-                'chapter_code',
-                'heading_code',
-                'parent_item_no',
-                'hierarchy_level',
-                'search_keywords'
-            ),
-            'classes': ('collapse',)
-        })
+        (
+            "Información Básica",
+            {
+                "fields": ("item_no", "descripcion", "partida_arancelaria"),
+                "classes": ("collapse",),
+            },
+        ),
+        (
+            "Información Fiscal",
+            {
+                "fields": (
+                    "impuesto_dai",
+                    "impuesto_isc",
+                    "impuesto_ispc",
+                    "impuesto_isv",
+                ),
+                "classes": ("collapse",),
+            },
+        ),
+        (
+            "Configuración de Courier",
+            {
+                "fields": (
+                    "courier_category",
+                    "restrictions",
+                    "package_type",
+                    "max_weight_allowed",
+                    "requires_special_handling",
+                    "special_instructions",
+                ),
+                "classes": ("collapse",),
+            },
+        ),
+        (
+            "Jerarquía y Búsqueda",
+            {
+                "fields": (
+                    "chapter_code",
+                    "heading_code",
+                    "parent_item_no",
+                    "hierarchy_level",
+                    "search_keywords",
+                ),
+                "classes": ("collapse",),
+            },
+        ),
     )
 
 

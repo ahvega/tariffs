@@ -7,64 +7,88 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('MiCasillero', '0007_cliente_ciudad_cliente_departamento_cliente_pais_and_more'),
+        (
+            "MiCasillero",
+            "0007_cliente_ciudad_cliente_departamento_cliente_pais_and_more",
+        ),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='partidaarancelaria',
-            name='fecha_actualizacion',
+            model_name="partidaarancelaria",
+            name="fecha_actualizacion",
         ),
         migrations.AddField(
-            model_name='partidaarancelaria',
-            name='courier_category',
-            field=models.CharField(choices=[('ALLOWED', 'Allowed for Courier'), ('RESTRICTED', 'Restricted Items'), ('PROHIBITED', 'Prohibited Items')], default='ALLOWED', max_length=20),
+            model_name="partidaarancelaria",
+            name="courier_category",
+            field=models.CharField(
+                choices=[
+                    ("ALLOWED", "Allowed for Courier"),
+                    ("RESTRICTED", "Restricted Items"),
+                    ("PROHIBITED", "Prohibited Items"),
+                ],
+                default="ALLOWED",
+                max_length=20,
+            ),
         ),
         migrations.AddField(
-            model_name='partidaarancelaria',
-            name='max_weight_allowed',
-            field=models.DecimalField(blank=True, decimal_places=2, max_digits=8, null=True),
+            model_name="partidaarancelaria",
+            name="max_weight_allowed",
+            field=models.DecimalField(
+                blank=True, decimal_places=2, max_digits=8, null=True
+            ),
         ),
         migrations.AddField(
-            model_name='partidaarancelaria',
-            name='package_type',
+            model_name="partidaarancelaria",
+            name="package_type",
             field=models.CharField(blank=True, max_length=100),
         ),
         migrations.AddField(
-            model_name='partidaarancelaria',
-            name='parent_category',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='MiCasillero.partidaarancelaria'),
+            model_name="partidaarancelaria",
+            name="parent_category",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="MiCasillero.partidaarancelaria",
+            ),
         ),
         migrations.AddField(
-            model_name='partidaarancelaria',
-            name='requires_special_handling',
+            model_name="partidaarancelaria",
+            name="requires_special_handling",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='partidaarancelaria',
-            name='restrictions',
+            model_name="partidaarancelaria",
+            name="restrictions",
             field=models.JSONField(blank=True, default=list),
         ),
         migrations.AddField(
-            model_name='partidaarancelaria',
-            name='search_keywords',
+            model_name="partidaarancelaria",
+            name="search_keywords",
             field=models.TextField(blank=True),
         ),
         migrations.AddField(
-            model_name='partidaarancelaria',
-            name='special_instructions',
+            model_name="partidaarancelaria",
+            name="special_instructions",
             field=models.TextField(blank=True),
         ),
         migrations.AddIndex(
-            model_name='partidaarancelaria',
-            index=models.Index(fields=['item_no'], name='MiCasillero_item_no_69b169_idx'),
+            model_name="partidaarancelaria",
+            index=models.Index(
+                fields=["item_no"], name="MiCasillero_item_no_69b169_idx"
+            ),
         ),
         migrations.AddIndex(
-            model_name='partidaarancelaria',
-            index=models.Index(fields=['descripcion'], name='MiCasillero_descrip_ee3636_idx'),
+            model_name="partidaarancelaria",
+            index=models.Index(
+                fields=["descripcion"], name="MiCasillero_descrip_ee3636_idx"
+            ),
         ),
         migrations.AddIndex(
-            model_name='partidaarancelaria',
-            index=models.Index(fields=['courier_category'], name='MiCasillero_courier_96e4e4_idx'),
+            model_name="partidaarancelaria",
+            index=models.Index(
+                fields=["courier_category"], name="MiCasillero_courier_96e4e4_idx"
+            ),
         ),
     ]

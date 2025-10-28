@@ -31,61 +31,65 @@ from MiCasillero.models import PartidaArancelaria
 
 
 class Command(BaseCommand):
-    help = 'Evaluate Elasticsearch search keyword quality using test dataset'
+    help = "Evaluate Elasticsearch search keyword quality using test dataset"
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '--output',
+            "--output",
             type=str,
-            default='search_quality_report.html',
-            help='Output HTML report filename'
+            default="search_quality_report.html",
+            help="Output HTML report filename",
         )
         parser.add_argument(
-            '--json-output',
+            "--json-output",
             type=str,
             default=None,
-            help='Optional JSON output filename for raw results'
+            help="Optional JSON output filename for raw results",
         )
         parser.add_argument(
-            '--test-file',
+            "--test-file",
             type=str,
-            default='test_data/test_queries.json',
-            help='Path to test queries JSON file'
+            default="test_data/test_queries.json",
+            help="Path to test queries JSON file",
         )
         parser.add_argument(
-            '--verbose',
-            action='store_true',
-            help='Print detailed output during evaluation'
+            "--verbose",
+            action="store_true",
+            help="Print detailed output during evaluation",
         )
         parser.add_argument(
-            '--k',
+            "--k",
             type=int,
             default=5,
-            help='Number of top results to consider for Precision@K (default: 5)'
+            help="Number of top results to consider for Precision@K (default: 5)",
         )
 
     def handle(self, *args, **options):
-        self.verbose = options['verbose']
-        self.k = options['k']
+        self.verbose = options["verbose"]
+        self.k = options["k"]
 
         # Load test queries
-        test_file_path = os.path.join(settings.BASE_DIR, options['test_file'])
+        test_file_path = os.path.join(settings.BASE_DIR, options["test_file"])
         self.stdout.write(f"Loading test queries from: {test_file_path}")
 
         try:
-            with open(test_file_path, 'r', encoding='utf-8') as f:
+            with open(test_file_path, "r", encoding="utf-8") as f:
                 test_data = json.load(f)
         except FileNotFoundError:
-            self.stderr.write(self.style.ERROR(f"Test file not found: {test_file_path}"))
+            self.stderr.write(
+                self.style.ERROR(f"Test file not found: {test_file_path}")
+            )
             return
         except json.JSONDecodeError as e:
             self.stderr.write(self.style.ERROR(f"Invalid JSON in test file: {e}"))
             return
 
-        self.stdout.write(self.style.SUCCESS(
-            f"Loaded {test_data['metadata']['total_queries']} test queries "
-            f"across {test_data['metadata']['total_categories']} categories"
-        ))
+        self.stdout.write(
+            self.style.SUCCESS(
+                f"Loaded {test_data['metadata']['total_queries']} test queries "
+                f"across {test_data['metadata']['total_categories']} categories"
+            )
+        )
 
         # Run evaluation
         results = self.evaluate_searches(test_data)
@@ -97,41 +101,51 @@ class Command(BaseCommand):
         self.print_summary(metrics)
 
         # Generate HTML report
-        html_output = options['output']
+        html_output = options["output"]
         self.generate_html_report(results, metrics, test_data, html_output)
         self.stdout.write(self.style.SUCCESS(f"\nHTML report saved to: {html_output}"))
 
         # Optionally save JSON
-        if options['json_output']:
-            self.save_json_results(results, metrics, options['json_output'])
-            self.stdout.write(self.style.SUCCESS(f"JSON results saved to: {options['json_output']}"))
+        if options["json_output"]:
+            self.save_json_results(results, metrics, options["json_output"])
+            self.stdout.write(
+                self.style.SUCCESS(f"JSON results saved to: {options['json_output']}")
+            )
 
         # Return status code based on quality
-        overall_precision = metrics['overall']['precision_at_k']
+        overall_precision = metrics["overall"]["precision_at_k"]
         if overall_precision >= 0.9:
-            self.stdout.write(self.style.SUCCESS(
-                f"\n✓ Search quality EXCELLENT (Precision@{self.k} = {overall_precision:.1%})"
-            ))
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"\n✓ Search quality EXCELLENT (Precision@{self.k} = {overall_precision:.1%})"
+                )
+            )
             return 0
         elif overall_precision >= 0.8:
-            self.stdout.write(self.style.WARNING(
-                f"\n⚠ Search quality GOOD (Precision@{self.k} = {overall_precision:.1%})"
-            ))
+            self.stdout.write(
+                self.style.WARNING(
+                    f"\n⚠ Search quality GOOD (Precision@{self.k} = {overall_precision:.1%})"
+                )
+            )
             return 0
         else:
-            self.stdout.write(self.style.ERROR(
-                f"\n✗ Search quality NEEDS IMPROVEMENT (Precision@{self.k} = {overall_precision:.1%})"
-            ))
+            self.stdout.write(
+                self.style.ERROR(
+                    f"\n✗ Search quality NEEDS IMPROVEMENT (Precision@{self.k} = {overall_precision:.1%})"
+                )
+            )
             return 1
 
     def evaluate_searches(self, test_data: Dict) -> List[Dict]:
         """Execute all test queries and collect results."""
         results = []
-        total_queries = sum(len(cat['queries']) for cat in test_data['categories'].values())
+        total_queries = sum(
+            len(cat["queries"]) for cat in test_data["categories"].values()
+        )
         current = 0
 
-        for category_id, category_data in test_data['categories'].items():
-            for query in category_data['queries']:
+        for category_id, category_data in test_data["categories"].items():
+            for query in category_data["queries"]:
                 current += 1
                 if self.verbose:
                     self.stdout.write(f"[{current}/{total_queries}] Testing: {query}")
@@ -141,24 +155,23 @@ class Command(BaseCommand):
 
                 # Evaluate results
                 result = {
-                    'query': query,
-                    'category': category_id,
-                    'category_name': category_data['description'],
-                    'expected_patterns': category_data.get('expected_partida_patterns', []),
-                    'results': search_results,
-                    'num_results': len(search_results),
-                    'is_zero_result': len(search_results) == 0,
+                    "query": query,
+                    "category": category_id,
+                    "category_name": category_data["description"],
+                    "expected_patterns": category_data.get(
+                        "expected_partida_patterns", []
+                    ),
+                    "results": search_results,
+                    "num_results": len(search_results),
+                    "is_zero_result": len(search_results) == 0,
                 }
 
                 # Calculate relevance for this query
-                result['relevant_in_top_k'] = self.count_relevant_in_top_k(
-                    search_results,
-                    result['expected_patterns'],
-                    self.k
+                result["relevant_in_top_k"] = self.count_relevant_in_top_k(
+                    search_results, result["expected_patterns"], self.k
                 )
-                result['first_relevant_position'] = self.find_first_relevant_position(
-                    search_results,
-                    result['expected_patterns']
+                result["first_relevant_position"] = self.find_first_relevant_position(
+                    search_results, result["expected_patterns"]
                 )
 
                 results.append(result)
@@ -174,15 +187,21 @@ class Command(BaseCommand):
             search = PartidaArancelariaDocument.search()
 
             # Multi-match query with same weights as production
-            es_query = ES_Q('multi_match',
+            es_query = ES_Q(
+                "multi_match",
                 query=query,
-                fields=['item_no^3', 'descripcion^2', 'full_text_search', 'search_keywords'],
-                fuzziness='AUTO'
+                fields=[
+                    "item_no^3",
+                    "descripcion^2",
+                    "full_text_search",
+                    "search_keywords",
+                ],
+                fuzziness="AUTO",
             )
 
             # Only return ALLOWED category
             search = search.query(es_query)
-            search = search.filter('term', courier_category='ALLOWED')
+            search = search.filter("term", courier_category="ALLOWED")
             search = search[:20]  # Limit to top 20 results
 
             response = search.execute()
@@ -192,13 +211,15 @@ class Command(BaseCommand):
             for hit in response:
                 try:
                     partida = PartidaArancelaria.objects.get(item_no=hit.item_no)
-                    results.append({
-                        'item_no': hit.item_no,
-                        'descripcion': hit.descripcion,
-                        'score': hit.meta.score,
-                        'search_keywords': getattr(hit, 'search_keywords', []),
-                        'courier_category': partida.courier_category,
-                    })
+                    results.append(
+                        {
+                            "item_no": hit.item_no,
+                            "descripcion": hit.descripcion,
+                            "score": hit.meta.score,
+                            "search_keywords": getattr(hit, "search_keywords", []),
+                            "courier_category": partida.courier_category,
+                        }
+                    )
                 except PartidaArancelaria.DoesNotExist:
                     continue
 
@@ -208,7 +229,9 @@ class Command(BaseCommand):
                 self.stderr.write(f"Search error for '{query}': {e}")
             return []
 
-    def count_relevant_in_top_k(self, results: List[Dict], expected_patterns: List[str], k: int) -> int:
+    def count_relevant_in_top_k(
+        self, results: List[Dict], expected_patterns: List[str], k: int
+    ) -> int:
         """Count how many results in top K match expected partida patterns."""
         if not results or not expected_patterns:
             return 0
@@ -217,20 +240,22 @@ class Command(BaseCommand):
         relevant_count = 0
 
         for result in top_k_results:
-            item_no = result['item_no']
+            item_no = result["item_no"]
             # Check if item_no starts with any expected pattern
             if any(item_no.startswith(pattern) for pattern in expected_patterns):
                 relevant_count += 1
 
         return relevant_count
 
-    def find_first_relevant_position(self, results: List[Dict], expected_patterns: List[str]) -> int:
+    def find_first_relevant_position(
+        self, results: List[Dict], expected_patterns: List[str]
+    ) -> int:
         """Find position (1-indexed) of first relevant result, or 0 if none found."""
         if not results or not expected_patterns:
             return 0
 
         for position, result in enumerate(results, start=1):
-            item_no = result['item_no']
+            item_no = result["item_no"]
             if any(item_no.startswith(pattern) for pattern in expected_patterns):
                 return position
 
@@ -241,15 +266,15 @@ class Command(BaseCommand):
         total_queries = len(results)
 
         # Overall metrics
-        zero_result_count = sum(1 for r in results if r['is_zero_result'])
-        total_relevant_in_k = sum(r['relevant_in_top_k'] for r in results)
+        zero_result_count = sum(1 for r in results if r["is_zero_result"])
+        total_relevant_in_k = sum(r["relevant_in_top_k"] for r in results)
         total_possible_relevant = total_queries * self.k
 
         # MRR calculation
         reciprocal_ranks = []
         for r in results:
-            if r['first_relevant_position'] > 0:
-                reciprocal_ranks.append(1.0 / r['first_relevant_position'])
+            if r["first_relevant_position"] > 0:
+                reciprocal_ranks.append(1.0 / r["first_relevant_position"])
             else:
                 reciprocal_ranks.append(0.0)
 
@@ -257,45 +282,57 @@ class Command(BaseCommand):
 
         # Category-specific metrics
         category_metrics = {}
-        for category_id in test_data['categories'].keys():
-            category_results = [r for r in results if r['category'] == category_id]
+        for category_id in test_data["categories"].keys():
+            category_results = [r for r in results if r["category"] == category_id]
 
             if category_results:
-                cat_zero_results = sum(1 for r in category_results if r['is_zero_result'])
-                cat_relevant = sum(r['relevant_in_top_k'] for r in category_results)
+                cat_zero_results = sum(
+                    1 for r in category_results if r["is_zero_result"]
+                )
+                cat_relevant = sum(r["relevant_in_top_k"] for r in category_results)
                 cat_possible = len(category_results) * self.k
 
                 cat_reciprocal_ranks = [
-                    1.0 / r['first_relevant_position'] if r['first_relevant_position'] > 0 else 0.0
+                    (
+                        1.0 / r["first_relevant_position"]
+                        if r["first_relevant_position"] > 0
+                        else 0.0
+                    )
                     for r in category_results
                 ]
 
                 category_metrics[category_id] = {
-                    'total_queries': len(category_results),
-                    'zero_results': cat_zero_results,
-                    'zero_result_rate': cat_zero_results / len(category_results),
-                    'precision_at_k': cat_relevant / cat_possible if cat_possible > 0 else 0.0,
-                    'mrr': sum(cat_reciprocal_ranks) / len(cat_reciprocal_ranks),
-                    'category_name': category_results[0]['category_name']
+                    "total_queries": len(category_results),
+                    "zero_results": cat_zero_results,
+                    "zero_result_rate": cat_zero_results / len(category_results),
+                    "precision_at_k": (
+                        cat_relevant / cat_possible if cat_possible > 0 else 0.0
+                    ),
+                    "mrr": sum(cat_reciprocal_ranks) / len(cat_reciprocal_ranks),
+                    "category_name": category_results[0]["category_name"],
                 }
 
         return {
-            'overall': {
-                'total_queries': total_queries,
-                'zero_results': zero_result_count,
-                'zero_result_rate': zero_result_count / total_queries,
-                'precision_at_k': total_relevant_in_k / total_possible_relevant if total_possible_relevant > 0 else 0.0,
-                'mrr': mrr,
-                'k': self.k
+            "overall": {
+                "total_queries": total_queries,
+                "zero_results": zero_result_count,
+                "zero_result_rate": zero_result_count / total_queries,
+                "precision_at_k": (
+                    total_relevant_in_k / total_possible_relevant
+                    if total_possible_relevant > 0
+                    else 0.0
+                ),
+                "mrr": mrr,
+                "k": self.k,
             },
-            'categories': category_metrics,
-            'timestamp': datetime.now().isoformat(),
-            'test_file': test_data['metadata']
+            "categories": category_metrics,
+            "timestamp": datetime.now().isoformat(),
+            "test_file": test_data["metadata"],
         }
 
     def print_summary(self, metrics: Dict):
         """Print summary of evaluation results to console."""
-        overall = metrics['overall']
+        overall = metrics["overall"]
 
         self.stdout.write("\n" + "=" * 60)
         self.stdout.write(self.style.SUCCESS("SEARCH QUALITY EVALUATION SUMMARY"))
@@ -305,23 +342,31 @@ class Command(BaseCommand):
         self.stdout.write(f"K (top results considered): {overall['k']}")
 
         # Zero-result rate
-        zero_rate = overall['zero_result_rate']
-        zero_style = self.style.SUCCESS if zero_rate < 0.05 else (
-            self.style.WARNING if zero_rate < 0.1 else self.style.ERROR
+        zero_rate = overall["zero_result_rate"]
+        zero_style = (
+            self.style.SUCCESS
+            if zero_rate < 0.05
+            else (self.style.WARNING if zero_rate < 0.1 else self.style.ERROR)
         )
-        self.stdout.write(f"\nZero-Result Rate: {zero_style(f'{zero_rate:.1%}')} ({overall['zero_results']} queries)")
+        self.stdout.write(
+            f"\nZero-Result Rate: {zero_style(f'{zero_rate:.1%}')} ({overall['zero_results']} queries)"
+        )
 
         # Precision@K
-        precision = overall['precision_at_k']
-        prec_style = self.style.SUCCESS if precision >= 0.9 else (
-            self.style.WARNING if precision >= 0.8 else self.style.ERROR
+        precision = overall["precision_at_k"]
+        prec_style = (
+            self.style.SUCCESS
+            if precision >= 0.9
+            else (self.style.WARNING if precision >= 0.8 else self.style.ERROR)
         )
         self.stdout.write(f"Precision@{overall['k']}: {prec_style(f'{precision:.1%}')}")
 
         # MRR
-        mrr = overall['mrr']
-        mrr_style = self.style.SUCCESS if mrr >= 0.8 else (
-            self.style.WARNING if mrr >= 0.6 else self.style.ERROR
+        mrr = overall["mrr"]
+        mrr_style = (
+            self.style.SUCCESS
+            if mrr >= 0.8
+            else (self.style.WARNING if mrr >= 0.6 else self.style.ERROR)
         )
         self.stdout.write(f"Mean Reciprocal Rank (MRR): {mrr_style(f'{mrr:.3f}')}")
 
@@ -331,9 +376,9 @@ class Command(BaseCommand):
         self.stdout.write("-" * 60)
 
         sorted_cats = sorted(
-            metrics['categories'].items(),
-            key=lambda x: x[1]['precision_at_k'],
-            reverse=True
+            metrics["categories"].items(),
+            key=lambda x: x[1]["precision_at_k"],
+            reverse=True,
         )
 
         for cat_id, cat_metrics in sorted_cats[:5]:
@@ -356,13 +401,15 @@ class Command(BaseCommand):
 
         self.stdout.write("=" * 60 + "\n")
 
-    def generate_html_report(self, results: List[Dict], metrics: Dict, test_data: Dict, output_path: str):
+    def generate_html_report(
+        self, results: List[Dict], metrics: Dict, test_data: Dict, output_path: str
+    ):
         """Generate comprehensive HTML report."""
-        overall = metrics['overall']
-        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        overall = metrics["overall"]
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         # Determine overall quality level
-        precision = overall['precision_at_k']
+        precision = overall["precision_at_k"]
         if precision >= 0.9:
             quality_level = "EXCELLENT"
             quality_color = "#22c55e"
@@ -448,7 +495,8 @@ class Command(BaseCommand):
 """
 
         # Category breakdown
-        html += """
+        html += (
+            """
         <div class="section">
             <h2>Category Performance</h2>
             <table>
@@ -456,23 +504,28 @@ class Command(BaseCommand):
                     <tr>
                         <th>Category</th>
                         <th>Queries</th>
-                        <th>Precision@""" + str(overall['k']) + """</th>
+                        <th>Precision@"""
+            + str(overall["k"])
+            + """</th>
                         <th>MRR</th>
                         <th>Zero Results</th>
                     </tr>
                 </thead>
                 <tbody>
 """
+        )
 
         sorted_cats = sorted(
-            metrics['categories'].items(),
-            key=lambda x: x[1]['precision_at_k'],
-            reverse=True
+            metrics["categories"].items(),
+            key=lambda x: x[1]["precision_at_k"],
+            reverse=True,
         )
 
         for cat_id, cat_metrics in sorted_cats:
-            precision_class = 'good' if cat_metrics['precision_at_k'] >= 0.9 else (
-                'warning' if cat_metrics['precision_at_k'] >= 0.8 else 'error'
+            precision_class = (
+                "good"
+                if cat_metrics["precision_at_k"] >= 0.9
+                else ("warning" if cat_metrics["precision_at_k"] >= 0.8 else "error")
             )
 
             html += f"""
@@ -493,8 +546,7 @@ class Command(BaseCommand):
 
         # Problem queries section (zero results or low relevance)
         problem_results = [
-            r for r in results
-            if r['is_zero_result'] or r['relevant_in_top_k'] == 0
+            r for r in results if r["is_zero_result"] or r["relevant_in_top_k"] == 0
         ]
 
         if problem_results:
@@ -510,13 +562,13 @@ class Command(BaseCommand):
                 <div class="query-text">"{result['query']}" <span style="color: #6b7280;">({result['category_name']})</span></div>
 """
 
-                if result['is_zero_result']:
+                if result["is_zero_result"]:
                     html += """<p class="error">⚠ Zero results returned</p>"""
                 else:
                     html += f"""
                 <p style="margin-bottom: 0.5rem;">Top {min(5, len(result['results']))} results:</p>
 """
-                    for idx, res in enumerate(result['results'][:5], 1):
+                    for idx, res in enumerate(result["results"][:5], 1):
                         html += f"""
                 <div class="result-item">{idx}. {res['item_no']} - {res['descripcion'][:100]}...</div>
 """
@@ -577,19 +629,19 @@ class Command(BaseCommand):
 """
 
         # Write HTML file
-        with open(output_path, 'w', encoding='utf-8') as f:
+        with open(output_path, "w", encoding="utf-8") as f:
             f.write(html)
 
     def save_json_results(self, results: List[Dict], metrics: Dict, output_path: str):
         """Save raw results and metrics to JSON file."""
         output = {
-            'metadata': {
-                'timestamp': metrics['timestamp'],
-                'test_file': metrics['test_file']
+            "metadata": {
+                "timestamp": metrics["timestamp"],
+                "test_file": metrics["test_file"],
             },
-            'metrics': metrics,
-            'results': results
+            "metrics": metrics,
+            "results": results,
         }
 
-        with open(output_path, 'w', encoding='utf-8') as f:
+        with open(output_path, "w", encoding="utf-8") as f:
             json.dump(output, f, indent=2, ensure_ascii=False)

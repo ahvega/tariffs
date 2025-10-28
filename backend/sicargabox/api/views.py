@@ -7,13 +7,16 @@ from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from MiCasillero.models import PartidaArancelaria, Cliente, Cotizacion, Articulo
 from .serializers import (
-    PartidaArancelariaAPISerializer, ClienteAPISerializer,
-    CotizacionAPISerializer, ArticuloAPISerializer
+    PartidaArancelariaAPISerializer,
+    ClienteAPISerializer,
+    CotizacionAPISerializer,
+    ArticuloAPISerializer,
 )
 
 # Create your views here.
 
-@extend_schema(tags=['Partidas Arancelarias'])
+
+@extend_schema(tags=["Partidas Arancelarias"])
 class PartidaArancelariaViewSet(viewsets.ModelViewSet):
     """
     ViewSet for managing Partidas Arancelarias (Tariff Classification Items).
@@ -45,18 +48,40 @@ class PartidaArancelariaViewSet(viewsets.ModelViewSet):
     - courier_category: Order by courier category
     - requires_special_handling: Order by special handling requirement
     """
+
     queryset = PartidaArancelaria.objects.all()
     serializer_class = PartidaArancelariaAPISerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['item_no', 'partida_arancelaria', 'courier_category', 'package_type', 'requires_special_handling']
-    search_fields = ['descripcion', 'item_no', 'partida_arancelaria', 'search_keywords', 'special_instructions']
-    ordering_fields = ['item_no', 'impuesto_dai', 'courier_category', 'requires_special_handling']
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+    filterset_fields = [
+        "item_no",
+        "partida_arancelaria",
+        "courier_category",
+        "package_type",
+        "requires_special_handling",
+    ]
+    search_fields = [
+        "descripcion",
+        "item_no",
+        "partida_arancelaria",
+        "search_keywords",
+        "special_instructions",
+    ]
+    ordering_fields = [
+        "item_no",
+        "impuesto_dai",
+        "courier_category",
+        "requires_special_handling",
+    ]
 
     def get_permissions(self):
         """
         Instantiates and returns the list of permissions that this view requires.
         """
-        if self.action == 'search_products':
+        if self.action == "search_products":
             permission_classes = [AllowAny]
         else:
             permission_classes = [IsAuthenticated]
@@ -64,26 +89,32 @@ class PartidaArancelariaViewSet(viewsets.ModelViewSet):
 
     @extend_schema(
         parameters=[
-            OpenApiParameter(name='query', description='Search term for products', required=True, type=str),
+            OpenApiParameter(
+                name="query",
+                description="Search term for products",
+                required=True,
+                type=str,
+            ),
         ],
-        description='Search for tariff items by product description'
+        description="Search for tariff items by product description",
     )
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=["get"])
     def search_products(self, request):
-        query = request.query_params.get('query', '')
+        query = request.query_params.get("query", "")
         if not query:
-            return Response({'error': 'Query parameter is required'}, status=400)
-        
+            return Response({"error": "Query parameter is required"}, status=400)
+
         results = self.queryset.filter(descripcion__icontains=query)
         page = self.paginate_queryset(results)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
-        
+
         serializer = self.get_serializer(results, many=True)
         return Response(serializer.data)
 
-@extend_schema(tags=['Clientes'])
+
+@extend_schema(tags=["Clientes"])
 class ClienteViewSet(viewsets.ModelViewSet):
     """
     ViewSet for managing Clientes (Customers).
@@ -103,11 +134,12 @@ class ClienteViewSet(viewsets.ModelViewSet):
 
     **Note:** Customer codes are auto-generated and read-only.
     """
+
     queryset = Cliente.objects.all()
     serializer_class = ClienteAPISerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['codigo_cliente']
-    search_fields = ['nombres', 'apellidos', 'correo_electronico', 'codigo_cliente']
+    filterset_fields = ["codigo_cliente"]
+    search_fields = ["nombres", "apellidos", "correo_electronico", "codigo_cliente"]
 
     def perform_create(self, serializer):
         """
@@ -118,7 +150,8 @@ class ClienteViewSet(viewsets.ModelViewSet):
         """
         serializer.save(user=self.request.user)
 
-@extend_schema(tags=['Cotizaciones'])
+
+@extend_schema(tags=["Cotizaciones"])
 class CotizacionViewSet(viewsets.ModelViewSet):
     """
     ViewSet for managing Cotizaciones (Shipping Quotations).
@@ -136,10 +169,11 @@ class CotizacionViewSet(viewsets.ModelViewSet):
 
     **Note:** The fecha_creacion (creation date) field is auto-generated and read-only.
     """
+
     queryset = Cotizacion.objects.all()
     serializer_class = CotizacionAPISerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['estado', 'cliente']
+    filterset_fields = ["estado", "cliente"]
 
     def get_queryset(self):
         """
@@ -153,7 +187,8 @@ class CotizacionViewSet(viewsets.ModelViewSet):
             return Cotizacion.objects.all()
         return Cotizacion.objects.filter(cliente__user=user)
 
-@extend_schema(tags=['Articulos'])
+
+@extend_schema(tags=["Articulos"])
 class ArticuloViewSet(viewsets.ModelViewSet):
     """
     ViewSet for managing Articulos (Shipment Items).
@@ -173,10 +208,11 @@ class ArticuloViewSet(viewsets.ModelViewSet):
     **Note:** All tax-related fields are automatically calculated and are read-only.
     The calculation is based on the associated tariff item (partida_arancelaria).
     """
+
     queryset = Articulo.objects.all()
     serializer_class = ArticuloAPISerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['cotizacion']
+    filterset_fields = ["cotizacion"]
 
     def perform_create(self, serializer):
         """

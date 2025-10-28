@@ -7,14 +7,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('MiCasillero', '0012_partidaarancelaria_search_vector_and_more'),
+        ("MiCasillero", "0012_partidaarancelaria_search_vector_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='articulo',
-            name='descripcion_original',
-            field=models.CharField(default='', help_text='Descripción del producto según la factura de compra', max_length=255),
+            model_name="articulo",
+            name="descripcion_original",
+            field=models.CharField(
+                default="",
+                help_text="Descripción del producto según la factura de compra",
+                max_length=255,
+            ),
             preserve_default=False,
         ),
     ]

@@ -17,9 +17,9 @@ class HTMXAlertaListView(generic.ListView):
         super().get(request, *args, **kwargs)
         context = {
             "model_id": self.model._meta.verbose_name_raw,
-            "objects": self.get_queryset()
+            "objects": self.get_queryset(),
         }
-        return TemplateResponse(request, 'htmx/list.html', context)
+        return TemplateResponse(request, "htmx/list.html", context)
 
 
 class HTMXAlertaCreateView(generic.CreateView):
@@ -30,26 +30,26 @@ class HTMXAlertaCreateView(generic.CreateView):
         super().get(request, *args, **kwargs)
         context = {
             "create_url": self.model.get_htmx_create_url(),
-            "form": self.get_form()
+            "form": self.get_form(),
         }
-        return TemplateResponse(request, 'htmx/form.html', context)
+        return TemplateResponse(request, "htmx/form.html", context)
 
     def form_valid(self, form):
         super().form_valid(form)
         context = {
             "model_id": self.model._meta.verbose_name_raw,
             "object": self.object,
-            "form": form
+            "form": form,
         }
-        return TemplateResponse(self.request, 'htmx/create.html', context)
+        return TemplateResponse(self.request, "htmx/create.html", context)
 
     def form_invalid(self, form):
         super().form_invalid(form)
         context = {
             "create_url": self.model.get_htmx_create_url(),
-            "form": self.get_form()
+            "form": self.get_form(),
         }
-        return TemplateResponse(self.request, 'htmx/form.html', context)
+        return TemplateResponse(self.request, "htmx/form.html", context)
 
 
 class HTMXAlertaDeleteView(generic.DeleteView):
@@ -69,9 +69,9 @@ class HTMXArticuloListView(generic.ListView):
         super().get(request, *args, **kwargs)
         context = {
             "model_id": self.model._meta.verbose_name_raw,
-            "objects": self.get_queryset()
+            "objects": self.get_queryset(),
         }
-        return TemplateResponse(request, 'htmx/list.html', context)
+        return TemplateResponse(request, "htmx/list.html", context)
 
 
 class HTMXArticuloCreateView(generic.CreateView):
@@ -82,26 +82,26 @@ class HTMXArticuloCreateView(generic.CreateView):
         super().get(request, *args, **kwargs)
         context = {
             "create_url": self.model.get_htmx_create_url(),
-            "form": self.get_form()
+            "form": self.get_form(),
         }
-        return TemplateResponse(request, 'htmx/form.html', context)
+        return TemplateResponse(request, "htmx/form.html", context)
 
     def form_valid(self, form):
         super().form_valid(form)
         context = {
             "model_id": self.model._meta.verbose_name_raw,
             "object": self.object,
-            "form": form
+            "form": form,
         }
-        return TemplateResponse(self.request, 'htmx/create.html', context)
+        return TemplateResponse(self.request, "htmx/create.html", context)
 
     def form_invalid(self, form):
         super().form_invalid(form)
         context = {
             "create_url": self.model.get_htmx_create_url(),
-            "form": self.get_form()
+            "form": self.get_form(),
         }
-        return TemplateResponse(self.request, 'htmx/form.html', context)
+        return TemplateResponse(self.request, "htmx/form.html", context)
 
 
 class HTMXArticuloDeleteView(generic.DeleteView):
@@ -121,9 +121,9 @@ class HTMXClienteListView(generic.ListView):
         super().get(request, *args, **kwargs)
         context = {
             "model_id": self.model._meta.verbose_name_raw,
-            "objects": self.get_queryset()
+            "objects": self.get_queryset(),
         }
-        return TemplateResponse(request, 'htmx/list.html', context)
+        return TemplateResponse(request, "htmx/list.html", context)
 
 
 class HTMXClienteCreateView(generic.CreateView):
@@ -134,26 +134,26 @@ class HTMXClienteCreateView(generic.CreateView):
         super().get(request, *args, **kwargs)
         context = {
             "create_url": self.model.get_htmx_create_url(),
-            "form": self.get_form()
+            "form": self.get_form(),
         }
-        return TemplateResponse(request, 'htmx/form.html', context)
+        return TemplateResponse(request, "htmx/form.html", context)
 
     def form_valid(self, form):
         super().form_valid(form)
         context = {
             "model_id": self.model._meta.verbose_name_raw,
             "object": self.object,
-            "form": form
+            "form": form,
         }
-        return TemplateResponse(self.request, 'htmx/create.html', context)
+        return TemplateResponse(self.request, "htmx/create.html", context)
 
     def form_invalid(self, form):
         super().form_invalid(form)
         context = {
             "create_url": self.model.get_htmx_create_url(),
-            "form": self.get_form()
+            "form": self.get_form(),
         }
-        return TemplateResponse(self.request, 'htmx/form.html', context)
+        return TemplateResponse(self.request, "htmx/form.html", context)
 
 
 class HTMXClienteDeleteView(generic.DeleteView):
@@ -173,9 +173,9 @@ class HTMXCotizacionListView(generic.ListView):
         super().get(request, *args, **kwargs)
         context = {
             "model_id": self.model._meta.verbose_name_raw,
-            "objects": self.get_queryset()
+            "objects": self.get_queryset(),
         }
-        return TemplateResponse(request, 'htmx/list.html', context)
+        return TemplateResponse(request, "htmx/list.html", context)
 
 
 class HTMXCotizacionCreateView(generic.CreateView):
@@ -186,26 +186,26 @@ class HTMXCotizacionCreateView(generic.CreateView):
         super().get(request, *args, **kwargs)
         context = {
             "create_url": self.model.get_htmx_create_url(),
-            "form": self.get_form()
+            "form": self.get_form(),
         }
-        return TemplateResponse(request, 'htmx/form.html', context)
+        return TemplateResponse(request, "htmx/form.html", context)
 
     def form_valid(self, form):
         super().form_valid(form)
         context = {
             "model_id": self.model._meta.verbose_name_raw,
             "object": self.object,
-            "form": form
+            "form": form,
         }
-        return TemplateResponse(self.request, 'htmx/create.html', context)
+        return TemplateResponse(self.request, "htmx/create.html", context)
 
     def form_invalid(self, form):
         super().form_invalid(form)
         context = {
             "create_url": self.model.get_htmx_create_url(),
-            "form": self.get_form()
+            "form": self.get_form(),
         }
-        return TemplateResponse(self.request, 'htmx/form.html', context)
+        return TemplateResponse(self.request, "htmx/form.html", context)
 
 
 class HTMXCotizacionDeleteView(generic.DeleteView):
@@ -225,9 +225,9 @@ class HTMXEnvioListView(generic.ListView):
         super().get(request, *args, **kwargs)
         context = {
             "model_id": self.model._meta.verbose_name_raw,
-            "objects": self.get_queryset()
+            "objects": self.get_queryset(),
         }
-        return TemplateResponse(request, 'htmx/list.html', context)
+        return TemplateResponse(request, "htmx/list.html", context)
 
 
 class HTMXEnvioCreateView(generic.CreateView):
@@ -238,26 +238,26 @@ class HTMXEnvioCreateView(generic.CreateView):
         super().get(request, *args, **kwargs)
         context = {
             "create_url": self.model.get_htmx_create_url(),
-            "form": self.get_form()
+            "form": self.get_form(),
         }
-        return TemplateResponse(request, 'htmx/form.html', context)
+        return TemplateResponse(request, "htmx/form.html", context)
 
     def form_valid(self, form):
         super().form_valid(form)
         context = {
             "model_id": self.model._meta.verbose_name_raw,
             "object": self.object,
-            "form": form
+            "form": form,
         }
-        return TemplateResponse(self.request, 'htmx/create.html', context)
+        return TemplateResponse(self.request, "htmx/create.html", context)
 
     def form_invalid(self, form):
         super().form_invalid(form)
         context = {
             "create_url": self.model.get_htmx_create_url(),
-            "form": self.get_form()
+            "form": self.get_form(),
         }
-        return TemplateResponse(self.request, 'htmx/form.html', context)
+        return TemplateResponse(self.request, "htmx/form.html", context)
 
 
 class HTMXEnvioDeleteView(generic.DeleteView):
@@ -277,9 +277,9 @@ class HTMXFacturaListView(generic.ListView):
         super().get(request, *args, **kwargs)
         context = {
             "model_id": self.model._meta.verbose_name_raw,
-            "objects": self.get_queryset()
+            "objects": self.get_queryset(),
         }
-        return TemplateResponse(request, 'htmx/list.html', context)
+        return TemplateResponse(request, "htmx/list.html", context)
 
 
 class HTMXFacturaCreateView(generic.CreateView):
@@ -290,26 +290,26 @@ class HTMXFacturaCreateView(generic.CreateView):
         super().get(request, *args, **kwargs)
         context = {
             "create_url": self.model.get_htmx_create_url(),
-            "form": self.get_form()
+            "form": self.get_form(),
         }
-        return TemplateResponse(request, 'htmx/form.html', context)
+        return TemplateResponse(request, "htmx/form.html", context)
 
     def form_valid(self, form):
         super().form_valid(form)
         context = {
             "model_id": self.model._meta.verbose_name_raw,
             "object": self.object,
-            "form": form
+            "form": form,
         }
-        return TemplateResponse(self.request, 'htmx/create.html', context)
+        return TemplateResponse(self.request, "htmx/create.html", context)
 
     def form_invalid(self, form):
         super().form_invalid(form)
         context = {
             "create_url": self.model.get_htmx_create_url(),
-            "form": self.get_form()
+            "form": self.get_form(),
         }
-        return TemplateResponse(self.request, 'htmx/form.html', context)
+        return TemplateResponse(self.request, "htmx/form.html", context)
 
 
 class HTMXFacturaDeleteView(generic.DeleteView):
@@ -329,9 +329,9 @@ class HTMXParametroSistemaListView(generic.ListView):
         super().get(request, *args, **kwargs)
         context = {
             "model_id": self.model._meta.verbose_name_raw,
-            "objects": self.get_queryset()
+            "objects": self.get_queryset(),
         }
-        return TemplateResponse(request, 'htmx/list.html', context)
+        return TemplateResponse(request, "htmx/list.html", context)
 
 
 class HTMXParametroSistemaCreateView(generic.CreateView):
@@ -342,26 +342,26 @@ class HTMXParametroSistemaCreateView(generic.CreateView):
         super().get(request, *args, **kwargs)
         context = {
             "create_url": self.model.get_htmx_create_url(),
-            "form": self.get_form()
+            "form": self.get_form(),
         }
-        return TemplateResponse(request, 'htmx/form.html', context)
+        return TemplateResponse(request, "htmx/form.html", context)
 
     def form_valid(self, form):
         super().form_valid(form)
         context = {
             "model_id": self.model._meta.verbose_name_raw,
             "object": self.object,
-            "form": form
+            "form": form,
         }
-        return TemplateResponse(self.request, 'htmx/create.html', context)
+        return TemplateResponse(self.request, "htmx/create.html", context)
 
     def form_invalid(self, form):
         super().form_invalid(form)
         context = {
             "create_url": self.model.get_htmx_create_url(),
-            "form": self.get_form()
+            "form": self.get_form(),
         }
-        return TemplateResponse(self.request, 'htmx/form.html', context)
+        return TemplateResponse(self.request, "htmx/form.html", context)
 
 
 class HTMXParametroSistemaDeleteView(generic.DeleteView):
@@ -381,9 +381,9 @@ class HTMXPartidaArancelariaListView(generic.ListView):
         super().get(request, *args, **kwargs)
         context = {
             "model_id": self.model._meta.verbose_name_raw,
-            "objects": self.get_queryset()
+            "objects": self.get_queryset(),
         }
-        return TemplateResponse(request, 'htmx/list.html', context)
+        return TemplateResponse(request, "htmx/list.html", context)
 
 
 class HTMXPartidaArancelariaCreateView(generic.CreateView):
@@ -394,26 +394,26 @@ class HTMXPartidaArancelariaCreateView(generic.CreateView):
         super().get(request, *args, **kwargs)
         context = {
             "create_url": self.model.get_htmx_create_url(),
-            "form": self.get_form()
+            "form": self.get_form(),
         }
-        return TemplateResponse(request, 'htmx/form.html', context)
+        return TemplateResponse(request, "htmx/form.html", context)
 
     def form_valid(self, form):
         super().form_valid(form)
         context = {
             "model_id": self.model._meta.verbose_name_raw,
             "object": self.object,
-            "form": form
+            "form": form,
         }
-        return TemplateResponse(self.request, 'htmx/create.html', context)
+        return TemplateResponse(self.request, "htmx/create.html", context)
 
     def form_invalid(self, form):
         super().form_invalid(form)
         context = {
             "create_url": self.model.get_htmx_create_url(),
-            "form": self.get_form()
+            "form": self.get_form(),
         }
-        return TemplateResponse(self.request, 'htmx/form.html', context)
+        return TemplateResponse(self.request, "htmx/form.html", context)
 
 
 class HTMXPartidaArancelariaDeleteView(generic.DeleteView):

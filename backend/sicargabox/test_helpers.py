@@ -53,8 +53,7 @@ def create_Group(**kwargs):
 
 
 def create_ContentType(**kwargs):
-    defaults = {
-    }
+    defaults = {}
     defaults.update(**kwargs)
     return ContentType.objects.create(**defaults)
 
@@ -67,6 +66,8 @@ def create_MiCasillero_Alerta(**kwargs):
     defaults["estado"] = ""
     defaults.update(**kwargs)
     return MiCasillero_models.Alerta.objects.create(**defaults)
+
+
 def create_MiCasillero_Articulo(**kwargs):
     defaults = {}
     defaults["valor_articulo"] = ""
@@ -81,6 +82,8 @@ def create_MiCasillero_Articulo(**kwargs):
     defaults["impuesto_total"] = ""
     defaults.update(**kwargs)
     return MiCasillero_models.Articulo.objects.create(**defaults)
+
+
 def create_MiCasillero_Cliente(**kwargs):
     defaults = {}
     defaults["nombres"] = ""
@@ -92,12 +95,16 @@ def create_MiCasillero_Cliente(**kwargs):
     defaults["fecha_registro"] = datetime.now()
     defaults.update(**kwargs)
     return MiCasillero_models.Cliente.objects.create(**defaults)
+
+
 def create_MiCasillero_Cotizacion(**kwargs):
     defaults = {}
     defaults["fecha_creacion"] = datetime.now()
     defaults["estado"] = ""
     defaults.update(**kwargs)
     return MiCasillero_models.Cotizacion.objects.create(**defaults)
+
+
 def create_MiCasillero_Envio(**kwargs):
     defaults = {}
     defaults["tracking_number_original"] = ""
@@ -108,6 +115,8 @@ def create_MiCasillero_Envio(**kwargs):
     defaults["fecha_actualizacion"] = datetime.now()
     defaults.update(**kwargs)
     return MiCasillero_models.Envio.objects.create(**defaults)
+
+
 def create_MiCasillero_Factura(**kwargs):
     defaults = {}
     defaults["flete"] = ""
@@ -121,6 +130,8 @@ def create_MiCasillero_Factura(**kwargs):
     defaults["estado_pago"] = ""
     defaults.update(**kwargs)
     return MiCasillero_models.Factura.objects.create(**defaults)
+
+
 def create_MiCasillero_ParametroSistema(**kwargs):
     defaults = {}
     defaults["nombre_parametro"] = ""
@@ -129,6 +140,8 @@ def create_MiCasillero_ParametroSistema(**kwargs):
     defaults["fecha_actualizacion"] = datetime.now()
     defaults.update(**kwargs)
     return MiCasillero_models.ParametroSistema.objects.create(**defaults)
+
+
 def create_MiCasillero_PartidaArancelaria(**kwargs):
     defaults = {}
     defaults["item_no"] = ""

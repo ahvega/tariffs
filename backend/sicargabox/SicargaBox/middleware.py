@@ -11,11 +11,11 @@ class AdminDefaultLanguageMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        admin_prefix = '/admin/'
+        admin_prefix = "/admin/"
         cookie_language = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME)
         session_language = None
 
-        if hasattr(request, 'session'):
+        if hasattr(request, "session"):
             session_language = request.session.get(LANGUAGE_SESSION_KEY)
 
         should_force_spanish = (

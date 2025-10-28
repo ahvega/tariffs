@@ -6,33 +6,43 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('MiCasillero', '0005_alter_partidaarancelaria_impuesto_dai_and_more'),
+        ("MiCasillero", "0005_alter_partidaarancelaria_impuesto_dai_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='articulo',
-            name='impuesto_dai',
-            field=models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=10, null=True),
+            model_name="articulo",
+            name="impuesto_dai",
+            field=models.DecimalField(
+                blank=True, decimal_places=2, default=0, max_digits=10, null=True
+            ),
         ),
         migrations.AlterField(
-            model_name='articulo',
-            name='impuesto_isc',
-            field=models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=10, null=True),
+            model_name="articulo",
+            name="impuesto_isc",
+            field=models.DecimalField(
+                blank=True, decimal_places=2, default=0, max_digits=10, null=True
+            ),
         ),
         migrations.AlterField(
-            model_name='articulo',
-            name='impuesto_ispc',
-            field=models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=10, null=True),
+            model_name="articulo",
+            name="impuesto_ispc",
+            field=models.DecimalField(
+                blank=True, decimal_places=2, default=0, max_digits=10, null=True
+            ),
         ),
         migrations.AlterField(
-            model_name='articulo',
-            name='impuesto_isv',
-            field=models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=10, null=True),
+            model_name="articulo",
+            name="impuesto_isv",
+            field=models.DecimalField(
+                blank=True, decimal_places=2, default=0, max_digits=10, null=True
+            ),
         ),
         migrations.AlterField(
-            model_name='articulo',
-            name='impuesto_total',
-            field=models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=10, null=True),
+            model_name="articulo",
+            name="impuesto_total",
+            field=models.DecimalField(
+                blank=True, decimal_places=2, default=0, max_digits=10, null=True
+            ),
         ),
     ]

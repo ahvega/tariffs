@@ -8,116 +8,356 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Cliente',
+            name="Cliente",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('nombres', models.CharField(max_length=255)),
-                ('apellidos', models.CharField(max_length=255)),
-                ('nombre_corto', models.CharField(blank=True, max_length=50)),
-                ('direccion', models.CharField(max_length=255)),
-                ('telefono', models.CharField(max_length=20)),
-                ('correo_electronico', models.EmailField(max_length=254, unique=True)),
-                ('codigo_cliente', models.CharField(max_length=10, unique=True)),
-                ('fecha_registro', models.DateTimeField(auto_now_add=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("nombres", models.CharField(max_length=255)),
+                ("apellidos", models.CharField(max_length=255)),
+                ("nombre_corto", models.CharField(blank=True, max_length=50)),
+                ("direccion", models.CharField(max_length=255)),
+                ("telefono", models.CharField(max_length=20)),
+                ("correo_electronico", models.EmailField(max_length=254, unique=True)),
+                ("codigo_cliente", models.CharField(max_length=10, unique=True)),
+                ("fecha_registro", models.DateTimeField(auto_now_add=True)),
             ],
         ),
         migrations.CreateModel(
-            name='ParametroSistema',
+            name="ParametroSistema",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('nombre_parametro', models.CharField(max_length=50, unique=True)),
-                ('valor', models.CharField(max_length=255)),
-                ('tipo_dato', models.CharField(choices=[('STRING', 'String'), ('INTEGER', 'Integer'), ('FLOAT', 'Float'), ('BOOLEAN', 'Boolean')], max_length=10)),
-                ('fecha_actualizacion', models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("nombre_parametro", models.CharField(max_length=50, unique=True)),
+                ("valor", models.CharField(max_length=255)),
+                (
+                    "tipo_dato",
+                    models.CharField(
+                        choices=[
+                            ("STRING", "String"),
+                            ("INTEGER", "Integer"),
+                            ("FLOAT", "Float"),
+                            ("BOOLEAN", "Boolean"),
+                        ],
+                        max_length=10,
+                    ),
+                ),
+                ("fecha_actualizacion", models.DateTimeField(auto_now=True)),
             ],
         ),
         migrations.CreateModel(
-            name='PartidaArancelaria',
+            name="PartidaArancelaria",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('item_no', models.CharField(max_length=50)),
-                ('descripcion', models.CharField(max_length=255)),
-                ('partida_arancelaria', models.CharField(max_length=50)),
-                ('impuesto_dai', models.DecimalField(decimal_places=2, max_digits=5)),
-                ('impuesto_isc', models.DecimalField(decimal_places=2, max_digits=5)),
-                ('impuesto_ispc', models.DecimalField(decimal_places=2, max_digits=5)),
-                ('impuesto_isv', models.DecimalField(decimal_places=2, max_digits=5)),
-                ('fecha_actualizacion', models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("item_no", models.CharField(max_length=50)),
+                ("descripcion", models.CharField(max_length=255)),
+                ("partida_arancelaria", models.CharField(max_length=50)),
+                ("impuesto_dai", models.DecimalField(decimal_places=2, max_digits=5)),
+                ("impuesto_isc", models.DecimalField(decimal_places=2, max_digits=5)),
+                ("impuesto_ispc", models.DecimalField(decimal_places=2, max_digits=5)),
+                ("impuesto_isv", models.DecimalField(decimal_places=2, max_digits=5)),
+                ("fecha_actualizacion", models.DateTimeField(auto_now=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Cotizacion',
+            name="Cotizacion",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('fecha_creacion', models.DateTimeField(auto_now_add=True)),
-                ('estado', models.CharField(choices=[('Pendiente', 'Pendiente'), ('Aceptada', 'Aceptada'), ('Rechazada', 'Rechazada')], max_length=20)),
-                ('cliente', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='MiCasillero.cliente')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("fecha_creacion", models.DateTimeField(auto_now_add=True)),
+                (
+                    "estado",
+                    models.CharField(
+                        choices=[
+                            ("Pendiente", "Pendiente"),
+                            ("Aceptada", "Aceptada"),
+                            ("Rechazada", "Rechazada"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "cliente",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="MiCasillero.cliente",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Envio',
+            name="Envio",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('tracking_number_original', models.CharField(max_length=50)),
-                ('tracking_number_final', models.CharField(max_length=50)),
-                ('direccion_casillero', models.CharField(max_length=255)),
-                ('estado_envio', models.CharField(choices=[('Recibido en Miami', 'Recibido en Miami'), ('En tránsito', 'En tránsito'), ('En aduana', 'En aduana'), ('Disponible para entrega', 'Disponible para entrega')], max_length=50)),
-                ('flete', models.DecimalField(blank=True, decimal_places=2, max_digits=10, null=True)),
-                ('fecha_actualizacion', models.DateTimeField(auto_now=True)),
-                ('cliente', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='MiCasillero.cliente')),
-                ('cotizacion', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='MiCasillero.cotizacion')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("tracking_number_original", models.CharField(max_length=50)),
+                ("tracking_number_final", models.CharField(max_length=50)),
+                ("direccion_casillero", models.CharField(max_length=255)),
+                (
+                    "estado_envio",
+                    models.CharField(
+                        choices=[
+                            ("Recibido en Miami", "Recibido en Miami"),
+                            ("En tránsito", "En tránsito"),
+                            ("En aduana", "En aduana"),
+                            ("Disponible para entrega", "Disponible para entrega"),
+                        ],
+                        max_length=50,
+                    ),
+                ),
+                (
+                    "flete",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=10, null=True
+                    ),
+                ),
+                ("fecha_actualizacion", models.DateTimeField(auto_now=True)),
+                (
+                    "cliente",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="MiCasillero.cliente",
+                    ),
+                ),
+                (
+                    "cotizacion",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="MiCasillero.cotizacion",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Alerta',
+            name="Alerta",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('tipo_alerta', models.CharField(choices=[('SMS', 'SMS'), ('WhatsApp', 'WhatsApp')], max_length=50)),
-                ('mensaje', models.TextField()),
-                ('fecha_envio', models.DateTimeField(auto_now_add=True)),
-                ('estado', models.CharField(choices=[('Enviado', 'Enviado'), ('Error', 'Error')], max_length=20)),
-                ('cliente', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='MiCasillero.cliente')),
-                ('envio', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='MiCasillero.envio')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "tipo_alerta",
+                    models.CharField(
+                        choices=[("SMS", "SMS"), ("WhatsApp", "WhatsApp")],
+                        max_length=50,
+                    ),
+                ),
+                ("mensaje", models.TextField()),
+                ("fecha_envio", models.DateTimeField(auto_now_add=True)),
+                (
+                    "estado",
+                    models.CharField(
+                        choices=[("Enviado", "Enviado"), ("Error", "Error")],
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "cliente",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="MiCasillero.cliente",
+                    ),
+                ),
+                (
+                    "envio",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="MiCasillero.envio",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Factura',
+            name="Factura",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('flete', models.DecimalField(blank=True, decimal_places=2, max_digits=10, null=True)),
-                ('total_impuesto_dai', models.DecimalField(blank=True, decimal_places=2, max_digits=10, null=True)),
-                ('total_impuesto_isc', models.DecimalField(blank=True, decimal_places=2, max_digits=10, null=True)),
-                ('total_impuesto_ispc', models.DecimalField(blank=True, decimal_places=2, max_digits=10, null=True)),
-                ('total_impuesto_isv', models.DecimalField(blank=True, decimal_places=2, max_digits=10, null=True)),
-                ('total_impuesto', models.DecimalField(blank=True, decimal_places=2, max_digits=10, null=True)),
-                ('monto_total', models.DecimalField(blank=True, decimal_places=2, max_digits=10, null=True)),
-                ('fecha_emision', models.DateTimeField(auto_now_add=True)),
-                ('estado_pago', models.CharField(choices=[('Pendiente', 'Pendiente'), ('Pagada', 'Pagada'), ('Cancelada', 'Cancelada')], max_length=20)),
-                ('cliente', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='MiCasillero.cliente')),
-                ('envio', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='MiCasillero.envio')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "flete",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=10, null=True
+                    ),
+                ),
+                (
+                    "total_impuesto_dai",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=10, null=True
+                    ),
+                ),
+                (
+                    "total_impuesto_isc",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=10, null=True
+                    ),
+                ),
+                (
+                    "total_impuesto_ispc",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=10, null=True
+                    ),
+                ),
+                (
+                    "total_impuesto_isv",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=10, null=True
+                    ),
+                ),
+                (
+                    "total_impuesto",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=10, null=True
+                    ),
+                ),
+                (
+                    "monto_total",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=10, null=True
+                    ),
+                ),
+                ("fecha_emision", models.DateTimeField(auto_now_add=True)),
+                (
+                    "estado_pago",
+                    models.CharField(
+                        choices=[
+                            ("Pendiente", "Pendiente"),
+                            ("Pagada", "Pagada"),
+                            ("Cancelada", "Cancelada"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "cliente",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="MiCasillero.cliente",
+                    ),
+                ),
+                (
+                    "envio",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="MiCasillero.envio",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Articulo',
+            name="Articulo",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('valor_articulo', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('largo', models.DecimalField(decimal_places=2, max_digits=5)),
-                ('ancho', models.DecimalField(decimal_places=2, max_digits=5)),
-                ('alto', models.DecimalField(decimal_places=2, max_digits=5)),
-                ('peso', models.DecimalField(decimal_places=2, max_digits=5)),
-                ('impuesto_dai', models.DecimalField(blank=True, decimal_places=2, max_digits=10, null=True)),
-                ('impuesto_isc', models.DecimalField(blank=True, decimal_places=2, max_digits=10, null=True)),
-                ('impuesto_ispc', models.DecimalField(blank=True, decimal_places=2, max_digits=10, null=True)),
-                ('impuesto_isv', models.DecimalField(blank=True, decimal_places=2, max_digits=10, null=True)),
-                ('impuesto_total', models.DecimalField(blank=True, decimal_places=2, max_digits=10, null=True)),
-                ('cotizacion', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='articulos', to='MiCasillero.cotizacion')),
-                ('partida_arancelaria', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='MiCasillero.partidaarancelaria')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "valor_articulo",
+                    models.DecimalField(decimal_places=2, max_digits=10),
+                ),
+                ("largo", models.DecimalField(decimal_places=2, max_digits=5)),
+                ("ancho", models.DecimalField(decimal_places=2, max_digits=5)),
+                ("alto", models.DecimalField(decimal_places=2, max_digits=5)),
+                ("peso", models.DecimalField(decimal_places=2, max_digits=5)),
+                (
+                    "impuesto_dai",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=10, null=True
+                    ),
+                ),
+                (
+                    "impuesto_isc",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=10, null=True
+                    ),
+                ),
+                (
+                    "impuesto_ispc",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=10, null=True
+                    ),
+                ),
+                (
+                    "impuesto_isv",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=10, null=True
+                    ),
+                ),
+                (
+                    "impuesto_total",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=10, null=True
+                    ),
+                ),
+                (
+                    "cotizacion",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="articulos",
+                        to="MiCasillero.cotizacion",
+                    ),
+                ),
+                (
+                    "partida_arancelaria",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="MiCasillero.partidaarancelaria",
+                    ),
+                ),
             ],
         ),
     ]

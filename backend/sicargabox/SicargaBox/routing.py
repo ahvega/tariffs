@@ -9,15 +9,20 @@ from SicargaBox.consumers import SicargaBox_WebSocketConsumer
 from MiCasillero.consumers import MiCasilleroConsumer
 
 
-application = ProtocolTypeRouter({
-
-    # WebSocket handler
-    "websocket": AuthMiddlewareStack(
-        URLRouter([
-            url(r"^ws/$", SicargaBox_WebSocketConsumer.as_asgi()),
-        ])
-    ),
-    "channel": ChannelNameRouter({
-        "MiCasillero": MiCasilleroConsumer,
-    })
-})
+application = ProtocolTypeRouter(
+    {
+        # WebSocket handler
+        "websocket": AuthMiddlewareStack(
+            URLRouter(
+                [
+                    url(r"^ws/$", SicargaBox_WebSocketConsumer.as_asgi()),
+                ]
+            )
+        ),
+        "channel": ChannelNameRouter(
+            {
+                "MiCasillero": MiCasilleroConsumer,
+            }
+        ),
+    }
+)
