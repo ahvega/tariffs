@@ -7,13 +7,14 @@
 
 ## Container Status
 
-```
+```bash
 NAME                  STATUS
 sicargabox-redis      Up (healthy)
 sicargabox-redis-ui   Up (healthy)
 ```
 
 **Ports:**
+
 - Redis Server: `0.0.0.0:6379` ✅
 - Redis Commander UI: `0.0.0.0:8081` ✅
 
@@ -22,12 +23,14 @@ sicargabox-redis-ui   Up (healthy)
 ## Test 1: PING Command
 
 **Command:**
+
 ```bash
 docker exec sicargabox-redis redis-cli ping
 ```
 
 **Result:**
-```
+
+```bash
 PONG
 ```
 
@@ -38,13 +41,15 @@ PONG
 ## Test 2: SET/GET Operations
 
 **Commands:**
+
 ```bash
 docker exec sicargabox-redis redis-cli SET test "Hello from Redis!"
 docker exec sicargabox-redis redis-cli GET test
 ```
 
 **Results:**
-```
+
+```bash
 SET: OK
 GET: Hello from Redis!
 ```
@@ -56,12 +61,14 @@ GET: Hello from Redis!
 ## Test 3: Server Information
 
 **Command:**
+
 ```bash
 docker exec sicargabox-redis redis-cli INFO server
 ```
 
 **Results:**
-```
+
+```bash
 Redis Version: 7.2.11
 Mode: standalone
 OS: Linux (WSL2)
@@ -77,6 +84,7 @@ Uptime: 101 seconds
 ## Test 4: Python Connection
 
 **Command:**
+
 ```python
 import redis
 r = redis.Redis(host='localhost', port=6379, db=0)
@@ -86,7 +94,8 @@ r.get('python_test')  # Returns: b'Hello from Python!'
 ```
 
 **Results:**
-```
+
+```bash
 PING: True
 SET: OK
 GET: Hello from Python!
@@ -99,12 +108,14 @@ GET: Hello from Python!
 ## Test 5: Database Size
 
 **Command:**
+
 ```bash
 docker exec sicargabox-redis redis-cli DBSIZE
 ```
 
 **Result:**
-```
+
+```bash
 1 key(s) in database
 ```
 
@@ -115,12 +126,14 @@ docker exec sicargabox-redis redis-cli DBSIZE
 ## Test 6: Memory Usage
 
 **Command:**
+
 ```bash
 docker exec sicargabox-redis redis-cli INFO memory
 ```
 
 **Results:**
-```
+
+```bash
 used_memory_human: ~2MB
 maxmemory_human: 256MB
 ```
@@ -131,7 +144,7 @@ maxmemory_human: 256MB
 
 ## Test 7: Web UI Accessibility
 
-**URL:** http://localhost:8081
+**URL:** <http://localhost:8081>
 
 **Expected:** Redis Commander web interface
 
@@ -309,6 +322,7 @@ if __name__ == '__main__':
 ```
 
 **Run it:**
+
 ```bash
 cd E:/MyDevTools/tariffs/backend/sicargabox
 python test_redis.py
@@ -347,6 +361,7 @@ def test_django_redis():
 ```
 
 **Run in Django shell:**
+
 ```bash
 cd E:/MyDevTools/tariffs/backend/sicargabox
 python manage.py shell
@@ -408,6 +423,7 @@ r.flushdb()
 ```
 
 **Expected Performance:**
+
 - Writes: 10,000-50,000 ops/second
 - Reads: 20,000-100,000 ops/second
 
@@ -485,14 +501,16 @@ docker exec sicargabox-redis redis-cli CONFIG GET maxmemory
 **Current Usage:** ~2MB
 
 **Services Running:**
+
 - Redis Server: localhost:6379 ✅
-- Redis Commander: http://localhost:8081 ✅
+- Redis Commander: <http://localhost:8081> ✅
 
 **Ready for:** Celery integration and background task processing
 
 ---
 
 **Documentation:**
+
 - Setup Guide: `REDIS_SETUP_GUIDE.md`
 - Architecture: `REDIS_ARCHITECTURE.md`
 - Technical Docs: `docker/redis/README.md`

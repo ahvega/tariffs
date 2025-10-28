@@ -1,32 +1,70 @@
+/* Import Geist + Geist Mono from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;600;700&family=Geist+Mono:wght@400;600&display=swap');
+
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@theme inline {
-  --font-family-sans: var(--font-geist);
-  --font-family-heading: var(--font-inter-tight);
-  --font-family-mono: var(--font-geist-mono);
+:root {
+  --font-geist: 'Geist', system-ui, -apple-system, 'Segoe UI', Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-geist-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-/* Default: Geist for labels */
+/* Default body: use Geist for labels / general UI text */
 body {
-  font-family: var(--font-geist), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: var(--font-geist);
 }
 
-/* Headings: Inter Tight */
+/* Headings: Geist */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-inter-tight), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: var(--font-geist);
+  /* preserve readable font-weight scale */
+  font-weight: 600;
 }
 
-/* Buttons: Inter Tight thin weight uppercase */
-button {
-  font-family: var(--font-inter-tight), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  font-weight: 300;
+/* Labels and UI labels (explicit) */
+label,
+legend,
+[role="label"],
+.label {
+  font-family: var(--font-geist);
+}
+
+/* Buttons and controls use Geist (labels) */
+button,
+.btn,
+.button {
+  font-family: var(--font-geist);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-/* Form inputs: Geist for labels, Geist Mono for values */
-input, select, textarea {
-  font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+/* Form inputs: use Geist Mono for the typed values (numbers, code, currency, etc.)
+   and ensure number inputs keep monospace for better alignment. */
+input,
+select,
+textarea,
+input[type="number"],
+input[type="tel"],
+.form-control {
+  font-family: var(--font-geist-mono);
+}
+
+/* If you want labels above inputs to remain in Geist (non-monospace), target them separately: */
+.form-label,
+label[for] {
+  font-family: var(--font-geist);
+}
+
+/* A helper class for numeric text (tables, totals, price display) */
+.numeric,
+.mono-number {
+  font-family: var(--font-geist-mono);
+}
+
+/* Keep any existing theme var usage compatible */
+@theme inline {
+  --font-family-sans: var(--font-geist);
+  --font-family-heading: var(--font-geist);
+  --font-family-mono: var(--font-geist-mono);
 }

@@ -6,70 +6,70 @@ Visual guide to understand how Redis integrates with the SicargaBox system.
 
 ## System Architecture
 
-```
+```bash
 ┌─────────────────────────────────────────────────────────────────┐
-│                         USER BROWSER                             │
-│                                                                  │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │         Elasticsearch Admin UI (Django Admin)             │  │
-│  │                                                            │  │
-│  │  [Rebuild Index] [Generate Keywords] [View Tasks]        │  │
-│  └──────────────────────────────────────────────────────────┘  │
+│                         USER BROWSER                            │
+│                                                                 │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │         Elasticsearch Admin UI (Django Admin)            │   │
+│  │                                                          │   │
+│  │  [Rebuild Index] [Generate Keywords] [View Tasks]        │   │
+│  └──────────────────────────────────────────────────────────┘   │
 └────────────────────────┬────────────────────────────────────────┘
                          │ HTTP Request
                          ↓
 ┌─────────────────────────────────────────────────────────────────┐
-│                     DJANGO APPLICATION                           │
-│                                                                  │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │  AdminTools Views (admintools/views.py)                   │  │
-│  │  ┌─────────────────────────────────────────────────────┐ │  │
-│  │  │ rebuild_index_action(request):                       │ │  │
-│  │  │   task = rebuild_elasticsearch_index.delay()        │ │  │
-│  │  │   return JsonResponse({'task_id': task.id})         │ │  │
-│  │  └─────────────────────────────────────────────────────┘ │  │
-│  └──────────────────────────────────────────────────────────┘  │
-│                         │                                        │
+│                     DJANGO APPLICATION                          │
+│                                                                 │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │  AdminTools Views (admintools/views.py)                  │   │
+│  │  ┌─────────────────────────────────────────────────────┐ │   │
+│  │  │ rebuild_index_action(request):                      │ │   │
+│  │  │   task = rebuild_elasticsearch_index.delay()        │ │   │
+│  │  │   return JsonResponse({'task_id': task.id})         │ │   │
+│  │  └─────────────────────────────────────────────────────┘ │   │
+│  └──────────────────────────────────────────────────────────┘   │
+│                         │                                       │
 │                         │ .delay() - Send task to queue         │
-│                         ↓                                        │
+│                         ↓                                       │
 └─────────────────────────────────────────────────────────────────┘
                           │
                           │ Redis Protocol (TCP/6379)
                           ↓
 ┌─────────────────────────────────────────────────────────────────┐
-│                    REDIS (Docker Container)                      │
-│                                                                  │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │  DATABASE 0 - Celery Broker (Task Queue)                  │  │
-│  │  ┌────────────────────────────────────────────────────┐  │  │
-│  │  │ Queue: celery                                       │  │  │
-│  │  │ ┌─────────────────────────────────────────────┐    │  │  │
-│  │  │ │ Task: rebuild_elasticsearch_index           │    │  │  │
-│  │  │ │ ID: abc-123-def-456                         │    │  │  │
-│  │  │ │ Args: []                                     │    │  │  │
-│  │  │ │ Status: PENDING                             │    │  │  │
-│  │  │ └─────────────────────────────────────────────┘    │  │  │
-│  │  │                                                     │  │  │
-│  │  │ Queue: elasticsearch                                │  │  │
-│  │  │ Queue: ai_generation                                │  │  │
-│  │  │ Queue: learning                                     │  │  │
-│  │  └────────────────────────────────────────────────────┘  │  │
-│  └──────────────────────────────────────────────────────────┘  │
-│                                                                  │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │  DATABASE 1 - Celery Result Backend (Task Results)        │  │
-│  │  ┌────────────────────────────────────────────────────┐  │  │
-│  │  │ celery-task-meta-abc-123-def-456                  │  │  │
-│  │  │ {                                                  │  │  │
-│  │  │   "status": "SUCCESS",                            │  │  │
-│  │  │   "result": {"documents": 4682, "time": "45s"},   │  │  │
-│  │  │   "traceback": null,                              │  │  │
-│  │  │   "children": [],                                 │  │  │
-│  │  │   "date_done": "2025-10-20T10:15:00"             │  │  │
-│  │  │ }                                                  │  │  │
-│  │  └────────────────────────────────────────────────────┘  │  │
-│  └──────────────────────────────────────────────────────────┘  │
-│                                                                  │
+│                    REDIS (Docker Container)                     │
+│                                                                 │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │  DATABASE 0 - Celery Broker (Task Queue)                 │   │
+│  │  ┌────────────────────────────────────────────────────┐  │   │
+│  │  │ Queue: celery                                      │  │   │
+│  │  │ ┌─────────────────────────────────────────────┐    │  │   │
+│  │  │ │ Task: rebuild_elasticsearch_index           │    │  │   │
+│  │  │ │ ID: abc-123-def-456                         │    │  │   │
+│  │  │ │ Args: []                                    │    │  │   │
+│  │  │ │ Status: PENDING                             │    │  │   │
+│  │  │ └─────────────────────────────────────────────┘    │  │   │
+│  │  │                                                    │  │   │
+│  │  │ Queue: elasticsearch                               │  │   │
+│  │  │ Queue: ai_generation                               │  │   │
+│  │  │ Queue: learning                                    │  │   │
+│  │  └────────────────────────────────────────────────────┘  │   │
+│  └──────────────────────────────────────────────────────────┘   │
+│                                                                 │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │  DATABASE 1 - Celery Result Backend (Task Results)       │   │
+│  │  ┌────────────────────────────────────────────────────┐  │   │
+│  │  │ celery-task-meta-abc-123-def-456                   │  │   │
+│  │  │ {                                                  │  │   │
+│  │  │   "status": "SUCCESS",                             │  │   │
+│  │  │   "result": {"documents": 4682, "time": "45s"},    │  │   │
+│  │  │   "traceback": null,                               │  │   │
+│  │  │   "children": [],                                  │  │   │
+│  │  │   "date_done": "2025-10-20T10:15:00"               │  │   │
+│  │  │ }                                                  │  │   │
+│  │  └────────────────────────────────────────────────────┘  │   │
+│  └──────────────────────────────────────────────────────────┘   │
+│                                                                 │
 │  Port: 6379                                                     │
 │  Memory: 256MB (configurable)                                   │
 │  Persistence: RDB + AOF                                         │
@@ -78,29 +78,29 @@ Visual guide to understand how Redis integrates with the SicargaBox system.
                           │ Picks up tasks from queue
                           │
 ┌─────────────────────────────────────────────────────────────────┐
-│              CELERY WORKER (Background Process)                  │
-│                                                                  │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │  Worker Process                                            │  │
-│  │  ┌─────────────────────────────────────────────────────┐ │  │
-│  │  │ 1. Poll Redis for new tasks                         │ │  │
-│  │  │ 2. Pick up task: rebuild_elasticsearch_index        │ │  │
-│  │  │ 3. Execute task                                     │ │  │
-│  │  │    - Call Django management command                │ │  │
-│  │  │    - Update progress in Redis                      │ │  │
-│  │  │ 4. Store result in Redis (DB 1)                    │ │  │
-│  │  │ 5. Mark task as SUCCESS/FAILURE                    │ │  │
-│  │  └─────────────────────────────────────────────────────┘ │  │
-│  └──────────────────────────────────────────────────────────┘  │
-│                                                                  │
-│  Command: celery -A SicargaBox worker -l info -P solo          │
+│              CELERY WORKER (Background Process)                 │
+│                                                                 │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │  Worker Process                                          │   │
+│  │  ┌─────────────────────────────────────────────────────┐ │   │
+│  │  │ 1. Poll Redis for new tasks                         │ │   │
+│  │  │ 2. Pick up task: rebuild_elasticsearch_index        │ │   │
+│  │  │ 3. Execute task                                     │ │   │
+│  │  │    - Call Django management command                 │ │   │
+│  │  │    - Update progress in Redis                       │ │   │
+│  │  │ 4. Store result in Redis (DB 1)                     │ │   │
+│  │  │ 5. Mark task as SUCCESS/FAILURE                     │ │   │
+│  │  └─────────────────────────────────────────────────────┘ │   │
+│  └──────────────────────────────────────────────────────────┘   │
+│                                                                 │
+│  Command: celery -A SicargaBox worker -l info -P solo           │
 └─────────────────────────────────────────────────────────────────┘
                           │
                           │ Updates
                           ↓
 ┌─────────────────────────────────────────────────────────────────┐
-│                   ELASTICSEARCH (Docker)                         │
-│                                                                  │
+│                   ELASTICSEARCH (Docker)                        │
+│                                                                 │
 │  Index: partidas_arancelarias                                   │
 │  Documents: 4,682                                               │
 │  Status: green                                                  │
@@ -108,12 +108,12 @@ Visual guide to understand how Redis integrates with the SicargaBox system.
 
 
 ┌─────────────────────────────────────────────────────────────────┐
-│                   POSTGRESQL DATABASE                            │
-│                                                                  │
+│                   POSTGRESQL DATABASE                           │
+│                                                                 │
 │  Tables:                                                        │
-│  - MiCasillero_partidaarancelaria (source data)                │
-│  - django_celery_results_taskresult (task history)             │
-│  - admintools_taskhistory (custom task tracking)               │
+│  - MiCasillero_partidaarancelaria (source data)                 │
+│  - django_celery_results_taskresult (task history)              │
+│  - admintools_taskhistory (custom task tracking)                │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -123,7 +123,7 @@ Visual guide to understand how Redis integrates with the SicargaBox system.
 
 ### 1. User Triggers Action
 
-```
+```bash
 User clicks [Rebuild Index] button in Admin UI
     ↓
 JavaScript sends POST to /admin/elasticsearch/rebuild/
@@ -154,7 +154,7 @@ def rebuild_index_action(request):
 
 ### 3. Task Queued in Redis
 
-```
+```bash
 Redis DB 0 (Broker):
     Key: celery-task-meta-abc-123
     Value: {
@@ -168,7 +168,7 @@ Redis DB 0 (Broker):
 
 ### 4. Celery Worker Picks Up Task
 
-```
+```bash
 [Worker Terminal Output]
 [2025-10-20 10:00:00,000: INFO/MainProcess]
     Task admintools.tasks.rebuild_elasticsearch_index[abc-123] received
@@ -186,7 +186,7 @@ Redis DB 0 (Broker):
 
 ### 5. Result Stored in Redis
 
-```
+```bash
 Redis DB 1 (Result Backend):
     Key: celery-task-meta-abc-123
     Value: {
@@ -219,7 +219,7 @@ setInterval(() => {
 
 ### List (Task Queues)
 
-```
+```bash
 Key: celery
 Type: LIST
 Values: [task_1, task_2, task_3]
@@ -230,7 +230,7 @@ Values: [task_1, task_2, task_3]
 
 ### Hash (Task Metadata)
 
-```
+```bash
 Key: celery-task-meta-abc-123
 Type: HASH
 Fields:
@@ -243,7 +243,7 @@ Fields:
 
 ### Set (Task Results)
 
-```
+```bash
 Key: unacked_set
 Type: SET
 Members: [task_abc, task_def, task_xyz]
@@ -255,7 +255,7 @@ Members: [task_abc, task_def, task_xyz]
 
 ## Redis Memory Layout
 
-```
+```bash
 Total Memory: 256 MB (configurable)
 
 ┌─────────────────────────────────────────┐
@@ -286,7 +286,7 @@ Memory Policy: allkeys-lru
 
 ## Task Lifecycle in Redis
 
-```
+```bash
 ┌──────────────┐
 │   PENDING    │  Task created, waiting in queue
 └──────┬───────┘
@@ -332,6 +332,7 @@ Memory Policy: allkeys-lru
 | **Best For** | Temporary data, caching, queues | Permanent data, complex queries |
 
 **In SicargaBox:**
+
 - **Redis:** Task queues, temporary results, real-time updates
 - **PostgreSQL:** Partida data, user accounts, task history (long-term)
 
@@ -341,7 +342,7 @@ Memory Policy: allkeys-lru
 
 ### RDB (Redis Database File)
 
-```
+```bash
 Snapshots at intervals:
 - Every 15 minutes if 1+ key changed
 - Every 5 minutes if 10+ keys changed
@@ -354,7 +355,7 @@ Cons: Data loss possible (last N minutes)
 
 ### AOF (Append Only File)
 
-```
+```bash
 Logs every write operation:
 - fsync every second (default)
 - Rebuilds database by replaying operations
@@ -416,7 +417,7 @@ PSUBSCRIBE celery-task-meta-*
 
 ### Multiple Workers
 
-```
+```bash
                     Redis Queue
                          │
           ┌──────────────┼──────────────┐
@@ -440,7 +441,7 @@ celery -A SicargaBox worker -l info -P solo -Q learning
 
 ### Redis Clustering (Production)
 
-```
+```bash
      Redis Sentinel (Monitor)
             │
     ┌───────┼───────┐
@@ -458,7 +459,7 @@ celery -A SicargaBox worker -l info -P solo -Q learning
 
 ### Without Redis (Synchronous)
 
-```
+```bash
 User clicks [Rebuild Index]
     ↓
 Django executes rebuild (45 seconds)
@@ -469,6 +470,7 @@ Response received (timeout after 30s!) ❌
 ```
 
 **Problems:**
+
 - Browser timeout
 - User can't do anything else
 - Server thread blocked
@@ -476,7 +478,7 @@ Response received (timeout after 30s!) ❌
 
 ### With Redis + Celery (Asynchronous)
 
-```
+```bash
 User clicks [Rebuild Index]
     ↓
 Django creates task (0.01s)
@@ -493,6 +495,7 @@ Progress: 25%... 50%... 75%... 100% ✅
 ```
 
 **Benefits:**
+
 - Instant response
 - Real-time progress
 - Non-blocking

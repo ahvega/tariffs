@@ -5,6 +5,7 @@
 **Challenge:** Clients enter item descriptions as they appear on purchase invoices (e.g., "Nike Air Max Running Shoes"), but tariff classifications use formal nomenclature (e.g., "Calzado con suela de caucho, plástico, cuero natural o regenerado y parte superior de materia textil").
 
 **Goal:** Create an intelligent system that:
+
 1. Semantically matches informal item descriptions to formal tariff classifications
 2. Learns from staff corrections and historical transactions
 3. Improves accuracy over time through continuous learning
@@ -14,12 +15,14 @@
 ### ✅ What's Already Built
 
 **1. Elasticsearch Integration**
+
 - Spanish language analyzer
 - Multi-field search (item_no, descripcion, search_keywords, full_text_search)
 - Fuzzy matching for typos (fuzziness='AUTO')
 - Score-based relevance ranking
 
 **2. AI Keyword Generation**
+
 - Management command: `generate_search_keywords.py`
 - Uses OpenAI/DeepSeek APIs
 - Context-aware keyword generation:
@@ -29,6 +32,7 @@
   - Generates synonyms, technical terms, colloquial variations
 
 **3. Search Endpoint**
+
 - View: `buscar_partidas()`
 - Returns top 20 matches with relevance scores
 - AJAX-ready for Select2 dropdowns
@@ -252,6 +256,7 @@ class Articulo(models.Model):
 ### Phase 1: Foundation (Week 1)
 
 **1.1 Database Setup**
+
 ```bash
 # Create new models
 python manage.py makemigrations
@@ -259,6 +264,7 @@ python manage.py migrate
 ```
 
 **1.2 Embedding Generation Service**
+
 ```python
 # backend/sicargabox/MiCasillero/services/embedding_service.py
 
@@ -313,6 +319,7 @@ class EmbeddingService:
 ```
 
 **1.3 Management Command: Generate Embeddings**
+
 ```python
 # backend/sicargabox/MiCasillero/management/commands/generate_embeddings.py
 
@@ -365,6 +372,7 @@ class Command(BaseCommand):
 ### Phase 2: Semantic Search Service (Week 2)
 
 **2.1 Hybrid Search Service**
+
 ```python
 # backend/sicargabox/MiCasillero/services/semantic_search_service.py
 
@@ -584,6 +592,7 @@ class SemanticSearchService:
 ### Phase 3: API Integration (Week 2-3)
 
 **3.1 New View: Semantic Search**
+
 ```python
 # backend/sicargabox/MiCasillero/views.py
 
@@ -642,6 +651,7 @@ def buscar_partidas_semantico(request):
 ```
 
 **3.2 Record Selection (Learning Capture)**
+
 ```python
 # backend/sicargabox/MiCasillero/views.py
 
@@ -690,6 +700,7 @@ def record_partida_selection(request):
 ### Phase 4: Staff Review & Correction (Week 3)
 
 **4.1 Staff Override Interface**
+
 ```python
 # backend/sicargabox/MiCasillero/views.py
 
@@ -750,6 +761,7 @@ def correct_partida_mapping(request, articulo_id):
 ### Phase 5: Continuous Learning (Week 4)
 
 **5.1 Weekly Embedding Update**
+
 ```python
 # backend/sicargabox/MiCasillero/management/commands/update_embeddings_with_learning.py
 
@@ -805,6 +817,7 @@ class Command(BaseCommand):
 ```
 
 **5.2 Celery Task (Scheduled)**
+
 ```python
 # backend/sicargabox/MiCasillero/tasks.py
 
@@ -823,6 +836,7 @@ def update_embeddings_weekly():
 ### Phase 6: Analytics Dashboard (Week 4)
 
 **6.1 Learning Metrics View**
+
 ```python
 # backend/sicargabox/MiCasillero/views.py
 
@@ -1002,18 +1016,21 @@ $('#id_partida_arancelaria').on('select2:select', function (e) {
 ## Rollout Strategy
 
 ### Phase 1: Shadow Mode (Week 5)
+
 - Deploy AI system alongside existing keyword search
 - Show both results to staff for comparison
 - Collect accuracy data
 - Don't enforce AI suggestions yet
 
 ### Phase 2: Assisted Mode (Week 6-7)
+
 - AI suggestions appear first in dropdown
 - Keyword search still available as fallback
 - Staff can easily override
 - Highlight learning progress to users
 
 ### Phase 3: Primary Mode (Week 8+)
+
 - AI search is primary method
 - Keyword search available via toggle
 - Confidence indicators guide users
@@ -1024,12 +1041,14 @@ $('#id_partida_arancelaria').on('select2:select', function (e) {
 ### API Costs (OpenAI)
 
 **Embedding Generation:**
+
 - Model: text-embedding-3-small
 - Cost: $0.02 per 1M tokens (~3,000 words)
 - Estimate: 10,000 partidas × 200 tokens = 2M tokens = $0.04
 - Weekly updates: ~$1-5/month
 
 **Search (real-time):**
+
 - 1 embedding per search × 1,000 searches/day
 - ~200 tokens per search = 200K tokens/day = 6M tokens/month
 - Cost: ~$0.12/month
@@ -1037,6 +1056,7 @@ $('#id_partida_arancelaria').on('select2:select', function (e) {
 **Total Estimated:** <$10/month (negligible)
 
 ### Alternative: Use DeepSeek
+
 - DeepSeek is cheaper but may not have embeddings API
 - Can use DeepSeek for keyword generation
 - Use OpenAI only for embeddings
@@ -1044,16 +1064,19 @@ $('#id_partida_arancelaria').on('select2:select', function (e) {
 ## Maintenance Plan
 
 ### Weekly Tasks
+
 - Run `update_embeddings_with_learning` command
 - Review AI dashboard metrics
 - Check for problem partidas needing better keywords
 
 ### Monthly Tasks
+
 - Analyze top correction patterns
 - Update prompts if needed
 - Review new product categories
 
 ### Quarterly Tasks
+
 - Full embedding regeneration
 - Model performance evaluation
 - Consider fine-tuning if accuracy plateaus

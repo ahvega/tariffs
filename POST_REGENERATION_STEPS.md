@@ -1,4 +1,5 @@
 # Post-Regeneration Steps
+
 # SicargaBox Bilingual Keyword Regeneration
 
 **Date:** 2025-10-22
@@ -53,6 +54,7 @@ print(f'Bilingual quality (sample): {bilingual_count}/10 ({(bilingual_count/10)*
 ```
 
 **Expected Output:**
+
 ```
 Total partidas: 7524
 With keywords: 7524 (100.0%)
@@ -98,6 +100,7 @@ Should show: `7524` (all partidas processed)
 ## Elasticsearch Rebuild
 
 ### Prerequisites
+
 ✅ Elasticsearch running on localhost:9200 (verified: status=green)
 
 ### Step 4: Rebuild Elasticsearch Index
@@ -113,6 +116,7 @@ venv/Scripts/python.exe manage.py search_index --rebuild
 ```
 
 **Expected output:**
+
 ```
 Deleting index 'partidaarancelaria'
 Creating index 'partidaarancelaria'
@@ -214,11 +218,13 @@ for r in results:
 
 Based on the comprehensive plan:
 
-### Baseline (Before - Spanish-only):
+### Baseline (Before - Spanish-only)
+
 - Precision@5: Low or 0% for English queries
 - Zero-result rate: ~100% for English queries
 
-### After Bilingual (DeepSeek):
+### After Bilingual (DeepSeek)
+
 - Precision@5: **88-92%** for both English and Spanish
 - Zero-result rate: **<10%**
 - Bilingual coverage: **100%** of partidas
@@ -236,6 +242,7 @@ Based on the comprehensive plan:
 ## Next Phase (After This)
 
 According to the comprehensive plan, Phase 1 focuses on:
+
 - Hierarchy enhancement
 - Trend-based prioritization for top 200 items
 - Using Claude for high-quality keywords on top items
@@ -271,6 +278,7 @@ venv/Scripts/python.exe manage.py search_index --populate
 ## Documentation
 
 Once complete, document results in:
+
 - Update [COMPREHENSIVE_KEYWORD_OPTIMIZATION_PLAN.md](COMPREHENSIVE_KEYWORD_OPTIMIZATION_PLAN.md) Phase 0 status
 - Create performance report with before/after metrics
 - Update [CLAUDE.md](CLAUDE.md) with bilingual keyword status

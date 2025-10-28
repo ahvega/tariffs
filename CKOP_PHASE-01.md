@@ -1,4 +1,5 @@
 # Comprehensive Keyword Optimization Plan - Phase 1
+
 # Hierarchy Enhancement Implementation Review
 
 **Date:** 2025-10-23
@@ -26,6 +27,7 @@
 **Objective:** Add hierarchy metadata to `PartidaArancelaria` model to enable proper "Los demás" keyword generation by identifying siblings and excluding their keywords.
 
 **Problem:** Currently 56 "Los demás" (catch-all) partidas have no keywords because:
+
 - No way to properly identify siblings at the same hierarchy level
 - Cannot exclude sibling keywords (only excludes descriptions)
 - `parent_category` ForeignKey is useless (all records are leaves)
@@ -37,6 +39,7 @@
 ## Current Issues
 
 ### Issue 1: Useless `parent_category` Field
+
 ```python
 # Current model (line 118)
 parent_category = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
@@ -51,6 +54,7 @@ parent_category = models.ForeignKey('self', null=True, blank=True, on_delete=mod
 ---
 
 ### Issue 2: Sibling Detection Based on Description
+
 ```python
 # Current logic (lines 67-69)
 siblings = PartidaArancelaria.objects.filter(
@@ -59,12 +63,14 @@ siblings = PartidaArancelaria.objects.filter(
 ```
 
 **Problem:**
+
 - Unreliable (matches on text substring)
 - Slow (full text search)
 - Can match unrelated partidas
 - Limited to 20 siblings (arbitrary)
 
 **Example:**
+
 - Searches for "Caballos" matches ALL partidas containing "Caballos" in description
 - May include unrelated categories
 
@@ -73,6 +79,7 @@ siblings = PartidaArancelaria.objects.filter(
 ---
 
 ### Issue 3: Only Excludes Sibling Descriptions, Not Keywords
+
 ```python
 # Current logic (lines 72-95)
 sibling_specific_descs = [
@@ -83,11 +90,13 @@ excluded_terms = [desc for desc in sibling_specific_descs]
 ```
 
 **Problem:**
+
 - Only excludes description text
 - Doesn't exclude already-generated keywords
 - AI generates overlapping keywords
 
 **Example:**
+
 ```
 Partida: 0101.21.00.00 - "Reproductores de raza pura"
 Keywords: ["purebred horses", "caballos de raza pura", "breeding stallions", ...]
@@ -225,12 +234,14 @@ class Migration(migrations.Migration):
 ```
 
 **What This Does:**
+
 - ❌ Removes: `parent_category` ForeignKey
 - ✅ Adds: 6 new hierarchy fields
 - ✅ Creates: 3 database indexes for fast queries
 - ✅ Safe: All fields nullable/with defaults
 
 **Why These Fields:**
+
 - `chapter_code`: Fast filtering by chapter (e.g., all "01" = Live Animals)
 - `heading_code`: **Critical** - identifies siblings at same level
 - `parent_item_no`: Optional parent reference (calculated, not FK)
@@ -308,10 +319,12 @@ class PartidaArancelaria(models.Model):
 ```
 
 **Line 118 Changes:**
+
 - **BEFORE:** `parent_category = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)`
 - **AFTER:** Removed entirely
 
 **New Fields Added After Line 117:**
+
 - Lines 119-153: Six new hierarchy fields with proper types, defaults, and help text
 
 ---
@@ -327,6 +340,7 @@ class PartidaArancelaria(models.Model):
 ### Hierarchy Extraction Logic
 
 **Input Pattern Analysis:**
+
 ```
 Database contains:
 - 99.3%: XXXX.XX.XX.XX (e.g., "0101.21.00.00", "8471.30.00.00")
@@ -337,17 +351,20 @@ Database contains:
 **Extraction Algorithm:**
 
 #### 1. Chapter Code
+
 ```python
 parts = item_no.split('.')
 chapter_code = parts[0].zfill(4)  # "0101", "8471"
 ```
 
 #### 2. Heading Code
+
 ```python
 heading_code = f"{parts[0]}.{parts[1]}"  # "0101.21", "8471.30"
 ```
 
 #### 3. Parent Item No
+
 ```
 Strategy: Replace last non-zero segment with "00"
 
@@ -368,6 +385,7 @@ if non_zero_indices:
 ```
 
 #### 4. Hierarchy Level
+
 ```
 Count non-zero segments:
 - "8471.00.00.00" → Level 1 (chapter only)
@@ -388,23 +406,29 @@ Count non-zero segments:
 **Command Features:**
 
 1. **Dry-Run Mode:**
+
 ```bash
 python manage.py populate_hierarchy_fields --dry-run
 ```
+
 Shows examples without modifying database.
 
 2. **Verbose Mode:**
+
 ```bash
 python manage.py populate_hierarchy_fields --verbose
 ```
+
 Shows detailed output for each record.
 
 3. **Progress Tracking:**
+
 - Updates every 500 records
 - Shows updated/skipped/error counts
 - Displays percentage completion
 
 4. **Efficiency:**
+
 - Only updates records that need changes
 - Uses bulk operations where possible
 - Skips records already populated
@@ -418,6 +442,7 @@ Shows detailed output for each record.
 **File:** `generate_search_keywords.py` (lines 67-95)
 
 **Problem 1: Sibling Detection**
+
 ```python
 # Current (unreliable)
 siblings = PartidaArancelaria.objects.filter(
@@ -426,6 +451,7 @@ siblings = PartidaArancelaria.objects.filter(
 ```
 
 **Problem 2: Only Excludes Descriptions**
+
 ```python
 # Current
 sibling_specific_descs = [
@@ -438,6 +464,7 @@ excluded_terms = sibling_specific_descs
 ### New Logic (Proposed)
 
 **Change 1: Use Heading Code for Siblings**
+
 ```python
 # NEW: Precise sibling detection
 siblings = PartidaArancelaria.objects.filter(
@@ -449,6 +476,7 @@ siblings = PartidaArancelaria.objects.filter(
 ```
 
 **Change 2: Collect Sibling Keywords**
+
 ```python
 # NEW: Exclude actual generated keywords
 if is_others:
@@ -465,6 +493,7 @@ if is_others:
 ```
 
 **Change 3: Update AI Prompt**
+
 ```python
 # OLD prompt (lines 173-178)
 prompt = f"""
@@ -506,12 +535,14 @@ Partidas at 0101.2X level:
 **Step-by-Step Processing:**
 
 1. **Detect "Los demás":**
+
 ```python
 specific_desc = "Los demás"
 is_others = True
 ```
 
 2. **Find Siblings:**
+
 ```python
 # NEW approach
 siblings = PartidaArancelaria.objects.filter(
@@ -522,6 +553,7 @@ siblings = PartidaArancelaria.objects.filter(
 ```
 
 3. **Collect Sibling Keywords:**
+
 ```python
 excluded_keywords = [
     "purebred horses",
@@ -534,6 +566,7 @@ excluded_keywords = [
 ```
 
 4. **Generate "Los demás" Keywords:**
+
 ```
 AI receives:
 - Parent category: "Horses" (Caballos)
@@ -548,6 +581,7 @@ AI generates:
 ```
 
 **Result:**
+
 ```
 0101.21.00.00 keywords: ["purebred", "breeding", ...]
 0101.29.00.00 keywords: ["horses", "work horses", "riding horses", ...]
@@ -561,6 +595,7 @@ AI generates:
 ### Test Plan
 
 #### Phase 1: Dry-Run Validation
+
 ```bash
 # 1. Test migration (fake)
 python manage.py migrate --fake-initial
@@ -575,6 +610,7 @@ python manage.py populate_hierarchy_fields --dry-run
 ```
 
 #### Phase 2: Sample Verification
+
 ```python
 # In Django shell
 from MiCasillero.models import PartidaArancelaria
@@ -597,6 +633,7 @@ for code in test_codes:
 ```
 
 #### Phase 3: Sibling Query Test
+
 ```python
 # Test sibling detection
 partida = PartidaArancelaria.objects.get(item_no="0101.29.00.00")
@@ -610,6 +647,7 @@ for s in siblings:
 ```
 
 #### Phase 4: Keyword Generation Test
+
 ```bash
 # Test with Claude on one "Los demás" partida
 python manage.py generate_search_keywords \
@@ -627,22 +665,26 @@ python manage.py generate_search_keywords \
 ### Success Criteria
 
 ✅ **Migration successful:**
+
 - No errors during `makemigrations` and `migrate`
 - All 7,524 records migrated
 - Indexes created
 
 ✅ **Hierarchy populated:**
+
 - 100% of records have `chapter_code`
 - 100% of records have `heading_code`
 - `parent_item_no` calculated for applicable records
 - `hierarchy_level` distributed correctly
 
 ✅ **Sibling detection working:**
+
 - "Los demás" partidas correctly identify siblings
 - Siblings at same `heading_code` level
 - No false positives
 
 ✅ **Keyword exclusion working:**
+
 - "Los demás" keywords don't overlap with siblings
 - All sibling keywords collected and excluded
 - Generated keywords are relevant and distinct
@@ -686,6 +728,7 @@ python manage.py generate_search_keywords \
 ### Why Not Use parent_category ForeignKey?
 
 **Considered:** Creating actual parent records in database
+
 ```
 0101.00.00.00 (parent - Chapter)
   └─ 0101.21.00.00 (child - Purebred horses)
@@ -693,6 +736,7 @@ python manage.py generate_search_keywords \
 ```
 
 **Rejected because:**
+
 - Would require creating ~1,000 parent records
 - Parent records have no tax values (not real partidas)
 - Complicates data model and migrations
@@ -701,6 +745,7 @@ python manage.py generate_search_keywords \
 ### Performance Considerations
 
 **Query Performance:**
+
 ```python
 # OLD (slow)
 siblings = PartidaArancelaria.objects.filter(
@@ -714,6 +759,7 @@ siblings = PartidaArancelaria.objects.filter(
 ```
 
 **Index Benefits:**
+
 - `heading_code` index: O(log n) lookup
 - Text search: O(n) scan
 - **Expected speedup:** 100-1000x faster
@@ -721,18 +767,21 @@ siblings = PartidaArancelaria.objects.filter(
 ### Edge Cases
 
 **Case 1: Irregular Codes**
+
 ```
 Example: "9999.99.99.99.99" (5 parts)
 Handling: Algorithm adapts, extracts first 4 parts
 ```
 
 **Case 2: Short Codes**
+
 ```
 Example: "01" (chapter only)
 Handling: Pads with zeros → "0001"
 ```
 
 **Case 3: No Siblings**
+
 ```
 Example: Only partida in heading
 Handling: Empty sibling list, no exclusions

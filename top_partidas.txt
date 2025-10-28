@@ -1,0 +1,153 @@
+0803.90.11.00 — Bananas (plátanos) frescos.
+0901.21.00.00 — Café tostado, sin descafeinar, sin moler (bebida artesanal: café especial).
+0902.10.00.00 — Té verde (matcha), sin fermentar, en envases inmediatos ≤ 3 kg.
+1905.31.00.00 — Galletas dulces (snacks “gluten-free” tipo galleta).
+2103.20.00.00 — Salsas de tomate (ketchup y demás salsas de tomate “orgánicas”).
+2106.10.00.00 — Concentrados de proteínas y sustancias proteicas texturadas.
+3004.50.10.00
+3005.90.00.00 — Artículos de guata, vendas y artículos similares, de venta al por menor (hisopos/cotonetes). **[Revisión manual si no son para higiene/curación]**
+3303.00.00.00 — Perfumes y aguas de tocador.
+3304.10.00.00 — Preparaciones para maquillaje de los labios (bálsamo labial).
+3304.99.10.00 — Preparaciones antisolares (protectores solares).
+3305.10.00.00 — Champús.
+3305.90.10.00 — Aceites para el cabello.
+3306.10.00.00 — Dentífricos (pastas y polvos para dientes).
+3306.20.00.00 — Hilo dental (dental floss).
+3306.90.00.00 — Preparaciones para higiene bucal o dental (enjuagues bucales).
+3307.10.00.00 — Lociones para después de afeitar (aftershave).
+3307.10.00.00 — Preparaciones de antes/para/tras el afeitado (espumas, cremas, aftershave).
+3307.10.00.00 — Preparaciones para el afeitado (espumas/gel).
+3307.20.00.00 — Desodorantes corporales y antitranspirantes.
+3307.49.00.00 — Preparaciones para perfumar o desodorizar locales, distintas de los ambientadores en aerosol (ambientador para auto).
+3401.11.00.00 — Jabón y preparaciones de tocador, en barras, panes o trozos, incluso medicados.
+3401.30.00.00 — Preparaciones para lavar la piel, líquidas/crema, acondicionadas para la venta al por menor (toallitas desmaquillantes impregnadas).
+3402.20.00.00 — Preparaciones tensoactivas, preparaciones para lavar o limpiar, acondicionadas para la venta al por menor.
+3406.00.00.00 — Velas y artículos similares.
+3506.10.00.00 — Colas y adhesivos preparados para la venta al por menor, ≤1 kg (pegamento para tela).
+3808.94.00.00 — Desinfectantes (preparaciones hidroalcohólicas “hand sanitizers”).
+3924.10.00.00 — Artículos para el servicio de mesa o de cocina, de plástico (botellas reutilizables para agua).
+3924.90.10.00 — Biberones (de plástico).
+3926.10.00.00 — Artículos de oficina o escolares, de plástico (organizadores de escritorio).
+4202.12.00.00 — Maletas y maletines, con superficie exterior de hojas de plástico o materias textiles (suitcases).
+4202.32.00.00 — Carteras, monederos y artículos similares, con superficie exterior de hojas de plástico o materias textiles (porta-pasaportes).
+4202.92.00.00 — Bolsos de viaje/“duffel bags”, con superficie exterior de hojas de plástico o materias textiles.
+4202.92.00.00 — Bolsos/riñoneras (“waist pouches”), exterior de plástico o textil.
+4202.92.00.00 — Mochilas y morrales, con superficie exterior de hojas de plástico o materias textiles (travel backpacks).
+4203.30.00.00 — Cinturones y bandoleras, de cuero natural o cuero regenerado (accesorios de moda representativos).
+4414.00.00.00 — Marcos de madera para pinturas, grabados o fotografías.
+4420.11.00.00 — Estatuillas y demás objetos de adorno, de madera: de maderas tropicales.
+7326.90.90.00 — Aros de bordado (embroidery hoops)** — según material: madera / plástico / metal.
+4602.19.00.00 — Cestería y artículos similares, de otras materias vegetales.
+4818.20.00.00 — Pañuelos y toallas faciales de papel (face tissues).
+4818.40.00.00 — Pañales y compresas para bebés y artículos similares, de pasta de papel/papel/celulosa.
+4820.10.00.00 — Libretas y cuadernos (notebooks).
+4820.30.00.00 — Carpetas y archivadores de hojas sueltas (file holders).
+4820.50.00.00 — Álbumes para muestras o para colecciones (álbumes de fotos).
+4821.10.00.00 — Etiquetas de papel o cartón impresas (si son de papel).
+4821.10.00.00 — Etiquetas de papel o cartón impresas (stickers de papel autoadhesivos).
+4901.99.00.10 — Libros de texto (aprendizaje de idiomas)
+4901.99.00.10 — Libros de texto (universitarios).
+4901.99.00.90 — Publicaciones técnicas impresas (manuales/guías)
+4903.00.00.00 — Libros para niños, ilustrados o para colorear.
+4909.00.00.00 — Tarjetas de felicitación impresas (greeting cards).
+4909.00.00.00 — Tarjetas postales impresas o ilustradas (postcards).
+4910.00.00.00 — Calendarios impresos, de cualquier clase.
+4911.99.00.00 — Impresos “otros” (pattern paper impreso)
+5703.20.00.00 — Alfombras y demás revestimientos textiles para el suelo, de materia sintética, de mechón (tufted).
+5810.10.00.00 — Bordados sin fondo visible, en pieza, en tiras o en aplicaciones.
+6109.10.00.00 — (T-shirts y camisetas, de punto) De algodón. 
+6109.10.00.00 — Camisetas (T-shirts) y camisetas interiores, de punto: de algodón (representativo de “clothes” generales).
+6110.30.00.00 — Jerseys, pullovers, cárdigans, chalecos y artículos similares, de punto: de fibras sintéticas (camisetas “jersey” deportivas).
+6111.20.00.00 — Prendas y complementos de vestir para bebés, de punto: de algodón.
+6112.12.00.00 — Conjuntos de abrigo para entrenamiento o deporte (chándales), de fibras sintéticas.
+6201.13.00.00 — Abrigos, chaquetones, capas, anoraks (incluidos los impermeables), cazadoras y artículos similares, para hombres o niños: de fibras sintéticas (impermeables).
+6204.33.00.00 — (Chaquetas/sacos) De fibras sintéticas.  
+6204.43.00.00 — (Vestidos) De fibras sintéticas.  
+6204.43.00.00 — (Vestidos) De fibras sintéticas.  
+6211.33.00.00 — Prendas de vestir para hombres o niños, no de punto: monos, conjuntos y artículos similares, de fibras sintéticas (uniformes de trabajo).
+6302.31.00.00 — Ropa de cama, de algodón, excepto estampada.
+6302.60.00.00 — Toallas de felpa (rizo), de algodón.
+6303.12.00.00 — Cortinas, estores y artículos similares, de fibras sintéticas.
+6306.22.00.00 — Tiendas de campaña, de fibras sintéticas (camping tents).
+6307.90.00.00 — Artículos confeccionados de materias textiles, n.e.p. (mascarillas de textil/no tejido, uso común).
+6307.90.00.00 — Artículos confeccionados de materias textiles, n.e.p. (mascarillas de textil/no tejido, uso común).
+6403.40.00.00 — Calzado con puntera de protección metálica (botas de seguridad).
+6404.11.00.00 — Calzado de deporte; calzado de tenis, baloncesto, gimnasia, entrenamiento y calzados similares.
+6404.11.00.00 — Calzado de deporte; calzado de tenis, baloncesto, gimnasia, entrenamiento y calzados similares. 
+6404.11.00.00 — Calzado de deporte; calzado de tenis, baloncesto, gimnasia, entrenamiento y similares (sneakers).
+6404.11.00.00 — Calzado de deporte; calzado de tenis, baloncesto, gimnasia, entrenamiento y similares.
+6506.10.00.00 — Cascos y demás cascos de protección (protectores para deporte, p. ej., cascos).
+6601.10.00.00 — Sombrillas y parasoles de mano.
+6913.10.00.00 — Estatuillas y demás objetos de adorno, de cerámica: de porcelana.
+7113.11.00.00 — Artículos de joyería de plata, incluso chapados de oro o de platino.
+7319.10.00.00 — Agujas de coser/bordar.
+7319.20.00.00 — Imperdibles (safety pins), de hierro o acero.
+7319.90.00.00 — Agujas y ganchos para tejer a mano (knitting needles), de metal común.
+7319.90.00.00 — Ganchos de crochet (crochet hooks), de metal común.
+7323.93.00.00 — Artículos de uso doméstico, de acero inoxidable (ollas de presión domésticas).
+8212.10.00.00 — Afeitadoras (desechables).
+8214.20.00.00 — Instrumentos de manicura o pedicuro (cortaúñas).
+8214.20.00.00 — Instrumentos de manicura o pedicuro (pinzas).
+8301.10.00.00 — Candados (cerraduras) de metal común (candados para bicicleta).
+8301.40.00.00 — Cerraduras para puertas, de metal común.
+8413.20.00.00 — Bombas de mano para líquidos (extractores de leche “breast pumps”).
+8414.20.00.00 — Bombas de aire o de vacío, de mano o de pie (bombas para bicicleta).
+8414.51.00.00 — Ventiladores de mesa, de pie, de pared, de techo o de ventana, con motor eléctrico.
+8421.23.00.00 — Filtros de aceite o de carburante para motores de encendido por chispa o compresión.
+8421.31.00.00 — Filtros de entrada de aire para motores de encendido por chispa o compresión.
+8471.30.00.00 — Máquinas automáticas para tratamiento o procesamiento de datos, portátiles (laptops).
+8471.50.00.00 — Unidades de proceso digitales, excepto las de las subpartidas 8471.41 y 8471.49, aunque incluyan memoria/entrada/salida.
+8471.60.00.00 — Unidades de entrada o salida (ratones inalámbricos).
+8471.60.00.00 — Unidades de entrada o salida (teclados “gaming”).
+8471.70.00.00 — Unidades de memoria (discos duros externos).
+8506.60.00.00 — Pilas (elementos primarios) de litio.
+8507.60.00.00 — Acumuladores eléctricos de iones de litio (power banks).
+8508.11.00.00 — Aspiradoras, con motor eléctrico autónomo, potencia ≤ 1.500 W y capacidad del depósito ≤ 20 L (aspiradora para auto 12V).
+8509.40.00.00 — Trituradores y mezcladores de alimentos; extractores de jugo, de uso doméstico (licuadoras/blenders).
+8509.80.00.00 — Aparatos electromecánicos domésticos con motor incorporado, n.e.p. (cepillos de dientes eléctricos).
+8510.20.00.00 — Máquinas de cortar el cabello, eléctricas.
+8511.10.00.00 — Bujías de encendido (spark plugs).
+8512.40.00.00 — Limpiaparabrisas eléctricos para vehículos automóviles.
+8513.10.00.00 — Lámparas eléctricas portátiles que funcionen con pilas (linternas/“camping lanterns” LED).
+8516.21.00.00 — Radiadores de acumulación eléctricos (aparatos de calefacción de locales).
+8516.60.00.00 — Hornos, cocinas, placas de cocción, aros calentadores, parrillas y asadores eléctricos (ollas arroceras eléctricas).
+8516.60.00.00 — Hornos/cocinas/parrillas/asadores eléctricos (freidoras de aire “air fryers”).
+8516.71.00.00 — Aparatos para la preparación de café o té (hervidores eléctricos para té/agua).
+8516.71.00.00 — Aparatos para la preparación de café o té (máquinas de café).
+8517.62.00.00 — Aparatos de conmutación/encaminamiento de datos (routers).
+8518.22.00.00 — Altavoces múltiples montados en la misma caja (parlantes Bluetooth portátiles).
+8518.30.00.00 — Auriculares, incluidos los de casco, incluso combinados con micrófono.
+8523.51.10.00 — Unidades de memoria de estado sólido (flash), sin grabar (USB drives).
+8525.89.10.00 — Cámaras de circuito cerrado de televisión (CCTV).
+8528.52.00.00 — Monitores capaces de utilizarse con máquinas de tratamiento de datos de la partida 84.71.
+8531.10.00.00 — Aparatos de alarma contra incendio o robo (alarmas de incendio).
+8536.69.00.00 — Enchufes y tomas de corriente (incl. adaptadores).
+8539.50.00.00 — Lámparas eléctricas de diodos emisores de luz (LED).
+8544.42.00.00 — Conductores eléctricos provistos de accesorios de conexión, ≤1.000 V (cables de red con conectores).
+8708.30.00.00 — Frenos y servofrenos; sus partes (incluye pastillas/guarniciones de freno).
+8712.00.00.00 — Bicicletas y demás velocípedos, sin motor.
+8715.00.00.00 — Coches de niños y sus partes.
+9017.80.00.00 — Instrumentos para medir longitud (cinta métrica de sastre).
+9020.00.00.00 — Aparatos de respiración (respiradores con elementos mecánicos/filtros especializados, tipo “respirador”).
+9025.19.00.00 — Termómetros (distintos de los de líquido en vidrio), incluso clínicos digitales.
+9105.21.00.00 — Relojes de pared, eléctricos.
+9401.20.00.00 — Asientos de los tipos utilizados en vehículos automóviles (sillas para niños).
+9403.20.00.00 — Muebles de metal (excepto los de la partida 94.01).
+9404.30.00.00 — Sacos (bolsas) de dormir (sleeping bags).
+9404.90.10.00 — Almohadas (cojines de viaje para el cuello).
+9405.20.00.00 — Lámparas eléctricas de mesa o escritorio.
+9503.00.41.00 — Juguetes rellenos. 
+9503.20.00.00 — Modelos reducidos para armar, incluso animados.
+9503.20.00.00 — Modelos reducidos para ensamblar, incluso animados (juguetes educativos tipo kit)
+9504.50.00.00 — Videoconsolas y máquinas de videojuego.
+9504.90.10.00 — Juegos de ajedrez y damas (representativo de “juegos de mesa”)
+9603.21.00.00 — Cepillos de dientes, incluidos los de dentaduras.
+9605.00.00.00 — Necessaires/estuches de viaje para costura (sewing kits).
+9606.21.00.00 — Botones de plástico, no recubiertos.
+9607.11.00.00 — Cremalleras (“zippers”), con dientes de metal común.
+9608.10.00.00 — Bolígrafos (ballpoint pens).
+9608.20.00.00 — Rotuladores y marcadores con punta de fieltro o similar (resaltadores/highlighters).
+9701.10.00.00 — Cuadros, pinturas y dibujos, ejecutados totalmente a mano.
+9701.21.20.00 — Pinturas y dibujos, de más de 100 años: con marco.
+9703.00.00.00 — Obras originales de estatuaria o escultura, de cualquier materia.
+9706.00.00.00 — Antigüedades de más de cien años (libros antiguos)

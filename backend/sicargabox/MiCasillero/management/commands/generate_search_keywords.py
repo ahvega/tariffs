@@ -45,6 +45,17 @@ class Command(BaseCommand):
             default=None,
             help='Número máximo total de partidas a procesar (opcional)',
         )
+        parser.add_argument(
+            '--los-demas-only',
+            action='store_true',
+            help='Procesar solo partidas "Los demás" sin keywords',
+        )
+        parser.add_argument(
+            '--item-nos-file',
+            type=str,
+            default=None,
+            help='Archivo con lista de item_no (uno por línea) para procesar',
+        )
 
     def get_context_for_partida(self, partida):
         """Obtiene el contexto relevante de una partida."""
@@ -60,44 +71,61 @@ class Command(BaseCommand):
         # Determinar si la descripción específica está en la descripción padre
         is_specific_in_parent = specific_desc in parent_desc if parent_desc else False
         
-        # Obtener partidas relacionadas basadas en la descripción padre
-        if parent_desc:
-            # Obtener todas las partidas que comparten la misma descripción padre
-            # Limitar a 20 siblings para evitar exceder el límite de contexto (131K tokens)
+        # Obtener partidas relacionadas (siblings) usando hierarchy
+        # Usar chapter_code + hierarchy_level para detección precisa
+        # Esto encuentra partidas al mismo nivel jerárquico en el mismo capítulo
+        if partida.chapter_code and partida.hierarchy_level:
+            siblings = PartidaArancelaria.objects.filter(
+                chapter_code=partida.chapter_code,
+                hierarchy_level=partida.hierarchy_level
+            ).exclude(id=partida.id).order_by('item_no')
+        elif parent_desc:
+            # Fallback: usar descripción (para partidas sin hierarchy fields)
             siblings = PartidaArancelaria.objects.filter(
                 descripcion__contains=parent_desc
             ).exclude(id=partida.id).order_by('item_no')[:20]
-            
-            # Obtener las descripciones específicas de las partidas hermanas
-            sibling_specific_descs = [
-                s.descripcion.split('|')[0].strip() if '|' in s.descripcion else s.descripcion
-                for s in siblings
-            ]
-            
-            # Para partidas "Los demás", necesitamos excluir términos específicos
-            if is_others:
-                # Si hay una excepción específica (después de "excepto")
-                if "excepto" in specific_desc.lower():
-                    # Obtener el término de excepción
-                    exception_term = specific_desc.lower().split("excepto")[1].strip()
-                    # Obtener términos específicos de partidas hermanas que no son "Los demás"
-                    excluded_terms = [
-                        desc for desc in sibling_specific_descs 
-                        if not desc.lower().startswith('los demás')
-                    ]
-                    # Agregar el término de excepción a los términos excluidos
-                    excluded_terms.append(exception_term)
-                else:
-                    # Si no hay excepción específica, excluir todos los términos específicos
-                    excluded_terms = [
-                        desc for desc in sibling_specific_descs 
-                        if not desc.lower().startswith('los demás')
-                    ]
-            else:
-                excluded_terms = []
         else:
             siblings = []
-            sibling_specific_descs = []
+
+        # Obtener las descripciones específicas de las partidas hermanas
+        sibling_specific_descs = [
+            s.descripcion.split('|')[0].strip() if '|' in s.descripcion else s.descripcion
+            for s in siblings
+        ]
+
+        # NUEVO: Para "Los demás", recolectar keywords de siblings para excluir
+        excluded_keywords = []
+        if is_others and siblings:
+            for sibling in siblings:
+                # Solo excluir keywords de siblings que NO son "Los demás"
+                sibling_desc = sibling.descripcion.split('|')[0].strip() if '|' in sibling.descripcion else sibling.descripcion
+                if not sibling_desc.lower().startswith('los demás') and not sibling_desc.lower().startswith('las demás'):
+                    if sibling.search_keywords:
+                        excluded_keywords.extend(sibling.search_keywords)
+
+            # Deduplicate and normalize
+            excluded_keywords = list(set([kw.lower().strip() for kw in excluded_keywords if kw]))
+
+        # Para partidas "Los demás", también excluir términos específicos de descripciones
+        if is_others:
+            # Si hay una excepción específica (después de "excepto")
+            if "excepto" in specific_desc.lower():
+                # Obtener el término de excepción
+                exception_term = specific_desc.lower().split("excepto")[1].strip()
+                # Obtener términos específicos de partidas hermanas que no son "Los demás"
+                excluded_terms = [
+                    desc for desc in sibling_specific_descs
+                    if not desc.lower().startswith('los demás') and not desc.lower().startswith('las demás')
+                ]
+                # Agregar el término de excepción a los términos excluidos
+                excluded_terms.append(exception_term)
+            else:
+                # Si no hay excepción específica, excluir todos los términos específicos
+                excluded_terms = [
+                    desc for desc in sibling_specific_descs
+                    if not desc.lower().startswith('los demás') and not desc.lower().startswith('las demás')
+                ]
+        else:
             excluded_terms = []
         
         context = {
@@ -114,10 +142,12 @@ class Command(BaseCommand):
             'siblings': [{
                 'codigo': p.item_no,
                 'description': p.descripcion,
-                'specific_desc': p.descripcion.split('|')[0].strip() if '|' in p.descripcion else p.descripcion
+                'specific_desc': p.descripcion.split('|')[0].strip() if '|' in p.descripcion else p.descripcion,
+                'keywords_count': len(p.search_keywords) if p.search_keywords else 0
             } for p in siblings],
             'sibling_specific_descs': sibling_specific_descs,
-            'excluded_terms': excluded_terms
+            'excluded_terms': excluded_terms,
+            'excluded_keywords': excluded_keywords  # NUEVO: keywords a excluir
         }
         return context
 
@@ -155,7 +185,8 @@ class Command(BaseCommand):
         current = context['current']
         siblings = context['siblings']
         excluded_terms = context['excluded_terms']
-        
+        excluded_keywords = context.get('excluded_keywords', [])  # NUEVO
+
         # Construir el prompt según el tipo de partida
         if current['is_others']:
             # Para "Los demás", excluir términos ya mencionados en hermanos
@@ -211,7 +242,17 @@ class Command(BaseCommand):
                 Código: {current['codigo']}
                 Descripción: {current['description']}
 
-                IMPORTANTE: Esta es una partida "Los demás" que debe EXCLUIR los siguientes términos que ya tienen su propia partida:
+                IMPORTANTE: Esta es una partida "Los demás" (catch-all category).
+
+                SIBLINGS (partidas específicas al mismo nivel):
+                {json.dumps([{'codigo': s['codigo'], 'descripcion': s['specific_desc'], 'keywords': s['keywords_count']} for s in siblings], indent=2, ensure_ascii=False)}
+
+                KEYWORDS YA USADOS POR SIBLINGS (PROHIBIDO usar estos):
+                {json.dumps(excluded_keywords[:100] if len(excluded_keywords) > 100 else excluded_keywords, indent=2, ensure_ascii=False)}
+                {f'... y {len(excluded_keywords) - 100} keywords más' if len(excluded_keywords) > 100 else ''}
+                Total de keywords excluidos: {len(excluded_keywords)}
+
+                TÉRMINOS ESPECÍFICOS A EXCLUIR:
                 {json.dumps(excluded_terms, indent=2, ensure_ascii=False)}
 
                 Genera una lista de keywords que:
@@ -236,9 +277,13 @@ class Command(BaseCommand):
                 - Accesorios: ["case", "cover", "funda", "protector", "screen protector", "mica"]
                 - Deportes: ["backpack", "mochila", "sports bag", "bolsa deportiva", "gym bag"]
 
-                IMPORTANTE:
-                - NO incluyas términos relacionados con: {json.dumps(excluded_terms, indent=2, ensure_ascii=False)}
-                - Responde SOLO con el array JSON, sin markdown, sin explicaciones.
+                ⚠️ CRÍTICO - EXCLUSIONES OBLIGATORIAS:
+                - NO uses NINGUNO de los {len(excluded_keywords)} keywords listados arriba
+                - NO uses variaciones o sinónimos de esos keywords
+                - NO uses términos relacionados con: {json.dumps(excluded_terms[:5], ensure_ascii=False)} {'...' if len(excluded_terms) > 5 else ''}
+                - Enfócate en términos GENÉRICOS del padre que NO aparezcan en siblings
+
+                Responde SOLO con el array JSON, sin markdown, sin explicaciones.
                 Ejemplo: ["headphones", "earbuds", "auriculares", "audífonos", "wireless headphones"]
                 """
         elif current['is_specific_in_parent']:
@@ -386,6 +431,8 @@ class Command(BaseCommand):
         start_from = options['start_from']
         api_provider = options['api_provider']
         limit = options['limit']
+        los_demas_only = options.get('los_demas_only', False)  # NUEVO
+        item_nos_file = options.get('item_nos_file', None)  # NUEVO
 
         # Verificar API key
         if api_provider == 'deepseek':
@@ -403,6 +450,32 @@ class Command(BaseCommand):
         partidas = PartidaArancelaria.objects.filter(
             id__gte=start_from
         ).order_by('id')
+
+        # NUEVO: Filtrar por item_nos desde archivo si se especificó
+        if item_nos_file:
+            try:
+                with open(item_nos_file, 'r', encoding='utf-8') as f:
+                    item_nos = [line.strip() for line in f if line.strip()]
+                partidas = PartidaArancelaria.objects.filter(
+                    item_no__in=item_nos
+                ).order_by('id')
+                self.stdout.write(self.style.WARNING(
+                    f'Modo "item_nos_file" activado - procesando {len(item_nos)} partidas desde {item_nos_file}'
+                ))
+            except FileNotFoundError:
+                self.stdout.write(self.style.ERROR(f'Archivo no encontrado: {item_nos_file}'))
+                return
+
+        # NUEVO: Filtrar solo "Los demás" si se especificó
+        elif los_demas_only:
+            from django.db.models import Q
+            partidas = partidas.filter(
+                Q(descripcion__iregex=r'^(los|las) demás') |
+                Q(descripcion__iregex=r'^(los|las) demas')
+            )
+            self.stdout.write(self.style.WARNING(
+                f'Modo "Los demás only" activado - procesando TODAS las partidas "Los demás" ({partidas.count()})'
+            ))
 
         # Aplicar límite si se especificó
         if limit:
