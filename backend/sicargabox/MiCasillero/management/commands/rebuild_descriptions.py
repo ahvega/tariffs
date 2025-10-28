@@ -1,6 +1,7 @@
-from django.core.management.base import BaseCommand
-import pandas as pd
 import os
+
+import pandas as pd
+from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):

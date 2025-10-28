@@ -22,8 +22,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-from django.core.management.base import BaseCommand
 from django.conf import settings
+from django.core.management.base import BaseCommand
 from elasticsearch_dsl.query import Q as ES_Q
 
 from MiCasillero.documents import PartidaArancelariaDocument

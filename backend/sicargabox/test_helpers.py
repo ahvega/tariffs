@@ -1,12 +1,9 @@
 import random
 import string
-
-from django.contrib.auth.models import User
-from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.models import AbstractBaseUser
-from django.contrib.auth.models import Group
-from django.contrib.contenttypes.models import ContentType
 from datetime import datetime
+
+from django.contrib.auth.models import AbstractBaseUser, AbstractUser, Group, User
+from django.contrib.contenttypes.models import ContentType
 
 from MiCasillero import models as MiCasillero_models
 

@@ -5,15 +5,15 @@
 #           Context Optimization, API Retries, DB Saving, and tqdm Progress Bar.
 # --------------------------------------------------------------------------
 
-import os
 import json
 import logging
+import os
 from time import sleep
-from dotenv import load_dotenv
 
 from django.core.management.base import BaseCommand, CommandError
-from django.db import transaction
 from django.core.paginator import Paginator
+from django.db import transaction
+from dotenv import load_dotenv
 
 # --- Model Import ---
 try:
@@ -33,7 +33,8 @@ logger = logging.getLogger(__name__)
 # --- LLM & Utility Library Imports ---
 SUPPORTED_PROVIDERS = []
 try:
-    from openai import OpenAI, RateLimitError, APIError as OpenAIAPIError
+    from openai import APIError as OpenAIAPIError
+    from openai import OpenAI, RateLimitError
 
     SUPPORTED_PROVIDERS.extend(["openai", "deepseek"])
 except ImportError:
@@ -45,9 +46,9 @@ except ImportError:
 try:
     import google.generativeai as genai
     from google.api_core.exceptions import (
-        ResourceExhausted,
         InternalServerError as GoogleInternalServerError,
     )
+    from google.api_core.exceptions import ResourceExhausted
 
     SUPPORTED_PROVIDERS.append("google")
 except ImportError:
@@ -57,11 +58,9 @@ except ImportError:
     )
 
 try:
-    from anthropic import (
-        Anthropic,
-        RateLimitError as AnthropicRateLimitError,
-        APIError as AnthropicAPIError,
-    )
+    from anthropic import Anthropic
+    from anthropic import APIError as AnthropicAPIError
+    from anthropic import RateLimitError as AnthropicRateLimitError
 
     SUPPORTED_PROVIDERS.append("anthropic")
 except ImportError:

@@ -1,7 +1,7 @@
 # Generated manually to add search_vector index after field creation
 
-from django.db import migrations
 from django.contrib.postgres.indexes import GinIndex
+from django.db import migrations
 
 
 class Migration(migrations.Migration):

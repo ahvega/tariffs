@@ -1,12 +1,10 @@
-from django.views import generic
-from django.urls import reverse_lazy
 from django.shortcuts import HttpResponse
-from django.views import generic
-from django.template import Template, RequestContext
+from django.template import RequestContext, Template
 from django.template.response import TemplateResponse
+from django.urls import reverse_lazy
+from django.views import generic
 
-from . import models
-from . import forms
+from . import forms, models
 
 
 class HTMXAlertaListView(generic.ListView):

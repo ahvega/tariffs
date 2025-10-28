@@ -1,19 +1,17 @@
-from decimal import Decimal
-from typing import Union, Dict
-from typing import TYPE_CHECKING
 import json
 from datetime import timedelta
+from decimal import Decimal
+from typing import TYPE_CHECKING, Dict, Union
 
-from django.db import models
-from django.core.exceptions import ValidationError
-from django.urls import reverse
 from django.contrib.auth.models import User
-from guardian.shortcuts import assign_perm, remove_perm, get_users_with_perms
-from django.contrib.postgres.search import SearchVectorField
 from django.contrib.postgres.indexes import GinIndex
+from django.contrib.postgres.search import SearchVector, SearchVectorField
+from django.core.exceptions import ValidationError
+from django.db import models
 from django.db.models import F
-from django.contrib.postgres.search import SearchVector
+from django.urls import reverse
 from django.utils import timezone
+from guardian.shortcuts import assign_perm, get_users_with_perms, remove_perm
 
 
 class ParametroSistemaManager(models.Manager):

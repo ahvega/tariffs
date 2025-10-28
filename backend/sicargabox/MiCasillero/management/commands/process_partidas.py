@@ -1,10 +1,12 @@
-from django.core.management.base import BaseCommand
-from django.conf import settings
-import pandas as pd
-import openai
-from MiCasillero.models import PartidaArancelaria
 import json
 import logging
+
+import openai
+import pandas as pd
+from django.conf import settings
+from django.core.management.base import BaseCommand
+
+from MiCasillero.models import PartidaArancelaria
 
 logger = logging.getLogger(__name__)
 

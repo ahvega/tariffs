@@ -1,5 +1,6 @@
-from django.db import migrations
 import json
+
+from django.db import migrations
 
 
 def clean_search_keywords(apps, schema_editor):

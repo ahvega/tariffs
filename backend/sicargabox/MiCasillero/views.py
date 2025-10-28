@@ -1,41 +1,41 @@
+import json
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Group
-from django.contrib.auth.forms import UserCreationForm as UserRegisterForm
 from django.contrib.auth.forms import AuthenticationForm as LoginForm
-from django.http import JsonResponse, HttpResponse
-from django.shortcuts import get_object_or_404
-from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm as UserRegisterForm
+from django.contrib.auth.models import Group
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
+from elasticsearch_dsl import Q as ES_Q
 from guardian.decorators import permission_required_or_403
 from guardian.mixins import PermissionRequiredMixin
 from guardian.shortcuts import assign_perm
-import json
 
+from .documents import PartidaArancelariaDocument
 from .forms import (
+    AlertaForm,
+    ArticuloForm,
     ClienteForm,
     CotizacionForm,
-    ArticuloForm,
-    PartidaArancelariaForm,
-    ParametroSistemaForm,
-    AlertaForm,
     EnvioForm,
     FacturaForm,
+    ParametroSistemaForm,
+    PartidaArancelariaForm,
 )
 from .models import (
+    Alerta,
+    Articulo,
     Cliente,
     Cotizacion,
-    Articulo,
-    PartidaArancelaria,
-    ParametroSistema,
-    Alerta,
     Envio,
     Factura,
+    ParametroSistema,
+    PartidaArancelaria,
 )
-from django.urls import reverse_lazy
-from elasticsearch_dsl import Q as ES_Q
-from .documents import PartidaArancelariaDocument
 
 
 def home(request):

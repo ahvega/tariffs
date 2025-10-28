@@ -1,5 +1,6 @@
 import mimetypes
 from pathlib import Path
+
 from django.utils.translation import gettext_lazy as _
 
 mimetypes.add_type("application/javascript", ".js", True)

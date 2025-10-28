@@ -1,8 +1,10 @@
+import os
+
+import pandas as pd
 from django.core.management.base import BaseCommand
 from django.db import transaction
+
 from MiCasillero.models import PartidaArancelaria
-import pandas as pd
-import os
 
 
 class Command(BaseCommand):

@@ -1,6 +1,8 @@
-from django.core.management.base import BaseCommand
-from MiCasillero.models import PartidaArancelaria
 import re
+
+from django.core.management.base import BaseCommand
+
+from MiCasillero.models import PartidaArancelaria
 
 
 class Command(BaseCommand):

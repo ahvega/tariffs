@@ -1,17 +1,19 @@
 # MiCasillero/management/commands/import_partidas.py
 
-import pandas as pd
-import numpy as np
-from django.core.management.base import BaseCommand, CommandError
-from MiCasillero.models import PartidaArancelaria
-import math
-from django.conf import settings
-import openai
 import json
 import logging
-from decimal import Decimal
+import math
 import os
+from decimal import Decimal
+
+import numpy as np
+import openai
+import pandas as pd
+from django.conf import settings
+from django.core.management.base import BaseCommand, CommandError
 from dotenv import load_dotenv
+
+from MiCasillero.models import PartidaArancelaria
 
 # Load environment variables
 load_dotenv()

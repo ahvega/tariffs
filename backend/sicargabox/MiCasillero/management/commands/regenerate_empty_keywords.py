@@ -1,11 +1,13 @@
-from django.core.management.base import BaseCommand
-from django.db import transaction
-from django.contrib.postgres.search import SearchVector
-from MiCasillero.models import PartidaArancelaria
 import json
 import os
-from openai import OpenAI
+
 from django.conf import settings
+from django.contrib.postgres.search import SearchVector
+from django.core.management.base import BaseCommand
+from django.db import transaction
+from openai import OpenAI
+
+from MiCasillero.models import PartidaArancelaria
 
 
 class Command(BaseCommand):

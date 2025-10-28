@@ -1,6 +1,6 @@
-from django.db import migrations
-from django.contrib.postgres.search import SearchVectorField
 from django.contrib.postgres.indexes import GinIndex
+from django.contrib.postgres.search import SearchVectorField
+from django.db import migrations
 
 
 class Migration(migrations.Migration):

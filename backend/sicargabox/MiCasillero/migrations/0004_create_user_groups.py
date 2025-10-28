@@ -1,6 +1,6 @@
-from django.db import migrations
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
+from django.db import migrations
 
 
 def create_user_groups(apps, schema_editor):

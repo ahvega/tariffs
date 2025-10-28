@@ -7,18 +7,20 @@ Usage:
     python match_courier_items_to_partidas.py [--dry-run] [--verbose]
 """
 
+import json
 import os
 import sys
-import django
-import json
 from pathlib import Path
+
+import django
 
 # Setup Django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "SicargaBox.settings")
 django.setup()
 
-from MiCasillero.models import PartidaArancelaria
 from django.db.models import Q
+
+from MiCasillero.models import PartidaArancelaria
 
 # Import the courier items list
 sys.path.append(str(Path(__file__).parent.parent.parent))

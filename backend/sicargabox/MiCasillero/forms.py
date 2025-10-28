@@ -1,9 +1,11 @@
+import json
+
 from django import forms
+from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 from django_select2.forms import Select2Widget
-from django.contrib.auth.models import User
+
 from . import models
-import json
 
 
 class UserRegisterForm(forms.ModelForm):

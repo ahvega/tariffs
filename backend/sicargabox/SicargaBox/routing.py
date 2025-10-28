@@ -1,13 +1,10 @@
-from django.conf.urls import url
-
-from channels.routing import ChannelNameRouter, ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
-
-from SicargaBox.consumers import SicargaBox_WebSocketConsumer
+from channels.routing import ChannelNameRouter, ProtocolTypeRouter, URLRouter
+from django.conf.urls import url
 
 # Consumer Imports
 from MiCasillero.consumers import MiCasilleroConsumer
-
+from SicargaBox.consumers import SicargaBox_WebSocketConsumer
 
 application = ProtocolTypeRouter(
     {
