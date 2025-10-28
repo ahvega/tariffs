@@ -1,9 +1,29 @@
+import os
 from SicargaBox.settings import *  # noqa
 
 # Override any settings required for tests here
 
 # Disable debug mode for tests
 DEBUG = False
+
+# Test database configuration
+# Use DATABASE_URL from environment if available, otherwise use test defaults
+if "DATABASE_URL" in os.environ:
+    import dj_database_url
+
+    DATABASES = {"default": dj_database_url.config(default=os.environ["DATABASE_URL"])}
+else:
+    # Default test database settings
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "test_sicargabox",
+            "USER": "postgres",
+            "PASSWORD": "postgres",
+            "HOST": "localhost",
+            "PORT": "5432",
+        }
+    }
 
 # Disable Debug Toolbar for tests
 DEBUG_TOOLBAR_CONFIG = {
