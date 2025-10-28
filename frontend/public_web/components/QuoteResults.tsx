@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { QuoteCalculation } from '@/lib/api';
 
 interface QuoteResultsProps {
@@ -7,6 +8,8 @@ interface QuoteResultsProps {
 }
 
 export default function QuoteResults({ quote }: QuoteResultsProps) {
+  const router = useRouter();
+
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('es-HN', {
       style: 'currency',
@@ -53,6 +56,20 @@ export default function QuoteResults({ quote }: QuoteResultsProps) {
         </span>
       );
     });
+  };
+
+  // Handle "Aceptar y Continuar" button click
+  const handleAcceptQuote = () => {
+    // TODO: Once NextAuth is implemented, check authentication status here
+    // Example: const session = useSession();
+    // if (session?.user) {
+    //   router.push('/envio/crear'); // Authenticated: go to shipping request
+    // } else {
+    //   router.push('/login'); // Not authenticated: go to login
+    // }
+
+    // For now, route to login page (will be created in Phase 4.2 - Authentication task)
+    router.push('/login');
   };
 
   return (
@@ -243,7 +260,10 @@ export default function QuoteResults({ quote }: QuoteResultsProps) {
         >
           Nueva Cotización
         </button>
-        <button className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium">
+        <button
+          onClick={handleAcceptQuote}
+          className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
+        >
           Aceptar y Continuar
         </button>
       </div>
