@@ -101,7 +101,7 @@ class PartidaArancelaria(models.Model):
     partida_arancelaria = models.CharField(max_length=50, verbose_name="Partida Arancelaria", help_text="Código HS completo")
     impuesto_dai = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Impuesto DAI", help_text="Derechos Arancelarios a la Importación")
     impuesto_isc = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Impuesto ISC", help_text="Impuesto Selectivo al Consumo")
-    impuesto_ispc = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Impuesto ISPC", help_text="Impuesto de Solidaridad para la Protección del Consumidor")
+    impuesto_ispc = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Impuesto ISPC", help_text="Impuesto Sobre Produccion y Consumo")
     impuesto_isv = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Impuesto ISV", help_text="Impuesto Sobre Ventas")
 
     # New fields for courier-specific information
@@ -763,10 +763,17 @@ class Articulo(models.Model):
         # Valor CIF = Valor del artículo + Costo de transporte
         valor_cif = self.valor_articulo + self.costo_transporte
 
-        # DAI, ISC, ISPC se calculan sobre el valor CIF
+        # Cálculo incremental de impuestos (cada impuesto se calcula sobre el total acumulado anterior)
+        # DAI se calcula sobre el valor CIF
         impuesto_dai = valor_cif * (self.porcentaje_dai / 100)
-        impuesto_isc = valor_cif * (self.porcentaje_isc / 100)
-        impuesto_ispc = valor_cif * (self.porcentaje_ispc / 100)
+
+        # ISC se calcula sobre CIF + DAI
+        base_isc = valor_cif + impuesto_dai
+        impuesto_isc = base_isc * (self.porcentaje_isc / 100)
+
+        # ISPC se calcula sobre CIF + DAI + ISC
+        base_ispc = valor_cif + impuesto_dai + impuesto_isc
+        impuesto_ispc = base_ispc * (self.porcentaje_ispc / 100)
 
         # Base imponible para ISV = CIF + DAI + ISC + ISPC
         base_isv = valor_cif + impuesto_dai + impuesto_isc + impuesto_ispc
