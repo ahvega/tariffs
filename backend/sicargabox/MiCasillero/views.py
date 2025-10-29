@@ -16,11 +16,26 @@ from guardian.mixins import PermissionRequiredMixin
 from guardian.shortcuts import assign_perm
 
 from .documents import PartidaArancelariaDocument
-from .forms import (AlertaForm, ArticuloForm, ClienteForm, CotizacionForm,
-                    EnvioForm, FacturaForm, ParametroSistemaForm,
-                    PartidaArancelariaForm)
-from .models import (Alerta, Articulo, Cliente, Cotizacion, Envio, Factura,
-                     ParametroSistema, PartidaArancelaria)
+from .forms import (
+    AlertaForm,
+    ArticuloForm,
+    ClienteForm,
+    CotizacionForm,
+    EnvioForm,
+    FacturaForm,
+    ParametroSistemaForm,
+    PartidaArancelariaForm,
+)
+from .models import (
+    Alerta,
+    Articulo,
+    Cliente,
+    Cotizacion,
+    Envio,
+    Factura,
+    ParametroSistema,
+    PartidaArancelaria,
+)
 
 
 def home(request):

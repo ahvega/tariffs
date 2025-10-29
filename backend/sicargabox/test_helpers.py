@@ -2,12 +2,7 @@ import random
 import string
 from decimal import Decimal
 
-from django.contrib.auth.models import (
-    AbstractBaseUser,
-    AbstractUser,
-    Group,
-    User,
-)
+from django.contrib.auth.models import AbstractBaseUser, AbstractUser, Group, User
 from django.contrib.contenttypes.models import ContentType
 
 from MiCasillero import models as MiCasillero_models
@@ -92,6 +87,17 @@ def create_MiCasillero_Cliente(**kwargs):
     defaults["telefono"] = "12345678"
     defaults["correo_electronico"] = "%s@test.com" % random_string(5)
     defaults.update(**kwargs)
+
+    # Create system parameter if it doesn't exist
+    if not MiCasillero_models.ParametroSistema.objects.filter(
+        nombre_parametro="Prefijo del Código de Cliente"
+    ).exists():
+        create_MiCasillero_ParametroSistema(
+            nombre_parametro="Prefijo del Código de Cliente",
+            valor="CLI",
+            tipo_dato="STRING",
+        )
+
     return MiCasillero_models.Cliente.objects.create(**defaults)
 
 

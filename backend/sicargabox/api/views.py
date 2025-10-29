@@ -6,12 +6,14 @@ from rest_framework.decorators import action, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from MiCasillero.models import (Articulo, Cliente, Cotizacion,
-                                PartidaArancelaria)
+from MiCasillero.models import Articulo, Cliente, Cotizacion, PartidaArancelaria
 
-from .serializers import (ArticuloAPISerializer, ClienteAPISerializer,
-                          CotizacionAPISerializer,
-                          PartidaArancelariaAPISerializer)
+from .serializers import (
+    ArticuloAPISerializer,
+    ClienteAPISerializer,
+    CotizacionAPISerializer,
+    PartidaArancelariaAPISerializer,
+)
 
 # Create your views here.
 
