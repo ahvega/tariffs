@@ -35,8 +35,6 @@ button,
 .btn,
 .button {
   font-family: var(--font-geist);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
 /* Form inputs: use Geist Mono for the typed values (numbers, code, currency, etc.)
