@@ -21,10 +21,12 @@ SicargaBox is a comprehensive courier quotation and shipping request system desi
 
 ### Repository Structure
 
-This is a monorepo with three main components:
+This is a monorepo with four main components:
 
 1. **Backend (SicargaBox)**: Django-based courier control system for managing quotes, shipments, and tracking
-2. **Tools (PDF Parser)**: Python utility for extracting tariff items from PDF documents
+2. **Tools**: Development utilities
+   - **PDF Parser**: Python utility for extracting tariff items from PDF documents
+   - **Task Orchestrator Dashboard**: Real-time monitoring dashboard for MCP task-orchestrator
 3. **Frontend/Mobile**: (Planned) Next.js customer and staff portals
 
 ## Backend: SicargaBox
@@ -123,6 +125,47 @@ python src/parse_tariffs.py <pdf_filename>
 ```
 
 Output includes: Partida (code), Descripción, Gravamen (tariff rate)
+
+## Tools: Task Orchestrator Dashboard
+
+### Purpose
+
+Visual monitoring dashboard for [MCP Task Orchestrator](https://github.com/jpicklyk/task-orchestrator) providing real-time visibility into project, feature, and task progress during development.
+
+**Use Case:** Development helper tool for monitoring AI-managed tasks while using Claude Code, Cursor, or other AI assistants integrated with task-orchestrator MCP.
+
+### Commands
+
+**Setup:**
+
+```bash
+cd tools/task-orchestrator-dashboard
+python -m venv venv
+venv\Scripts\activate  # Windows (or source venv/bin/activate on macOS/Linux)
+pip install -r requirements.txt
+```
+
+**Configuration (optional):**
+
+```bash
+# Set path to task-orchestrator database
+export TASK_ORCHESTRATOR_DB=/path/to/tasks.db  # Default: data/tasks.db
+```
+
+**Run Dashboard:**
+
+```bash
+python server.py
+# Open browser: http://localhost:8000
+```
+
+**Features:**
+- Real-time stats (projects, features, tasks, completion rates)
+- Auto-refresh every 10 seconds
+- REST API at `/api/*` endpoints
+- Interactive API docs at `/docs`
+
+**Note:** This tool is designed to be independent and can be extracted to its own repository. See `tools/task-orchestrator-dashboard/README.md` for detailed documentation.
 
 ## Architecture
 

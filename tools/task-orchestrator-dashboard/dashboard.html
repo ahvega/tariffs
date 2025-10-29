@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Orchestrator Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            color: var(--gray-900);
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: var(--gray-100);
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-label {
+            color: var(--gray-600);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .stat-subtext {
+            color: var(--gray-600);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .projects-container {
+            display: grid;
+            gap: 20px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .project-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .project-description {
+            color: var(--gray-600);
+            font-size: 14px;
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge.completed { background: #d1fae5; color: #065f46; }
+        .badge.in_progress { background: #dbeafe; color: #1e40af; }
+        .badge.pending { background: #fef3c7; color: #92400e; }
+        .badge.todo { background: var(--gray-200); color: var(--gray-700); }
+
+        .features-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .feature-item {
+            background: var(--gray-50);
+            border-radius: 6px;
+            padding: 16px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .feature-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .feature-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .tasks-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .task-item {
+            background: white;
+            border-radius: 4px;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--gray-200);
+        }
+
+        .task-name {
+            color: var(--gray-700);
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            transition: width 0.3s ease;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray-600);
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--gray-200);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .refresh-info {
+            font-size: 12px;
+            color: var(--gray-600);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>🎯 Task Orchestrator Dashboard</h1>
+                <p class="refresh-info">Auto-refresh: <span id="refresh-countdown">10</span>s</p>
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot" id="status-dot"></div>
+                <span id="status-text">Connected</span>
+            </div>
+        </header>
+
+        <div id="error-container"></div>
+
+        <div class="stats-grid" id="stats-grid">
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <div class="projects-container" id="projects-container">
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000/api';
+        const REFRESH_INTERVAL = 10000; // 10 seconds
+        let countdownInterval;
+        let refreshTimer;
+
+        async function fetchData(endpoint) {
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error(`Error fetching ${endpoint}:`, error);
+                throw error;
+            }
+        }
+
+        function showError(message) {
+            const container = document.getElementById('error-container');
+            container.innerHTML = `<div class="error">⚠️ ${message}</div>`;
+            updateStatus(false);
+        }
+
+        function clearError() {
+            document.getElementById('error-container').innerHTML = '';
+            updateStatus(true);
+        }
+
+        function updateStatus(connected) {
+            const dot = document.getElementById('status-dot');
+            const text = document.getElementById('status-text');
+            if (connected) {
+                dot.style.background = 'var(--success)';
+                text.textContent = 'Connected';
+            } else {
+                dot.style.background = 'var(--danger)';
+                text.textContent = 'Disconnected';
+            }
+        }
+
+        function renderStats(stats) {
+            const grid = document.getElementById('stats-grid');
+            const completionRate = stats.tasks.completion_rate || 0;
+
+            grid.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-label">Projects</div>
+                    <div class="stat-value">${stats.projects}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Features</div>
+                    <div class="stat-value">${stats.features}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Tasks</div>
+                    <div class="stat-value">${stats.tasks.total}</div>
+                    <div class="stat-subtext">${stats.tasks.completed} completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">In Progress</div>
+                    <div class="stat-value">${stats.tasks.in_progress}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Completion Rate</div>
+                    <div class="stat-value">${completionRate}%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${completionRate}%"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getStatusBadge(status) {
+            const statusMap = {
+                'completed': 'completed',
+                'in_progress': 'in_progress',
+                'pending': 'pending',
+                'todo': 'todo'
+            };
+            const badgeClass = statusMap[status] || 'todo';
+            return `<span class="badge ${badgeClass}">${status.replace('_', ' ')}</span>`;
+        }
+
+        function calculateProgress(tasks) {
+            if (!tasks || tasks.length === 0) return 0;
+            const completed = tasks.filter(t => t.status === 'completed').length;
+            return Math.round((completed / tasks.length) * 100);
+        }
+
+        function renderProjects(projects) {
+            const container = document.getElementById('projects-container');
+
+            if (!projects || projects.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No projects found</h3>
+                        <p>Start by creating a project in your task-orchestrator</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = projects.map(project => {
+                const featuresHtml = project.features.map(feature => {
+                    const progress = calculateProgress(feature.tasks);
+                    const tasksHtml = feature.tasks.map(task => `
+                        <div class="task-item">
+                            <span class="task-name">${task.name}</span>
+                            ${getStatusBadge(task.status)}
+                        </div>
+                    `).join('');
+
+                    return `
+                        <div class="feature-item">
+                            <div class="feature-header">
+                                <div class="feature-title">${feature.name}</div>
+                                ${feature.status ? getStatusBadge(feature.status) : ''}
+                            </div>
+                            ${feature.description ? `<p class="project-description">${feature.description}</p>` : ''}
+                            <div class="tasks-list">
+                                ${tasksHtml || '<p class="task-name">No tasks yet</p>'}
+                            </div>
+                            ${feature.tasks.length > 0 ? `
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${progress}%"></div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="project-card">
+                        <div class="project-header">
+                            <div>
+                                <div class="project-title">${project.name}</div>
+                                ${project.description ? `<p class="project-description">${project.description}</p>` : ''}
+                            </div>
+                            ${project.status ? getStatusBadge(project.status) : ''}
+                        </div>
+                        <div class="features-list">
+                            ${featuresHtml || '<p class="project-description">No features yet</p>'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function loadDashboard() {
+            try {
+                clearError();
+
+                // Load stats and projects in parallel
+                const [stats, projects] = await Promise.all([
+                    fetchData('/stats'),
+                    fetchData('/projects')
+                ]);
+
+                renderStats(stats);
+                renderProjects(projects);
+
+            } catch (error) {
+                showError(`Failed to load dashboard: ${error.message}. Make sure the server is running on port 8000.`);
+            }
+        }
+
+        function startCountdown() {
+            let seconds = REFRESH_INTERVAL / 1000;
+            const countdownEl = document.getElementById('refresh-countdown');
+
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+
+            countdownInterval = setInterval(() => {
+                seconds--;
+                countdownEl.textContent = seconds;
+
+                if (seconds <= 0) {
+                    seconds = REFRESH_INTERVAL / 1000;
+                }
+            }, 1000);
+        }
+
+        function startAutoRefresh() {
+            // Initial load
+            loadDashboard();
+            startCountdown();
+
+            // Set up auto-refresh
+            if (refreshTimer) {
+                clearInterval(refreshTimer);
+            }
+
+            refreshTimer = setInterval(() => {
+                loadDashboard();
+                startCountdown();
+            }, REFRESH_INTERVAL);
+        }
+
+        // Start the dashboard
+        startAutoRefresh();
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (countdownInterval) clearInterval(countdownInterval);
+            if (refreshTimer) clearInterval(refreshTimer);
+        });
+    </script>
+</body>
+</html>
