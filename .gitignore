@@ -26,6 +26,9 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
+# But allow frontend lib directories
+!frontend/**/lib/
+
 # Virtual Environments
 venv/
 env/

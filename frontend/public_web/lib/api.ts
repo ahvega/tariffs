@@ -66,6 +66,34 @@ export interface QuoteRequest {
   partida_arancelaria: number;
 }
 
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+}
+
+export interface AuthResponse {
+  user: User;
+  access: string;
+  refresh: string;
+}
+
+export interface RegisterRequest {
+  username: string;
+  email: string;
+  password: string;
+  password2: string;
+  first_name: string;
+  last_name: string;
+}
+
+export interface LoginRequest {
+  username: string;
+  password: string;
+}
+
 class ApiClient {
   private baseUrl: string;
 
@@ -144,6 +172,93 @@ class ApiClient {
     } catch (error) {
       console.error('Error fetching partidas:', error);
       return [];
+    }
+  }
+
+  // Authentication methods
+  async register(registerData: RegisterRequest): Promise<AuthResponse | null> {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/auth/register/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(registerData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error registering user:', errorData);
+        throw new Error(JSON.stringify(errorData));
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error registering user:', error);
+      return null;
+    }
+  }
+
+  async login(loginData: LoginRequest): Promise<AuthResponse | null> {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/auth/login/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error logging in:', errorData);
+        throw new Error(JSON.stringify(errorData));
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error logging in:', error);
+      return null;
+    }
+  }
+
+  async getCurrentUser(accessToken: string): Promise<User | null> {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/auth/me/`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Error fetching current user');
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching current user:', error);
+      return null;
+    }
+  }
+
+  async refreshToken(refreshToken: string): Promise<{ access: string } | null> {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/auth/refresh/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ refresh: refreshToken }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error refreshing token');
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error refreshing token:', error);
+      return null;
     }
   }
 }

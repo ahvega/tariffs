@@ -1,3 +1,5 @@
+from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 
 from MiCasillero.models import Articulo, Cliente, Cotizacion, PartidaArancelaria
@@ -170,3 +172,80 @@ class ArticuloAPISerializer(serializers.ModelSerializer):
             "impuesto_isv",
             "impuesto_total",
         ]
+
+
+class UserSerializer(serializers.ModelSerializer):
+    """
+    Serializer for User model (for authentication responses).
+
+    Returns user information after successful login/registration.
+    Used in authentication API responses and /api/auth/me/ endpoint.
+
+    Fields:
+        id (int): User ID
+        username (str): Username
+        email (str): Email address
+        first_name (str): First name
+        last_name (str): Last name
+    """
+
+    class Meta:
+        model = User
+        fields = ["id", "username", "email", "first_name", "last_name"]
+        read_only_fields = ["id"]
+
+
+class RegisterSerializer(serializers.ModelSerializer):
+    """
+    Serializer for user registration.
+
+    Handles new user registration with password validation and confirmation.
+    Automatically creates associated Cliente record upon successful registration.
+
+    Fields:
+        username (str): Unique username
+        email (str): Email address (required)
+        password (str): Password (write-only, validated)
+        password2 (str): Password confirmation (write-only)
+        first_name (str): First name (required)
+        last_name (str): Last name (required)
+    """
+
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(
+        write_only=True, required=True, validators=[validate_password]
+    )
+    password2 = serializers.CharField(write_only=True, required=True)
+    first_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=True)
+
+    class Meta:
+        model = User
+        fields = ["username", "email", "password", "password2", "first_name", "last_name"]
+
+    def validate(self, attrs):
+        """Validate that passwords match"""
+        if attrs["password"] != attrs["password2"]:
+            raise serializers.ValidationError({"password": "Password fields didn't match."})
+        return attrs
+
+    def validate_email(self, value):
+        """Validate that email is unique"""
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("A user with this email already exists.")
+        return value
+
+    def create(self, validated_data):
+        """Create user and associated Cliente record"""
+        validated_data.pop("password2")
+        user = User.objects.create_user(**validated_data)
+
+        # Create associated Cliente record
+        Cliente.objects.create(
+            user=user,
+            nombres=user.first_name,
+            apellidos=user.last_name,
+            correo_electronico=user.email,
+        )
+
+        return user

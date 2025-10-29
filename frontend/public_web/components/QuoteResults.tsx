@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { QuoteCalculation } from '@/lib/api';
 import { quoteStorage } from '@/lib/quoteStorage';
 
@@ -10,6 +11,7 @@ interface QuoteResultsProps {
 
 export default function QuoteResults({ quote }: QuoteResultsProps) {
   const router = useRouter();
+  const { data: session, status } = useSession();
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('es-HN', {
@@ -61,16 +63,13 @@ export default function QuoteResults({ quote }: QuoteResultsProps) {
 
   // Handle "Aceptar y Continuar" button click
   const handleAcceptQuote = () => {
-    // TODO: Once NextAuth is implemented, check authentication status here
-    // Example: const session = useSession();
-    // if (session?.user) {
-    //   router.push('/envio/crear'); // Authenticated: go to shipping request
-    // } else {
-    //   router.push('/login'); // Not authenticated: go to login
-    // }
-
-    // For now, route to login page (will be created in Phase 4.2 - Authentication task)
-    router.push('/login');
+    if (session?.user) {
+      // Authenticated: go to shipping request (to be implemented in Phase 4.4)
+      router.push('/envio/crear');
+    } else {
+      // Not authenticated: go to login
+      router.push('/login');
+    }
   };
 
   return (
