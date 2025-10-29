@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { QuoteCalculation } from '@/lib/api';
+import { quoteStorage } from '@/lib/quoteStorage';
 
 interface QuoteResultsProps {
   quote: QuoteCalculation;
@@ -255,7 +256,10 @@ export default function QuoteResults({ quote }: QuoteResultsProps) {
       {/* Action Buttons */}
       <div className="flex justify-end gap-3 mt-6">
         <button
-          onClick={() => window.location.reload()}
+          onClick={() => {
+            quoteStorage.clear();
+            window.location.reload();
+          }}
           className="px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium"
         >
           Nueva Cotización

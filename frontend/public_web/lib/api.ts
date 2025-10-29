@@ -85,13 +85,15 @@ class ApiClient {
 
       const data: { results: SearchResult[] } = await response.json();
 
-      // Convert search results to PartidaArancelaria format
-      return data.results.map(result => ({
-        id: parseInt(result.id),
-        item_no: result.codigo,
-        descripcion: result.descripcion,
-        search_keywords: result.keywords,
-      }));
+      // Convert search results to PartidaArancelaria format and sort by relevance score (descending)
+      return data.results
+        .sort((a, b) => b.score - a.score)
+        .map(result => ({
+          id: parseInt(result.id),
+          item_no: result.codigo,
+          descripcion: result.descripcion,
+          search_keywords: result.keywords,
+        }));
     } catch (error) {
       console.error('Error searching partidas:', error);
       return [];

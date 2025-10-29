@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { apiClient, type PartidaArancelaria, type QuoteCalculation } from '@/lib/api';
+import { apiClient, type PartidaArancelaria, type QuoteCalculation, type QuoteRequest } from '@/lib/api';
+import { quoteStorage } from '@/lib/quoteStorage';
 import ThemeToggle from '@/components/ThemeToggle';
 import QuoteResults from '@/components/QuoteResults';
 
@@ -24,6 +25,28 @@ export default function CotizadorPage() {
     ancho: '',
     alto: '',
   });
+
+  // Load stored quote on mount
+  useEffect(() => {
+    const storedQuote = quoteStorage.getQuote();
+    if (storedQuote) {
+      setQuoteResult(storedQuote);
+
+      // Optionally restore form data from stored request
+      const storedRequest = quoteStorage.getRequest();
+      if (storedRequest) {
+        setFormData({
+          descripcion_original: storedRequest.descripcion_original,
+          valor: storedRequest.valor.toString(),
+          peso: storedRequest.peso.toString(),
+          unidad_peso: storedRequest.unidad_peso,
+          largo: storedRequest.largo?.toString() || '',
+          ancho: storedRequest.ancho?.toString() || '',
+          alto: storedRequest.alto?.toString() || '',
+        });
+      }
+    }
+  }, []);
 
   // Debounced search
   useEffect(() => {
@@ -111,20 +134,26 @@ export default function CotizadorPage() {
     setIsCalculating(true);
     setQuoteResult(null);
 
+    const quoteRequest: QuoteRequest = {
+      valor: parseFloat(formData.valor),
+      peso: parseFloat(formData.peso),
+      unidad_peso: formData.unidad_peso,
+      largo: parseFloat(formData.largo),
+      ancho: parseFloat(formData.ancho),
+      alto: parseFloat(formData.alto),
+      descripcion_original: formData.descripcion_original,
+      partida_arancelaria: selectedPartida.id,
+    };
+
     try {
-      const quote = await apiClient.calculateQuote({
-        valor: parseFloat(formData.valor),
-        peso: parseFloat(formData.peso),
-        unidad_peso: formData.unidad_peso,
-        largo: parseFloat(formData.largo),
-        ancho: parseFloat(formData.ancho),
-        alto: parseFloat(formData.alto),
-        descripcion_original: formData.descripcion_original,
-        partida_arancelaria: selectedPartida.id,
-      });
+      const quote = await apiClient.calculateQuote(quoteRequest);
 
       if (quote) {
         setQuoteResult(quote);
+
+        // Save quote to session storage
+        quoteStorage.save(quote, quoteRequest);
+
         setTimeout(() => {
           document.getElementById('quote-results')?.scrollIntoView({
             behavior: 'smooth',
@@ -224,8 +253,8 @@ export default function CotizadorPage() {
                             }}
                             className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
                           >
-                            <div className="font-mono font-semibold text-gray-900 dark:text-white mb-1">{partida.item_no}</div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                            <div className="font-mono font-semibold text-sm text-gray-900 dark:text-white mb-1">{partida.item_no}</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
                               {(() => {
                                 const hierarchy = parsePartidaHierarchy(partida.descripcion);
                                 if (!hierarchy) return partida.descripcion;
@@ -233,12 +262,12 @@ export default function CotizadorPage() {
                                 return (
                                   <div className="space-y-0.5">
                                     {hierarchy.grandparent && (
-                                      <div className="font-mono font-normal">{hierarchy.grandparent}</div>
+                                      <div className="font-normal">{hierarchy.grandparent}</div>
                                     )}
                                     {hierarchy.parent && (
-                                      <div className="pl-2 font-mono font-normal">{hierarchy.parent}</div>
+                                      <div className="pl-2 font-normal">{hierarchy.parent}</div>
                                     )}
-                                    <div className={`font-mono font-semibold ${hierarchy.parent ? "pl-4" : hierarchy.grandparent ? "pl-2" : ""}`}>
+                                    <div className={`font-semibold ${hierarchy.parent ? "pl-4" : hierarchy.grandparent ? "pl-2" : ""}`}>
                                       {hierarchy.partida}
                                     </div>
                                   </div>
@@ -290,7 +319,7 @@ export default function CotizadorPage() {
                     step="0.01"
                     min="0"
                     placeholder="0.00"
-                    className="rounded-none rounded-r-lg flex-1 min-w-0 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    className="rounded-none rounded-r-lg flex-1 min-w-0 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono"
                     value={formData.valor}
                     onChange={(e) =>
                       setFormData({ ...formData, valor: e.target.value })
@@ -311,7 +340,7 @@ export default function CotizadorPage() {
                   step="0.01"
                   min="0"
                   placeholder="0.00"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono"
                   value={formData.peso}
                   onChange={(e) =>
                     setFormData({ ...formData, peso: e.target.value })
@@ -351,7 +380,7 @@ export default function CotizadorPage() {
                   step="0.1"
                   min="0"
                   placeholder="0.0"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono"
                   value={formData.largo}
                   onChange={(e) =>
                     setFormData({ ...formData, largo: e.target.value })
@@ -370,7 +399,7 @@ export default function CotizadorPage() {
                   step="0.1"
                   min="0"
                   placeholder="0.0"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono"
                   value={formData.ancho}
                   onChange={(e) =>
                     setFormData({ ...formData, ancho: e.target.value })
@@ -389,7 +418,7 @@ export default function CotizadorPage() {
                   step="0.1"
                   min="0"
                   placeholder="0.0"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono"
                   value={formData.alto}
                   onChange={(e) =>
                     setFormData({ ...formData, alto: e.target.value })
