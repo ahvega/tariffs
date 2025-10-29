@@ -166,6 +166,17 @@ def create_MiCasillero_Envio(**kwargs):
     defaults["estado_envio"] = "Solicitado"
     defaults["peso_estimado"] = Decimal("5.00")
     defaults.update(**kwargs)
+
+    # Create system parameter if it doesn't exist (required by Envio.save())
+    if not MiCasillero_models.ParametroSistema.objects.filter(
+        nombre_parametro="Costo Flete por Libra en USD$"
+    ).exists():
+        create_MiCasillero_ParametroSistema(
+            nombre_parametro="Costo Flete por Libra en USD$",
+            valor="2.50",
+            tipo_dato="FLOAT",
+        )
+
     return MiCasillero_models.Envio.objects.create(**defaults)
 
 
