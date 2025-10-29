@@ -7,18 +7,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('MiCasillero', '0011_merge_20250326_1909'),
+        ("MiCasillero", "0011_merge_20250326_1909"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='partidaarancelaria',
-            name='descripcion',
+            model_name="partidaarancelaria",
+            name="descripcion",
             field=models.CharField(max_length=1255),
         ),
         migrations.AlterField(
-            model_name='partidaarancelaria',
-            name='search_keywords',
+            model_name="partidaarancelaria",
+            name="search_keywords",
             field=models.JSONField(blank=True, default=list, null=True),
         ),
     ]

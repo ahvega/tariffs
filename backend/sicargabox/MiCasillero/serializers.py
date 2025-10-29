@@ -16,6 +16,7 @@ class AlertaSerializer(serializers.ModelSerializer):
             "estado",
         ]
 
+
 class ArticuloSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -34,6 +35,7 @@ class ArticuloSerializer(serializers.ModelSerializer):
             "impuesto_total",
         ]
 
+
 class ClienteSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -49,6 +51,7 @@ class ClienteSerializer(serializers.ModelSerializer):
             "fecha_registro",
         ]
 
+
 class CotizacionSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -58,6 +61,7 @@ class CotizacionSerializer(serializers.ModelSerializer):
             "fecha_creacion",
             "estado",
         ]
+
 
 class EnvioSerializer(serializers.ModelSerializer):
 
@@ -73,6 +77,7 @@ class EnvioSerializer(serializers.ModelSerializer):
             "flete",
             "fecha_actualizacion",
         ]
+
 
 class FacturaSerializer(serializers.ModelSerializer):
 
@@ -92,6 +97,7 @@ class FacturaSerializer(serializers.ModelSerializer):
             "estado_pago",
         ]
 
+
 class ParametroSistemaSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -102,6 +108,7 @@ class ParametroSistemaSerializer(serializers.ModelSerializer):
             "tipo_dato",
             "fecha_actualizacion",
         ]
+
 
 class PartidaArancelariaSerializer(serializers.ModelSerializer):
 
@@ -121,5 +128,5 @@ class PartidaArancelariaSerializer(serializers.ModelSerializer):
             "requires_special_handling",
             "special_instructions",
             "max_weight_allowed",
-            "search_keywords"
+            "search_keywords",
         ]

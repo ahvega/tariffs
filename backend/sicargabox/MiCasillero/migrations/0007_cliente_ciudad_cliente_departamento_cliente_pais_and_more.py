@@ -6,28 +6,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('MiCasillero', '0006_alter_articulo_impuesto_dai_and_more'),
+        ("MiCasillero", "0006_alter_articulo_impuesto_dai_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='cliente',
-            name='ciudad',
-            field=models.CharField(default='San Pedro Sula', max_length=50),
+            model_name="cliente",
+            name="ciudad",
+            field=models.CharField(default="San Pedro Sula", max_length=50),
         ),
         migrations.AddField(
-            model_name='cliente',
-            name='departamento',
-            field=models.CharField(default='Cortés', max_length=50),
+            model_name="cliente",
+            name="departamento",
+            field=models.CharField(default="Cortés", max_length=50),
         ),
         migrations.AddField(
-            model_name='cliente',
-            name='pais',
-            field=models.CharField(default='Honduras', max_length=50),
+            model_name="cliente",
+            name="pais",
+            field=models.CharField(default="Honduras", max_length=50),
         ),
         migrations.AlterField(
-            model_name='cliente',
-            name='codigo_cliente',
+            model_name="cliente",
+            name="codigo_cliente",
             field=models.CharField(max_length=13, unique=True),
         ),
     ]

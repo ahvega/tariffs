@@ -6,10 +6,9 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('MiCasillero', '0009_partidaarancelaria_search_vector_and_more'),
-        ('MiCasillero', '0010_add_search_vector'),
-        ('MiCasillero', '0010_alter_partidaarancelaria_search_keywords'),
+        ("MiCasillero", "0009_partidaarancelaria_search_vector_and_more"),
+        ("MiCasillero", "0010_add_search_vector"),
+        ("MiCasillero", "0010_alter_partidaarancelaria_search_keywords"),
     ]
 
-    operations = [
-    ]
+    operations = []

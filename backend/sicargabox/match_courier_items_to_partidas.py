@@ -7,18 +7,20 @@ Usage:
     python match_courier_items_to_partidas.py [--dry-run] [--verbose]
 """
 
+import json
 import os
 import sys
-import django
-import json
 from pathlib import Path
 
+import django
+
 # Setup Django
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'SicargaBox.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "SicargaBox.settings")
 django.setup()
 
-from MiCasillero.models import PartidaArancelaria
 from django.db.models import Q
+
+from MiCasillero.models import PartidaArancelaria
 
 # Import the courier items list
 sys.path.append(str(Path(__file__).parent.parent.parent))
@@ -33,10 +35,10 @@ class CourierItemMatcher:
         self.matches = []
         self.manual_review_needed = []
         self.stats = {
-            'total_items': 0,
-            'auto_matched': 0,
-            'manual_review': 0,
-            'no_match': 0,
+            "total_items": 0,
+            "auto_matched": 0,
+            "manual_review": 0,
+            "no_match": 0,
         }
 
     def log(self, message):
@@ -57,7 +59,7 @@ class CourierItemMatcher:
         )[:limit]
 
         for p in exact_matches:
-            results.append((p, 'HIGH', 'Exact keyword match'))
+            results.append((p, "HIGH", "Exact keyword match"))
 
         if results:
             return results
@@ -73,7 +75,7 @@ class CourierItemMatcher:
 
             for p in partial_matches:
                 if p not in [r[0] for r in results]:
-                    results.append((p, 'MEDIUM', f'Partial match: "{word}"'))
+                    results.append((p, "MEDIUM", f'Partial match: "{word}"'))
 
         if results:
             return results[:limit]
@@ -89,7 +91,7 @@ class CourierItemMatcher:
             desc_matches = PartidaArancelaria.objects.filter(q_filter)[:limit]
             for p in desc_matches:
                 if p not in [r[0] for r in results]:
-                    results.append((p, 'LOW', 'Description match'))
+                    results.append((p, "LOW", "Description match"))
 
         return results[:limit]
 
@@ -98,8 +100,8 @@ class CourierItemMatcher:
         Match a single courier item to a partida.
         Returns match info or None if manual review needed.
         """
-        item_name = item['item']
-        description = item['description']
+        item_name = item["item"]
+        description = item["description"]
 
         self.log(f"\nMatching: {item_name}")
         self.log(f"Description: {description}")
@@ -120,27 +122,27 @@ class CourierItemMatcher:
         self.log(f"  Desc: {best_match.descripcion[:60]}")
 
         match_info = {
-            'item': item_name,
-            'description': description,
-            'partida_no': best_match.item_no,
-            'partida_desc': best_match.descripcion,
-            'confidence': confidence,
-            'match_reason': reason,
-            'current_provider': self._get_provider(best_match),
-            'keyword_count': len(best_match.search_keywords) if best_match.search_keywords else 0,
-            'alternative_matches': [
-                {
-                    'item_no': p.item_no,
-                    'desc': p.descripcion[:60],
-                    'confidence': conf
-                }
+            "item": item_name,
+            "description": description,
+            "partida_no": best_match.item_no,
+            "partida_desc": best_match.descripcion,
+            "confidence": confidence,
+            "match_reason": reason,
+            "current_provider": self._get_provider(best_match),
+            "keyword_count": (
+                len(best_match.search_keywords) if best_match.search_keywords else 0
+            ),
+            "alternative_matches": [
+                {"item_no": p.item_no, "desc": p.descripcion[:60], "confidence": conf}
                 for p, conf, _ in results[1:4]  # Top 3 alternatives
-            ]
+            ],
         }
 
         # Flag for manual review if confidence is LOW or multiple good matches
-        if confidence == 'LOW' or len([r for r in results if r[1] == 'HIGH']) > 1:
-            self.log("  ⚠️ FLAGGED FOR MANUAL REVIEW (low confidence or multiple matches)")
+        if confidence == "LOW" or len([r for r in results if r[1] == "HIGH"]) > 1:
+            self.log(
+                "  ⚠️ FLAGGED FOR MANUAL REVIEW (low confidence or multiple matches)"
+            )
             return match_info, True  # Return with manual review flag
 
         return match_info, False
@@ -152,7 +154,7 @@ class CourierItemMatcher:
 
         # Check if it's likely Claude (from Phase 2C - Los demás)
         desc_lower = partida.descripcion.lower()
-        if desc_lower.startswith('los demás') or desc_lower.startswith('las demás'):
+        if desc_lower.startswith("los demás") or desc_lower.startswith("las demás"):
             return "Claude (Phase 2C)"
 
         # Otherwise assume DeepSeek baseline
@@ -165,35 +167,39 @@ class CourierItemMatcher:
         print("=" * 70)
         print()
 
-        self.stats['total_items'] = len(top_200_courier_items)
+        self.stats["total_items"] = len(top_200_courier_items)
 
         for item in top_200_courier_items:
             result = self.match_item(item)
 
             if result is None:
                 # No match found
-                self.manual_review_needed.append({
-                    'item': item['item'],
-                    'description': item['description'],
-                    'reason': 'No matches found',
-                    'suggested_partida': None
-                })
-                self.stats['no_match'] += 1
+                self.manual_review_needed.append(
+                    {
+                        "item": item["item"],
+                        "description": item["description"],
+                        "reason": "No matches found",
+                        "suggested_partida": None,
+                    }
+                )
+                self.stats["no_match"] += 1
             elif result[1]:  # Manual review flag
                 match_info = result[0]
-                self.manual_review_needed.append({
-                    'item': match_info['item'],
-                    'description': match_info['description'],
-                    'reason': f"Low confidence ({match_info['confidence']}) or multiple matches",
-                    'suggested_partida': match_info['partida_no'],
-                    'suggested_desc': match_info['partida_desc'],
-                    'alternatives': match_info['alternative_matches']
-                })
-                self.stats['manual_review'] += 1
+                self.manual_review_needed.append(
+                    {
+                        "item": match_info["item"],
+                        "description": match_info["description"],
+                        "reason": f"Low confidence ({match_info['confidence']}) or multiple matches",
+                        "suggested_partida": match_info["partida_no"],
+                        "suggested_desc": match_info["partida_desc"],
+                        "alternatives": match_info["alternative_matches"],
+                    }
+                )
+                self.stats["manual_review"] += 1
             else:
                 # Good match
                 self.matches.append(result[0])
-                self.stats['auto_matched'] += 1
+                self.stats["auto_matched"] += 1
 
     def generate_report(self):
         """Generate matching report."""
@@ -207,9 +213,13 @@ class CourierItemMatcher:
         print()
 
         # Analyze matched partidas
-        unique_partidas = set(m['partida_no'] for m in self.matches)
-        deepseek_count = len([m for m in self.matches if 'DeepSeek' in m['current_provider']])
-        claude_count = len([m for m in self.matches if 'Claude' in m['current_provider']])
+        unique_partidas = set(m["partida_no"] for m in self.matches)
+        deepseek_count = len(
+            [m for m in self.matches if "DeepSeek" in m["current_provider"]]
+        )
+        claude_count = len(
+            [m for m in self.matches if "Claude" in m["current_provider"]]
+        )
 
         print(f"Unique partidas matched: {len(unique_partidas)}")
         print(f"  - Currently using DeepSeek: {deepseek_count}")
@@ -231,12 +241,14 @@ class CourierItemMatcher:
                 print(f"   Description: {item['description']}")
                 print(f"   Reason: {item['reason']}")
 
-                if item.get('suggested_partida'):
-                    print(f"   Suggested: {item['suggested_partida']} - {item['suggested_desc'][:60]}")
+                if item.get("suggested_partida"):
+                    print(
+                        f"   Suggested: {item['suggested_partida']} - {item['suggested_desc'][:60]}"
+                    )
 
-                    if item.get('alternatives'):
+                    if item.get("alternatives"):
                         print(f"   Alternatives:")
-                        for alt in item['alternatives']:
+                        for alt in item["alternatives"]:
                             print(f"     - {alt['item_no']}: {alt['desc']}")
 
                 print()
@@ -245,32 +257,36 @@ class CourierItemMatcher:
 
     def _save_results(self):
         """Save matching results to JSON files."""
-        output_dir = Path(__file__).parent.parent.parent / 'phase_2d_results'
+        output_dir = Path(__file__).parent.parent.parent / "phase_2d_results"
         output_dir.mkdir(exist_ok=True)
 
         # Save auto-matched items
-        with open(output_dir / 'auto_matched.json', 'w', encoding='utf-8') as f:
+        with open(output_dir / "auto_matched.json", "w", encoding="utf-8") as f:
             json.dump(self.matches, f, indent=2, ensure_ascii=False)
 
         # Save manual review items
-        with open(output_dir / 'manual_review.json', 'w', encoding='utf-8') as f:
+        with open(output_dir / "manual_review.json", "w", encoding="utf-8") as f:
             json.dump(self.manual_review_needed, f, indent=2, ensure_ascii=False)
 
         # Save partida list for regeneration (sorted unique list)
-        unique_partidas = list(set(m['partida_no'] for m in self.matches))
-        with open(output_dir / 'partidas_to_regenerate.txt', 'w') as f:
-            f.write('\n'.join(sorted(unique_partidas)))
+        unique_partidas = list(set(m["partida_no"] for m in self.matches))
+        with open(output_dir / "partidas_to_regenerate.txt", "w") as f:
+            f.write("\n".join(sorted(unique_partidas)))
 
         # Save summary
         summary = {
-            'stats': self.stats,
-            'unique_partidas': len(unique_partidas),
-            'partidas_to_regenerate': unique_partidas,
-            'deepseek_count': len([m for m in self.matches if 'DeepSeek' in m['current_provider']]),
-            'claude_count': len([m for m in self.matches if 'Claude' in m['current_provider']]),
+            "stats": self.stats,
+            "unique_partidas": len(unique_partidas),
+            "partidas_to_regenerate": unique_partidas,
+            "deepseek_count": len(
+                [m for m in self.matches if "DeepSeek" in m["current_provider"]]
+            ),
+            "claude_count": len(
+                [m for m in self.matches if "Claude" in m["current_provider"]]
+            ),
         }
 
-        with open(output_dir / 'summary.json', 'w', encoding='utf-8') as f:
+        with open(output_dir / "summary.json", "w", encoding="utf-8") as f:
             json.dump(summary, f, indent=2, ensure_ascii=False)
 
         print(f"\n[OK] Results saved to: {output_dir}/")
@@ -284,9 +300,9 @@ def main():
     """Main entry point."""
     import argparse
 
-    parser = argparse.ArgumentParser(description='Match courier items to partidas')
-    parser.add_argument('--verbose', '-v', action='store_true', help='Verbose output')
-    parser.add_argument('--dry-run', action='store_true', help='Dry run mode')
+    parser = argparse.ArgumentParser(description="Match courier items to partidas")
+    parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
+    parser.add_argument("--dry-run", action="store_true", help="Dry run mode")
 
     args = parser.parse_args()
 
@@ -315,5 +331,5 @@ def main():
     print()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

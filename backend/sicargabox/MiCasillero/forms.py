@@ -1,9 +1,11 @@
+import json
+
 from django import forms
+from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 from django_select2.forms import Select2Widget
-from django.contrib.auth.models import User
+
 from . import models
-import json
 
 
 class UserRegisterForm(forms.ModelForm):
@@ -46,84 +48,114 @@ class ArticuloForm(forms.ModelForm):
     descripcion_original = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                'class': 'w-full p-2 border border-gray-300 rounded bg-gray-200 text-black',
-                'placeholder': 'Ej: Cuerdas para Guitarra'
+                "class": "w-full p-2 border border-gray-300 rounded bg-gray-200 text-black",
+                "placeholder": "Ej: Cuerdas para Guitarra",
             }
         ),
-        label=mark_safe('Descripción del Producto <small>(según factura de compra)</small>'),
-        help_text="Ingresa la descripción exacta del producto según aparece en tu factura de compra"
+        label=mark_safe(
+            "Descripción del Producto <small>(según factura de compra)</small>"
+        ),
+        help_text="Ingresa la descripción exacta del producto según aparece en tu factura de compra",
     )
 
     partida_arancelaria = forms.ModelChoiceField(
-        queryset=models.PartidaArancelaria.objects.all().order_by('descripcion'),
+        queryset=models.PartidaArancelaria.objects.all().order_by("descripcion"),
         widget=Select2Widget(
             attrs={
-                'class': 'form-control select2',
-                'style': 'width: 100%',
-            }),
-        label=mark_safe('Partida Arancelaria <small>(Selecciona la que mejor se ajuste)</small>'),
-        help_text="Busca y selecciona la partida arancelaria que mejor se ajuste a tu producto"
+                "class": "form-control select2",
+                "style": "width: 100%",
+            }
+        ),
+        label=mark_safe(
+            "Partida Arancelaria <small>(Selecciona la que mejor se ajuste)</small>"
+        ),
+        help_text="Busca y selecciona la partida arancelaria que mejor se ajuste a tu producto",
     )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
         # Agregar los keywords como data attribute
         choices = []
-        for partida in self.fields['partida_arancelaria'].queryset:
-            option_attrs = {'data-keywords': json.dumps(partida.search_keywords or [])}
+        for partida in self.fields["partida_arancelaria"].queryset:
+            option_attrs = {"data-keywords": json.dumps(partida.search_keywords or [])}
             choices.append((partida.id, partida.descripcion, option_attrs))
-            
-        self.fields['partida_arancelaria'].widget.choices = choices
+
+        self.fields["partida_arancelaria"].widget.choices = choices
 
     class Meta:
         model = models.Articulo
-        fields = ['descripcion_original', 'partida_arancelaria', 'valor_articulo', 'peso', 'largo', 'ancho', 'alto']
+        fields = [
+            "descripcion_original",
+            "partida_arancelaria",
+            "valor_articulo",
+            "peso",
+            "largo",
+            "ancho",
+            "alto",
+        ]
         labels = {
-            'valor_articulo': mark_safe('Valor en USD$ <small>(Incluir Envío e Impuestos)</small>'),
-            'peso': mark_safe('Peso'),
-            'largo': mark_safe('Largo'),
-            'ancho': mark_safe('Ancho'),
-            'alto': mark_safe('Alto'),
+            "valor_articulo": mark_safe(
+                "Valor en USD$ <small>(Incluir Envío e Impuestos)</small>"
+            ),
+            "peso": mark_safe("Peso"),
+            "largo": mark_safe("Largo"),
+            "ancho": mark_safe("Ancho"),
+            "alto": mark_safe("Alto"),
         }
         widgets = {
-            'valor_articulo': forms.NumberInput(
-                attrs={'class': 'w-full p-2 border border-gray-300 rounded bg-gray-200 text-black'}),
-            'peso': forms.NumberInput(
-                attrs={'class': 'w-full p-2 border border-gray-300 rounded bg-gray-200 text-black'}),
-            'largo': forms.NumberInput(
-                attrs={'class': 'w-full p-2 border border-gray-300 rounded bg-gray-200 text-black'}),
-            'ancho': forms.NumberInput(
-                attrs={'class': 'w-full p-2 border border-gray-300 rounded bg-gray-200 text-black'}),
-            'alto': forms.NumberInput(
-                attrs={'class': 'w-full p-2 border border-gray-300 rounded bg-gray-200 text-black'}),
+            "valor_articulo": forms.NumberInput(
+                attrs={
+                    "class": "w-full p-2 border border-gray-300 rounded bg-gray-200 text-black"
+                }
+            ),
+            "peso": forms.NumberInput(
+                attrs={
+                    "class": "w-full p-2 border border-gray-300 rounded bg-gray-200 text-black"
+                }
+            ),
+            "largo": forms.NumberInput(
+                attrs={
+                    "class": "w-full p-2 border border-gray-300 rounded bg-gray-200 text-black"
+                }
+            ),
+            "ancho": forms.NumberInput(
+                attrs={
+                    "class": "w-full p-2 border border-gray-300 rounded bg-gray-200 text-black"
+                }
+            ),
+            "alto": forms.NumberInput(
+                attrs={
+                    "class": "w-full p-2 border border-gray-300 rounded bg-gray-200 text-black"
+                }
+            ),
         }
         error_messages = {
-            'descripcion_original': {
-                'required': 'Por favor ingresa la descripción del producto según tu factura.',
+            "descripcion_original": {
+                "required": "Por favor ingresa la descripción del producto según tu factura.",
             },
-            'partida_arancelaria': {
-                'required': 'Por favor selecciona una partida arancelaria que se ajuste a tu producto.',
+            "partida_arancelaria": {
+                "required": "Por favor selecciona una partida arancelaria que se ajuste a tu producto.",
             },
-            'valor_articulo': {
-                'required': 'Este campo es obligatorio.',
-                'invalid': 'Introduce un valor válido.',
+            "valor_articulo": {
+                "required": "Este campo es obligatorio.",
+                "invalid": "Introduce un valor válido.",
             },
-            'peso': {
-                'required': 'Este campo es obligatorio.',
-                'invalid': 'Introduce un peso válido.',
+            "peso": {
+                "required": "Este campo es obligatorio.",
+                "invalid": "Introduce un peso válido.",
             },
-            'largo': {
-                'required': 'Este campo es obligatorio.',
-                'invalid': 'Introduce un valor válido.',
+            "largo": {
+                "required": "Este campo es obligatorio.",
+                "invalid": "Introduce un valor válido.",
             },
-            'ancho': {
-                'required': 'Este campo es obligatorio.',
-                'invalid': 'Introduce un valor válido.',
+            "ancho": {
+                "required": "Este campo es obligatorio.",
+                "invalid": "Introduce un valor válido.",
             },
-            'alto': {
-                'required': 'Este campo es obligatorio.',
-                'invalid': 'Introduce un valor válido.',
+            "alto": {
+                "required": "Este campo es obligatorio.",
+                "invalid": "Introduce un valor válido.",
             },
         }
 

@@ -8,18 +8,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('MiCasillero', '0008_remove_partidaarancelaria_fecha_actualizacion_and_more'),
+        ("MiCasillero", "0008_remove_partidaarancelaria_fecha_actualizacion_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='partidaarancelaria',
-            name='courier_category',
-            field=models.CharField(choices=[('ALLOWED', 'Permitido para Courier'), ('RESTRICTED', 'Articulos restringidos para Courier'), ('PROHIBITED', 'Articulos prohibidos para Courier')], default='ALLOWED', max_length=20),
+            model_name="partidaarancelaria",
+            name="courier_category",
+            field=models.CharField(
+                choices=[
+                    ("ALLOWED", "Permitido para Courier"),
+                    ("RESTRICTED", "Articulos restringidos para Courier"),
+                    ("PROHIBITED", "Articulos prohibidos para Courier"),
+                ],
+                default="ALLOWED",
+                max_length=20,
+            ),
         ),
         migrations.AlterField(
-            model_name='partidaarancelaria',
-            name='search_keywords',
+            model_name="partidaarancelaria",
+            name="search_keywords",
             field=models.JSONField(blank=True, default=list),
         ),
     ]

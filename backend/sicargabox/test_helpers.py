@@ -1,12 +1,9 @@
 import random
 import string
+from decimal import Decimal
 
-from django.contrib.auth.models import User
-from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.models import AbstractBaseUser
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import AbstractBaseUser, AbstractUser, Group, User
 from django.contrib.contenttypes.models import ContentType
-from datetime import datetime
 
 from MiCasillero import models as MiCasillero_models
 
@@ -53,91 +50,157 @@ def create_Group(**kwargs):
 
 
 def create_ContentType(**kwargs):
-    defaults = {
-    }
+    defaults = {}
     defaults.update(**kwargs)
     return ContentType.objects.create(**defaults)
 
 
-def create_MiCasillero_Alerta(**kwargs):
-    defaults = {}
-    defaults["tipo_alerta"] = ""
-    defaults["mensaje"] = ""
-    defaults["fecha_envio"] = datetime.now()
-    defaults["estado"] = ""
-    defaults.update(**kwargs)
-    return MiCasillero_models.Alerta.objects.create(**defaults)
-def create_MiCasillero_Articulo(**kwargs):
-    defaults = {}
-    defaults["valor_articulo"] = ""
-    defaults["largo"] = ""
-    defaults["ancho"] = ""
-    defaults["alto"] = ""
-    defaults["peso"] = ""
-    defaults["impuesto_dai"] = ""
-    defaults["impuesto_isc"] = ""
-    defaults["impuesto_ispc"] = ""
-    defaults["impuesto_isv"] = ""
-    defaults["impuesto_total"] = ""
-    defaults.update(**kwargs)
-    return MiCasillero_models.Articulo.objects.create(**defaults)
-def create_MiCasillero_Cliente(**kwargs):
-    defaults = {}
-    defaults["nombres"] = ""
-    defaults["apellidos"] = ""
-    defaults["direccion"] = ""
-    defaults["telefono"] = ""
-    defaults["correo_electronico"] = ""
-    defaults["codigo_cliente"] = ""
-    defaults["fecha_registro"] = datetime.now()
-    defaults.update(**kwargs)
-    return MiCasillero_models.Cliente.objects.create(**defaults)
-def create_MiCasillero_Cotizacion(**kwargs):
-    defaults = {}
-    defaults["fecha_creacion"] = datetime.now()
-    defaults["estado"] = ""
-    defaults.update(**kwargs)
-    return MiCasillero_models.Cotizacion.objects.create(**defaults)
-def create_MiCasillero_Envio(**kwargs):
-    defaults = {}
-    defaults["tracking_number_original"] = ""
-    defaults["tracking_number_final"] = ""
-    defaults["direccion_casillero"] = ""
-    defaults["estado_envio"] = ""
-    defaults["flete"] = ""
-    defaults["fecha_actualizacion"] = datetime.now()
-    defaults.update(**kwargs)
-    return MiCasillero_models.Envio.objects.create(**defaults)
-def create_MiCasillero_Factura(**kwargs):
-    defaults = {}
-    defaults["flete"] = ""
-    defaults["total_impuesto_dai"] = ""
-    defaults["total_impuesto_isc"] = ""
-    defaults["total_impuesto_ispc"] = ""
-    defaults["total_impuesto_isv"] = ""
-    defaults["total_impuesto"] = ""
-    defaults["monto_total"] = ""
-    defaults["fecha_emision"] = datetime.now()
-    defaults["estado_pago"] = ""
-    defaults.update(**kwargs)
-    return MiCasillero_models.Factura.objects.create(**defaults)
 def create_MiCasillero_ParametroSistema(**kwargs):
     defaults = {}
-    defaults["nombre_parametro"] = ""
-    defaults["valor"] = ""
-    defaults["tipo_dato"] = ""
-    defaults["fecha_actualizacion"] = datetime.now()
+    defaults["nombre_parametro"] = "param_" + random_string(5)
+    defaults["valor"] = "test_value"
+    defaults["tipo_dato"] = "STRING"
     defaults.update(**kwargs)
     return MiCasillero_models.ParametroSistema.objects.create(**defaults)
+
+
 def create_MiCasillero_PartidaArancelaria(**kwargs):
     defaults = {}
-    defaults["item_no"] = ""
-    defaults["descripcion"] = ""
-    defaults["partida_arancelaria"] = ""
-    defaults["impuesto_dai"] = ""
-    defaults["impuesto_isc"] = ""
-    defaults["impuesto_ispc"] = ""
-    defaults["impuesto_isv"] = ""
-    defaults["fecha_actualizacion"] = datetime.now()
+    defaults["item_no"] = random_string(8)
+    defaults["descripcion"] = "Test description"
+    defaults["partida_arancelaria"] = random_string(10)
+    defaults["impuesto_dai"] = Decimal("0.10")
+    defaults["impuesto_isc"] = Decimal("0.10")
+    defaults["impuesto_ispc"] = Decimal("0.05")
+    defaults["impuesto_isv"] = Decimal("0.15")
     defaults.update(**kwargs)
     return MiCasillero_models.PartidaArancelaria.objects.create(**defaults)
+
+
+def create_MiCasillero_Cliente(**kwargs):
+    defaults = {}
+    if "user" not in kwargs:
+        defaults["user"] = create_User()
+    defaults["nombres"] = "Test"
+    defaults["apellidos"] = "User"
+    defaults["direccion"] = "Test Address"
+    defaults["telefono"] = "12345678"
+    defaults["correo_electronico"] = "%s@test.com" % random_string(5)
+    defaults.update(**kwargs)
+
+    # Create system parameter if it doesn't exist
+    if not MiCasillero_models.ParametroSistema.objects.filter(
+        nombre_parametro="Prefijo del Código de Cliente"
+    ).exists():
+        create_MiCasillero_ParametroSistema(
+            nombre_parametro="Prefijo del Código de Cliente",
+            valor="CLI",
+            tipo_dato="STRING",
+        )
+
+    return MiCasillero_models.Cliente.objects.create(**defaults)
+
+
+def create_MiCasillero_Cotizacion(**kwargs):
+    defaults = {}
+    if "cliente" not in kwargs:
+        defaults["cliente"] = create_MiCasillero_Cliente()
+    defaults["estado"] = "Pendiente"
+    defaults["subtotal_articulos"] = Decimal("100.00")
+    defaults["total_flete"] = Decimal("10.00")
+    defaults["total_impuestos"] = Decimal("20.00")
+    defaults["total_estimado"] = Decimal("130.00")
+    defaults.update(**kwargs)
+
+    # Create system parameter if it doesn't exist
+    if not MiCasillero_models.ParametroSistema.objects.filter(
+        nombre_parametro="Días Validez Cotización"
+    ).exists():
+        create_MiCasillero_ParametroSistema(
+            nombre_parametro="Días Validez Cotización",
+            valor="30",
+            tipo_dato="INTEGER",
+        )
+
+    return MiCasillero_models.Cotizacion.objects.create(**defaults)
+
+
+def create_MiCasillero_Articulo(**kwargs):
+    defaults = {}
+    if "cotizacion" not in kwargs:
+        defaults["cotizacion"] = create_MiCasillero_Cotizacion()
+    if "partida_arancelaria" not in kwargs:
+        defaults["partida_arancelaria"] = create_MiCasillero_PartidaArancelaria()
+
+    defaults["descripcion_original"] = "Test article"
+    defaults["valor_articulo"] = Decimal("100.00")
+    defaults["largo"] = Decimal("10.00")
+    defaults["ancho"] = Decimal("10.00")
+    defaults["alto"] = Decimal("10.00")
+    defaults["peso"] = Decimal("5.00")
+    defaults.update(**kwargs)
+
+    # Create system parameter if it doesn't exist
+    if not MiCasillero_models.ParametroSistema.objects.filter(
+        nombre_parametro="Costo Flete por Libra en USD$"
+    ).exists():
+        create_MiCasillero_ParametroSistema(
+            nombre_parametro="Costo Flete por Libra en USD$",
+            valor="2.50",
+            tipo_dato="FLOAT",
+        )
+
+    return MiCasillero_models.Articulo.objects.create(**defaults)
+
+
+def create_MiCasillero_Envio(**kwargs):
+    defaults = {}
+    if "cotizacion" not in kwargs:
+        defaults["cotizacion"] = create_MiCasillero_Cotizacion()
+    if "cliente" not in kwargs:
+        defaults["cliente"] = defaults["cotizacion"].cliente
+
+    defaults["tracking_number_original"] = "TRK" + random_string(10)
+    defaults["tracking_number_sicarga"] = "SIC" + random_string(10)
+    defaults["direccion_entrega"] = "Test delivery address"
+    defaults["estado_envio"] = "Solicitado"
+    defaults["peso_estimado"] = Decimal("5.00")
+    defaults.update(**kwargs)
+
+    # Create system parameter if it doesn't exist (required by Envio.save())
+    if not MiCasillero_models.ParametroSistema.objects.filter(
+        nombre_parametro="Costo Flete por Libra en USD$"
+    ).exists():
+        create_MiCasillero_ParametroSistema(
+            nombre_parametro="Costo Flete por Libra en USD$",
+            valor="2.50",
+            tipo_dato="FLOAT",
+        )
+
+    return MiCasillero_models.Envio.objects.create(**defaults)
+
+
+def create_MiCasillero_Factura(**kwargs):
+    defaults = {}
+    if "envio" not in kwargs:
+        defaults["envio"] = create_MiCasillero_Envio()
+    if "cliente" not in kwargs:
+        defaults["cliente"] = defaults["envio"].cliente
+
+    defaults["estado_pago"] = "Pendiente"
+    defaults.update(**kwargs)
+    return MiCasillero_models.Factura.objects.create(**defaults)
+
+
+def create_MiCasillero_Alerta(**kwargs):
+    defaults = {}
+    if "envio" not in kwargs:
+        defaults["envio"] = create_MiCasillero_Envio()
+    if "cliente" not in kwargs:
+        defaults["cliente"] = defaults["envio"].cliente
+
+    defaults["tipo_alerta"] = "SMS"
+    defaults["mensaje"] = "Test alert message"
+    defaults["estado"] = "Enviado"
+    defaults.update(**kwargs)
+    return MiCasillero_models.Alerta.objects.create(**defaults)

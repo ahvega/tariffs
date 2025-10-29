@@ -51,7 +51,7 @@ export default function QuoteResults({ quote }: QuoteResultsProps) {
       const isLast = index === parts.length - 1;
       return (
         <span key={index}>
-          {isLast ? <strong><span className="font-mono">{part}</span></strong> : <span className="font-mono">{part}</span>}
+          {isLast ? <strong><small>{part}</small></strong> : <small>{part}</small>}
           {!isLast && <span className="mx-1">›</span>}
         </span>
       );
@@ -97,7 +97,7 @@ export default function QuoteResults({ quote }: QuoteResultsProps) {
           <div>
             <h3 className="font-bold text-gray-700 dark:text-gray-300">Total a Pagar</h3>
             <div className="font-mono text-3xl font-bold text-blue-600 dark:text-blue-400">
-              {formatCurrency(quote.total_incluido_valor)}
+              {formatCurrency(quote.cargos_totales)}
             </div>
           </div>
         </div>

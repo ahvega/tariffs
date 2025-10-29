@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from MiCasillero.models import PartidaArancelaria, Cliente, Cotizacion, Articulo
+
+from MiCasillero.models import Articulo, Cliente, Cotizacion, PartidaArancelaria
+
 
 class PartidaArancelariaAPISerializer(serializers.ModelSerializer):
     """
@@ -25,25 +27,27 @@ class PartidaArancelariaAPISerializer(serializers.ModelSerializer):
         max_weight_allowed (decimal): Maximum allowed weight (null if no limit)
         search_keywords (list): Keywords for search functionality
     """
+
     class Meta:
         model = PartidaArancelaria
         fields = [
-            'id',
-            'item_no',
-            'descripcion',
-            'partida_arancelaria',
-            'impuesto_dai',
-            'impuesto_isc',
-            'impuesto_ispc',
-            'impuesto_isv',
-            'courier_category',
-            'restrictions',
-            'package_type',
-            'requires_special_handling',
-            'special_instructions',
-            'max_weight_allowed',
-            'search_keywords'
+            "id",
+            "item_no",
+            "descripcion",
+            "partida_arancelaria",
+            "impuesto_dai",
+            "impuesto_isc",
+            "impuesto_ispc",
+            "impuesto_isv",
+            "courier_category",
+            "restrictions",
+            "package_type",
+            "requires_special_handling",
+            "special_instructions",
+            "max_weight_allowed",
+            "search_keywords",
         ]
+
 
 class ClienteAPISerializer(serializers.ModelSerializer):
     """
@@ -65,12 +69,24 @@ class ClienteAPISerializer(serializers.ModelSerializer):
         departamento (str): Department/State
         pais (str): Country
     """
+
     class Meta:
         model = Cliente
-        fields = ['id', 'codigo_cliente', 'nombres', 'apellidos', 'telefono',
-                 'correo_electronico', 'nombre_corto', 'direccion', 'ciudad',
-                 'departamento', 'pais']
-        read_only_fields = ['codigo_cliente', 'nombre_corto']
+        fields = [
+            "id",
+            "codigo_cliente",
+            "nombres",
+            "apellidos",
+            "telefono",
+            "correo_electronico",
+            "nombre_corto",
+            "direccion",
+            "ciudad",
+            "departamento",
+            "pais",
+        ]
+        read_only_fields = ["codigo_cliente", "nombre_corto"]
+
 
 class CotizacionAPISerializer(serializers.ModelSerializer):
     """
@@ -85,10 +101,12 @@ class CotizacionAPISerializer(serializers.ModelSerializer):
         fecha_creacion (datetime): Creation timestamp (read-only, auto-generated)
         estado (str): Quotation status
     """
+
     class Meta:
         model = Cotizacion
-        fields = ['id', 'cliente', 'fecha_creacion', 'estado']
-        read_only_fields = ['fecha_creacion']
+        fields = ["id", "cliente", "fecha_creacion", "estado"]
+        read_only_fields = ["fecha_creacion"]
+
 
 class ArticuloAPISerializer(serializers.ModelSerializer):
     """
@@ -118,14 +136,37 @@ class ArticuloAPISerializer(serializers.ModelSerializer):
         All tax fields are automatically calculated upon creation based on the
         associated partida arancelaria's tax rates.
     """
-    peso_volumetrico = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
-    peso_a_usar = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
+
+    peso_volumetrico = serializers.DecimalField(
+        max_digits=10, decimal_places=2, read_only=True
+    )
+    peso_a_usar = serializers.DecimalField(
+        max_digits=10, decimal_places=2, read_only=True
+    )
 
     class Meta:
         model = Articulo
-        fields = ['id', 'cotizacion', 'valor_articulo', 'largo', 'ancho', 'alto',
-                 'peso', 'peso_volumetrico', 'peso_a_usar', 'partida_arancelaria',
-                 'impuesto_dai', 'impuesto_isc', 'impuesto_ispc', 'impuesto_isv',
-                 'impuesto_total']
-        read_only_fields = ['impuesto_dai', 'impuesto_isc', 'impuesto_ispc',
-                           'impuesto_isv', 'impuesto_total'] 
+        fields = [
+            "id",
+            "cotizacion",
+            "valor_articulo",
+            "largo",
+            "ancho",
+            "alto",
+            "peso",
+            "peso_volumetrico",
+            "peso_a_usar",
+            "partida_arancelaria",
+            "impuesto_dai",
+            "impuesto_isc",
+            "impuesto_ispc",
+            "impuesto_isv",
+            "impuesto_total",
+        ]
+        read_only_fields = [
+            "impuesto_dai",
+            "impuesto_isc",
+            "impuesto_ispc",
+            "impuesto_isv",
+            "impuesto_total",
+        ]
