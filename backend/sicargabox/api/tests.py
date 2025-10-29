@@ -5,13 +5,8 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from MiCasillero.models import (
-    Articulo,
-    Cliente,
-    Cotizacion,
-    ParametroSistema,
-    PartidaArancelaria,
-)
+from MiCasillero.models import (Articulo, Cliente, Cotizacion,
+                                ParametroSistema, PartidaArancelaria)
 
 
 class PartidaArancelariaViewSetTestCase(TestCase):

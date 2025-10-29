@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from MiCasillero.models import Articulo, Cliente, Cotizacion, PartidaArancelaria
+from MiCasillero.models import (Articulo, Cliente, Cotizacion,
+                                PartidaArancelaria)
 
 
 class PartidaArancelariaAPISerializer(serializers.ModelSerializer):

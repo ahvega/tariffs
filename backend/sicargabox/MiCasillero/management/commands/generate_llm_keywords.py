@@ -45,9 +45,8 @@ except ImportError:
 
 try:
     import google.generativeai as genai
-    from google.api_core.exceptions import (
-        InternalServerError as GoogleInternalServerError,
-    )
+    from google.api_core.exceptions import \
+        InternalServerError as GoogleInternalServerError
     from google.api_core.exceptions import ResourceExhausted
 
     SUPPORTED_PROVIDERS.append("google")
