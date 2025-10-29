@@ -105,16 +105,34 @@ class PartidaArancelaria(models.Model):
     impuesto_isv = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Impuesto ISV", help_text="Impuesto Sobre Ventas")
 
     # New fields for courier-specific information
-    courier_category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='ALLOWED', verbose_name="Categoría de Courier")
-    restrictions = models.JSONField(default=list, blank=True, verbose_name="Restricciones")  # Lista de restricciones específicas
+    courier_category = models.CharField(
+        max_length=20, 
+        choices=CATEGORY_CHOICES, 
+        default='ALLOWED', 
+        verbose_name="Categoría de Courier"
+    )
+    restrictions = models.JSONField(
+        default=list, 
+        blank=True, 
+        verbose_name="Restricciones"
+    )  # Lista de restricciones específicas
     package_type = models.CharField(max_length=100, blank=True, verbose_name="Tipo de Paquete")
     max_weight_allowed = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True, verbose_name="Peso Máximo Permitido")
     requires_special_handling = models.BooleanField(default=False, verbose_name="Requiere Manejo Especial")
     special_instructions = models.TextField(blank=True, verbose_name="Instrucciones Especiales")
 
     # Search optimization fields
-    search_keywords = models.JSONField(default=list, blank=True, null=True, help_text="Palabras clave para mejorar la búsqueda", verbose_name="Palabras Clave de Búsqueda")  # Para keywords generados por AI
-    search_vector = SearchVectorField(null=True, verbose_name="Vector de Búsqueda") # Campo para búsqueda de texto completo
+    search_keywords = models.JSONField(
+        default=list, 
+        blank=True, 
+        null=True, 
+        help_text="Palabras clave para mejorar la búsqueda", 
+        verbose_name="Palabras Clave de Búsqueda"
+    )  # Para keywords generados por AI
+    search_vector = SearchVectorField(
+        null=True, 
+        verbose_name="Vector de Búsqueda"
+    ) # Campo para búsqueda de texto completo
 
     # Hierarchy fields for sibling detection and "Los demás" keyword generation
     chapter_code = models.CharField(
