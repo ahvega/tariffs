@@ -101,7 +101,7 @@ class PartidaArancelaria(models.Model):
     partida_arancelaria = models.CharField(max_length=50, verbose_name="Partida Arancelaria", help_text="Código HS completo")
     impuesto_dai = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Impuesto DAI", help_text="Derechos Arancelarios a la Importación")
     impuesto_isc = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Impuesto ISC", help_text="Impuesto Selectivo al Consumo")
-    impuesto_ispc = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Impuesto ISPC", help_text="Impuesto de Solidaridad para la Protección del Consumidor")
+    impuesto_ispc = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Impuesto ISPC", help_text="Impuesto Sobre Produccción y Consumo")
     impuesto_isv = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Impuesto ISV", help_text="Impuesto Sobre Ventas")
 
     # New fields for courier-specific information
