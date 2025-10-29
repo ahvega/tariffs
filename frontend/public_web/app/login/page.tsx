@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { quoteStorage } from '@/lib/quoteStorage';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -30,9 +31,16 @@ export default function LoginPage() {
       if (result?.error) {
         setError('Credenciales inválidas. Por favor, intenta de nuevo.');
       } else if (result?.ok) {
-        // Redirect to the callback URL if provided, otherwise to home
-        const callbackUrl = searchParams.get('callbackUrl') || '/';
-        router.push(callbackUrl);
+        // Check if user has a quote in storage
+        const hasQuote = quoteStorage.has();
+        if (hasQuote) {
+          // Redirect to shipping request with quote
+          router.push('/envio/crear');
+        } else {
+          // Check for callback URL or redirect to quote calculator
+          const callbackUrl = searchParams.get('callbackUrl') || '/cotizador';
+          router.push(callbackUrl);
+        }
       }
     } catch (error) {
       console.error('Login error:', error);

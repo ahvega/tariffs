@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, User
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 
@@ -239,6 +239,14 @@ class RegisterSerializer(serializers.ModelSerializer):
         """Create user and associated Cliente record"""
         validated_data.pop("password2")
         user = User.objects.create_user(**validated_data)
+
+        # Assign user to UsuariosClientes group
+        try:
+            clientes_group = Group.objects.get(name="UsuariosClientes")
+            user.groups.add(clientes_group)
+        except Group.DoesNotExist:
+            # Log warning but don't fail registration
+            pass
 
         # Create associated Cliente record
         Cliente.objects.create(

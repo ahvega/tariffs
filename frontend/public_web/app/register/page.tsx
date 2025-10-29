@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { apiClient } from '@/lib/api';
 import { signIn } from 'next-auth/react';
+import { quoteStorage } from '@/lib/quoteStorage';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -36,7 +37,15 @@ export default function RegisterPage() {
         });
 
         if (loginResult?.ok) {
-          router.push('/');
+          // Check if user has a quote in storage
+          const hasQuote = quoteStorage.has();
+          if (hasQuote) {
+            // Redirect to shipping request with quote
+            router.push('/envio/crear');
+          } else {
+            // No quote, redirect to quote calculator
+            router.push('/cotizador');
+          }
         }
       } else {
         setErrors({ general: ['Error al registrar el usuario. Por favor, intenta de nuevo.'] });
