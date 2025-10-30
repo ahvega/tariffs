@@ -266,13 +266,13 @@ python server.py
 
 For detailed development plans, refer to:
 
-- `DEVELOPMENT_PLAN.md` - Overall project roadmap and system scope
-- `PUBLIC_QUOTE_CALCULATOR_AND_ONBOARDING.md` - Public quote calculator and client registration
-- `SHIPMENT_TRACKING_AND_STATUS_MANAGEMENT.md` - Tracking system and status updates
-- `LIQUIDATION_AND_INVOICING_SYSTEM.md` - Final cost calculation and PDF invoice generation
-- `ELASTICSEARCH_ADMIN_MANAGEMENT.md` - Admin interface for Elasticsearch operations
-- `FRONTEND_CUSTOMER_PORTAL.md` - Next.js customer portal (planned)
-- `FRONTEND_STAFF_PORTAL.md` - Next.js staff portal (planned)
+- `.planning/DEVELOPMENT_PLAN.md` - Overall project roadmap and system scope
+- `.planning/PUBLIC_QUOTE_CALCULATOR_AND_ONBOARDING.md` - Public quote calculator and client registration
+- `.planning/SHIPMENT_TRACKING_AND_STATUS_MANAGEMENT.md` - Tracking system and status updates
+- `.planning/LIQUIDATION_AND_INVOICING_SYSTEM.md` - Final cost calculation and PDF invoice generation
+- `.planning/ELASTICSEARCH_ADMIN_MANAGEMENT.md` - Admin interface for Elasticsearch operations
+- `.planning/FRONTEND_CUSTOMER_PORTAL.md` - Next.js customer portal (planned)
+- `.planning/FRONTEND_STAFF_PORTAL.md` - Next.js staff portal (planned)
 
 ### Current Phase: Backend Foundation
 
