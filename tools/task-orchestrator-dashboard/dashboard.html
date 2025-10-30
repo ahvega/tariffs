@@ -286,7 +286,7 @@
     </div>
 
     <script>
-        const API_BASE = 'http://localhost:8000/api';
+        const API_BASE = 'http://localhost:8888/api';
         const REFRESH_INTERVAL = 10000; // 10 seconds
         let countdownInterval;
         let refreshTimer;
@@ -394,7 +394,7 @@
                     const progress = calculateProgress(feature.tasks);
                     const tasksHtml = feature.tasks.map(task => `
                         <div class="task-item">
-                            <span class="task-name">${task.name}</span>
+                            <span class="task-name">${task.title}</span>
                             ${getStatusBadge(task.status)}
                         </div>
                     `).join('');
@@ -449,7 +449,7 @@
                 renderProjects(projects);
 
             } catch (error) {
-                showError(`Failed to load dashboard: ${error.message}. Make sure the server is running on port 8000.`);
+                showError(`Failed to load dashboard: ${error.message}. Make sure the server is running on port 8888.`);
             }
         }
 
