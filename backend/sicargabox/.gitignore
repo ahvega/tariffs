@@ -34,6 +34,9 @@ static/src/*
 # Media files
 media/
 
+# User uploaded files
+invoices/
+
 # Local settings
 local_settings.py
 
