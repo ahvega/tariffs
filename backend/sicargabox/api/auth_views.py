@@ -20,6 +20,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from MiCasillero.models import Cliente
 from .serializers import RegisterSerializer, UserSerializer
 
 
@@ -152,13 +153,25 @@ def login(request):
 @permission_classes([IsAuthenticated])
 def me(request):
     """
-    Get current authenticated user information.
+    Get current authenticated user information including Cliente data.
 
     Requires JWT authentication via Authorization header.
 
     Returns:
-        - 200: Current user information
+        - 200: Current user information with cliente data
         - 401: Not authenticated or invalid token
     """
-    serializer = UserSerializer(request.user)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    user_data = UserSerializer(request.user).data
+
+    # Try to get associated Cliente
+    try:
+        cliente = Cliente.objects.get(user=request.user)
+        user_data['cliente'] = {
+            'id': cliente.id,
+            'codigo_cliente': cliente.codigo_cliente,
+            'nombre_completo': f"{request.user.first_name} {request.user.last_name}",
+        }
+    except Cliente.DoesNotExist:
+        user_data['cliente'] = None
+
+    return Response(user_data, status=status.HTTP_200_OK)

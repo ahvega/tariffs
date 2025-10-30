@@ -1,12 +1,12 @@
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import OpenApiParameter, extend_schema
-from rest_framework import filters, viewsets
-from rest_framework.decorators import action, permission_classes
+from rest_framework import filters, status, viewsets
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from MiCasillero.models import Articulo, Cliente, Cotizacion, PartidaArancelaria
+from MiCasillero.models import Articulo, Cliente, Cotizacion, ParametroSistema, PartidaArancelaria
 
 from .serializers import (
     ArticuloAPISerializer,
@@ -229,3 +229,37 @@ class ArticuloViewSet(viewsets.ModelViewSet):
         articulo = serializer.save()
         articulo.calcular_impuestos()
         articulo.save()
+
+
+@extend_schema(
+    tags=["System Parameters"],
+    responses={200: dict},
+)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_parametros_publicos(request):
+    """
+    Get public system parameters for frontend use.
+
+    Returns system parameters needed by the frontend including:
+    - direccion_consolidador: Miami warehouse address
+    - direccion_oficina: Honduras office address for pickup
+    - whatsapp_oficina: Office WhatsApp number
+    - entrega_a_domicilio: Whether home delivery service is available
+
+    Requires authentication.
+    """
+    try:
+        parametros = {
+            'direccion_consolidador': ParametroSistema.objects.get_valor('Dirección Consolidador'),
+            'direccion_oficina': ParametroSistema.objects.get_valor('Dirección Oficina'),
+            'whatsapp_oficina': ParametroSistema.objects.get_valor('WhatsApp Oficina'),
+            'telefono_oficina': ParametroSistema.objects.get_valor('Teléfono Oficina'),
+            'entrega_a_domicilio': ParametroSistema.objects.get_valor('Entrega a Domicilio'),
+        }
+        return Response({'success': True, 'data': parametros}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response(
+            {'success': False, 'error': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )

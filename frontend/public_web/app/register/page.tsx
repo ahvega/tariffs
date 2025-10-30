@@ -43,8 +43,8 @@ export default function RegisterPage() {
             // Redirect to shipping request with quote
             router.push('/envio/crear');
           } else {
-            // No quote, redirect to quote calculator
-            router.push('/cotizador');
+            // No quote, redirect to welcome page to show Miami address
+            router.push('/bienvenida');
           }
         }
       } else {

@@ -53,6 +53,7 @@ export interface QuoteCalculation {
   partida_descripcion: string;
   partida_arancelaria_numero: string;
   descripcion_original: string;
+  partida_arancelaria_id?: number;  // For shipping request creation
 }
 
 export interface QuoteRequest {
@@ -92,6 +93,44 @@ export interface RegisterRequest {
 export interface LoginRequest {
   username: string;
   password: string;
+}
+
+export interface ShippingRequest {
+  tracking_number_original: string;
+  direccion_entrega: string;
+  ciudad?: string;
+  departamento?: string;
+  instrucciones_especiales?: string;
+  factura_compra?: File;
+  // Quote data
+  valor_articulo: number;
+  peso: number;
+  largo?: number;
+  ancho?: number;
+  alto?: number;
+  partida_arancelaria_id: number;
+  descripcion_original: string;
+}
+
+export interface ShippingResponse {
+  id: number;
+  tracking_number_sicarga: string;
+  tracking_number_original: string;
+  estado_envio: string;
+  estado_envio_display: string;
+  cliente_nombre: string;
+  direccion_entrega: string;
+  instrucciones_especiales: string;
+  peso_estimado: number;
+  fecha_solicitud: string;
+}
+
+export interface ParametrosSistema {
+  direccion_consolidador: string;
+  direccion_oficina: string;
+  whatsapp_oficina: string;
+  telefono_oficina: string;
+  entrega_a_domicilio: boolean;
 }
 
 class ApiClient {
@@ -258,6 +297,140 @@ class ApiClient {
       return await response.json();
     } catch (error) {
       console.error('Error refreshing token:', error);
+      return null;
+    }
+  }
+
+  // Shipping methods
+  async createShippingRequest(
+    shippingRequest: ShippingRequest,
+    accessToken: string
+  ): Promise<ShippingResponse | null> {
+    try {
+      const formData = new FormData();
+
+      // Add shipping information
+      formData.append('tracking_number_original', shippingRequest.tracking_number_original);
+      formData.append('direccion_entrega', shippingRequest.direccion_entrega);
+      if (shippingRequest.ciudad) formData.append('ciudad', shippingRequest.ciudad);
+      if (shippingRequest.departamento) formData.append('departamento', shippingRequest.departamento);
+      if (shippingRequest.instrucciones_especiales) {
+        formData.append('instrucciones_especiales', shippingRequest.instrucciones_especiales);
+      }
+      if (shippingRequest.factura_compra) {
+        formData.append('factura_compra', shippingRequest.factura_compra);
+      }
+
+      // Add quote data
+      formData.append('valor_articulo', shippingRequest.valor_articulo.toString());
+      formData.append('peso', shippingRequest.peso.toString());
+      if (shippingRequest.largo) formData.append('largo', shippingRequest.largo.toString());
+      if (shippingRequest.ancho) formData.append('ancho', shippingRequest.ancho.toString());
+      if (shippingRequest.alto) formData.append('alto', shippingRequest.alto.toString());
+      formData.append('partida_arancelaria_id', shippingRequest.partida_arancelaria_id.toString());
+      formData.append('descripcion_original', shippingRequest.descripcion_original);
+
+      const response = await fetch(`${this.baseUrl}/api/shipping/request/`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error creating shipping request:', errorData);
+        throw new Error(JSON.stringify(errorData));
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error creating shipping request:', error);
+      return null;
+    }
+  }
+
+  async updateShippingRequest(
+    envioId: number,
+    updates: {
+      tracking_number_original?: string;
+      factura_compra?: File;
+    },
+    accessToken: string
+  ): Promise<ShippingResponse | null> {
+    try {
+      const formData = new FormData();
+
+      // Add updates if provided
+      if (updates.tracking_number_original) {
+        formData.append('tracking_number_original', updates.tracking_number_original);
+      }
+      if (updates.factura_compra) {
+        formData.append('factura_compra', updates.factura_compra);
+      }
+
+      const response = await fetch(`${this.baseUrl}/api/shipping/update/${envioId}/`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error updating shipping request:', errorData);
+        throw new Error(JSON.stringify(errorData));
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error updating shipping request:', error);
+      return null;
+    }
+  }
+
+  async getUserEnvios(accessToken: string): Promise<ShippingResponse[]> {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/shipping/list/`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Error fetching user envíos');
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching user envíos:', error);
+      return [];
+    }
+  }
+
+  async getParametrosSistema(accessToken: string): Promise<ParametrosSistema | null> {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/parametros/publicos/`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Error fetching system parameters');
+      }
+
+      const data: { success: boolean; data: ParametrosSistema } = await response.json();
+
+      if (data.success) {
+        return data.data;
+      } else {
+        throw new Error('Failed to fetch system parameters');
+      }
+    } catch (error) {
+      console.error('Error fetching system parameters:', error);
       return null;
     }
   }

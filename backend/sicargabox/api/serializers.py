@@ -2,7 +2,7 @@ from django.contrib.auth.models import Group, User
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 
-from MiCasillero.models import Articulo, Cliente, Cotizacion, PartidaArancelaria
+from MiCasillero.models import Articulo, Cliente, Cotizacion, Envio, PartidaArancelaria
 
 
 class PartidaArancelariaAPISerializer(serializers.ModelSerializer):
@@ -257,3 +257,73 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
 
         return user
+
+
+class ShippingRequestSerializer(serializers.Serializer):
+    """
+    Serializer for creating a shipping request (Envio).
+
+    Accepts quote data and shipping information to create an Envio record.
+    """
+    # Quote reference
+    quote_id = serializers.IntegerField(required=False, help_text="Cotizacion ID if already saved")
+
+    # Quote data (if no quote_id provided)
+    valor_articulo = serializers.DecimalField(max_digits=10, decimal_places=2, required=False)
+    peso = serializers.DecimalField(max_digits=8, decimal_places=2, required=False)
+    largo = serializers.DecimalField(max_digits=5, decimal_places=2, required=False)
+    ancho = serializers.DecimalField(max_digits=5, decimal_places=2, required=False)
+    alto = serializers.DecimalField(max_digits=5, decimal_places=2, required=False)
+    partida_arancelaria_id = serializers.IntegerField(required=False)
+    descripcion_original = serializers.CharField(max_length=500, required=False)
+
+    # Shipping information
+    tracking_number_original = serializers.CharField(
+        max_length=50,
+        required=False,
+        allow_blank=True,
+        help_text="US tracking number (optional - can be added later)"
+    )
+    direccion_entrega = serializers.CharField(max_length=255, help_text="Delivery address")
+    ciudad = serializers.CharField(max_length=100, required=False)
+    departamento = serializers.CharField(max_length=100, required=False)
+    instrucciones_especiales = serializers.CharField(required=False, allow_blank=True)
+
+    def validate(self, attrs):
+        """Validate that either quote_id or quote data is provided"""
+        if not attrs.get('quote_id') and not all([
+            attrs.get('valor_articulo'),
+            attrs.get('peso'),
+            attrs.get('partida_arancelaria_id'),
+        ]):
+            raise serializers.ValidationError(
+                "Must provide either quote_id or complete quote data (valor_articulo, peso, partida_arancelaria_id)"
+            )
+        return attrs
+
+
+class EnvioSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Envio (Shipment).
+
+    Returns shipment information including tracking numbers, status, and delivery details.
+    """
+    cliente_nombre = serializers.CharField(source='cliente.nombre_corto', read_only=True)
+    estado_envio_display = serializers.CharField(source='get_estado_envio_display', read_only=True)
+
+    class Meta:
+        model = Envio
+        fields = [
+            'id',
+            'tracking_number_sicarga',
+            'tracking_number_original',
+            'estado_envio',
+            'estado_envio_display',
+            'cliente_nombre',
+            'direccion_entrega',
+            'instrucciones_especiales',
+            'peso_estimado',
+            'peso_real',
+            'fecha_solicitud',
+        ]
+        read_only_fields = ['tracking_number_sicarga', 'fecha_solicitud']

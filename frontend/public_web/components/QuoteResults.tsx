@@ -1,9 +1,11 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { QuoteCalculation } from '@/lib/api';
+import { QuoteCalculation, apiClient, User } from '@/lib/api';
 import { quoteStorage } from '@/lib/quoteStorage';
+import ShippingAddressDisplay from './ShippingAddressDisplay';
 
 interface QuoteResultsProps {
   quote: QuoteCalculation;
@@ -12,6 +14,64 @@ interface QuoteResultsProps {
 export default function QuoteResults({ quote }: QuoteResultsProps) {
   const router = useRouter();
   const { data: session, status } = useSession();
+
+  // State for address display
+  const [showAddress, setShowAddress] = useState(false);
+  const [clienteInfo, setClienteInfo] = useState<{
+    nombre_completo: string;
+    codigo_cliente: string;
+  } | null>(null);
+  const [consolidatorAddress, setConsolidatorAddress] = useState<string>('');
+  const [addressLoading, setAddressLoading] = useState(false);
+
+  // Fetch address data for authenticated users
+  useEffect(() => {
+    const fetchAddressData = async () => {
+      if (status === 'authenticated' && session) {
+        try {
+          setAddressLoading(true);
+          const accessToken = (session as any).accessToken;
+
+          if (!accessToken) return;
+
+          // Fetch current user with cliente info
+          const userData = await apiClient.getCurrentUser(accessToken) as User & {
+            cliente?: {
+              id: number;
+              codigo_cliente: string;
+              nombre_completo: string;
+            };
+          };
+
+          if (userData && userData.cliente) {
+            setClienteInfo({
+              nombre_completo: userData.cliente.nombre_completo,
+              codigo_cliente: userData.cliente.codigo_cliente,
+            });
+
+            // Fetch system parameters
+            const parametros = await apiClient.getParametrosSistema(accessToken);
+            if (parametros) {
+              setConsolidatorAddress(parametros.direccion_consolidador);
+
+              // Check localStorage to auto-expand on first view
+              const hasSeenAddress = localStorage.getItem('hasSeenMiamiAddress');
+              if (!hasSeenAddress) {
+                setShowAddress(true);
+                localStorage.setItem('hasSeenMiamiAddress', 'true');
+              }
+            }
+          }
+        } catch (err) {
+          console.error('Error fetching address data:', err);
+        } finally {
+          setAddressLoading(false);
+        }
+      }
+    };
+
+    fetchAddressData();
+  }, [status, session]);
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('es-HN', {
@@ -251,6 +311,63 @@ export default function QuoteResults({ quote }: QuoteResultsProps) {
           </div>
         </div>
       </div>
+
+      {/* Miami Address Section - For Authenticated Users */}
+      {status === 'authenticated' && clienteInfo && consolidatorAddress && (
+        <div className="mb-6 border-t border-gray-200 dark:border-gray-700 pt-6">
+          <button
+            onClick={() => setShowAddress(!showAddress)}
+            className="w-full flex items-center justify-between p-4 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">📦</span>
+              <div className="text-left">
+                <h3 className="font-semibold text-gray-900 dark:text-white">
+                  Dirección de tu Casillero en Miami
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Usa esta dirección al realizar tu compra
+                </p>
+              </div>
+            </div>
+            <svg
+              className={`w-5 h-5 text-gray-600 dark:text-gray-400 transition-transform ${
+                showAddress ? 'rotate-180' : ''
+              }`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          {showAddress && (
+            <div className="mt-4 animate-fadeIn">
+              <ShippingAddressDisplay
+                clientName={clienteInfo.nombre_completo}
+                clientCode={clienteInfo.codigo_cliente}
+                consolidatorAddress={consolidatorAddress}
+                showInstructions={false}
+              />
+              <div className="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                <div className="flex items-start gap-2">
+                  <span className="text-xl">⚠️</span>
+                  <div>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white mb-1">
+                      Importante
+                    </p>
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                      Asegúrate de usar esta dirección exactamente como aparece arriba al realizar tu compra.
+                      Incluye tu nombre y código de cliente para que podamos identificar tu paquete cuando llegue a Miami.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Action Buttons */}
       <div className="flex justify-end gap-3 mt-6">

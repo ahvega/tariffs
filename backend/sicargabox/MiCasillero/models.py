@@ -44,10 +44,15 @@ class ParametroSistema(models.Model):
         ('BOOLEAN', 'Boolean'),
     ]
 
-    nombre_parametro = models.CharField(max_length=50, unique=True)
+    nombre_parametro = models.CharField(max_length=50, unique=True, verbose_name="Nombre del Parámetro")
     valor = models.CharField(max_length=255)
-    tipo_dato = models.CharField(max_length=10, choices=TIPO_DATO_CHOICES)
-    fecha_actualizacion = models.DateTimeField(auto_now=True)
+    tipo_dato = models.CharField(max_length=10, choices=TIPO_DATO_CHOICES, verbose_name="Tipo de Dato")
+    descripcion = models.TextField(
+        blank=True, 
+        verbose_name="Descripción",
+        help_text="Descripción del parámetro y su propósito"
+    )
+    fecha_actualizacion = models.DateTimeField(auto_now=True, verbose_name="Fecha de Actualización")
 
     # Annotate the manager so static analyzers (Pylance/mypy) know about custom methods
     if TYPE_CHECKING:
@@ -350,7 +355,7 @@ class Cliente(models.Model):
                 remove_perm('delete_cliente', user, self)
 
     def __str__(self):
-        return f"{self.user.username} - {self.nombre_corto}"
+        return f"{self.nombre_corto} ({self.user.username}) - {self.codigo_cliente}"
 
     def get_absolute_url(self):
         return reverse("MiCasillero_Cliente_detail", args=(self.pk,))
@@ -443,6 +448,7 @@ class Envio(models.Model):
         pk: int
     ESTADO_ENVIO_CHOICES = [
         ('Solicitado', 'Solicitud Recibida'),
+        ('Documentación Pendiente', 'Documentación Pendiente'),
         ('Recibido en Miami', 'Recibido en Miami'),
         ('Procesado', 'Procesado y Listo para Envío'),
         ('En tránsito a Honduras', 'En Tránsito a Honduras'),

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { apiClient, type PartidaArancelaria, type QuoteCalculation, type QuoteRequest } from '@/lib/api';
 import { quoteStorage } from '@/lib/quoteStorage';
-import ThemeToggle from '@/components/ThemeToggle';
+import Header from '@/components/Header';
 import QuoteResults from '@/components/QuoteResults';
 
 export default function CotizadorPage() {
@@ -149,6 +149,8 @@ export default function CotizadorPage() {
       const quote = await apiClient.calculateQuote(quoteRequest);
 
       if (quote) {
+        // Add partida_arancelaria_id to quote for shipping request
+        quote.partida_arancelaria_id = selectedPartida.id;
         setQuoteResult(quote);
 
         // Save quote to session storage
@@ -173,13 +175,7 @@ export default function CotizadorPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
-      {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-md">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">SicargaBox</h1>
-          <ThemeToggle />
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">

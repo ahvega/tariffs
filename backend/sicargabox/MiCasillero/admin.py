@@ -9,6 +9,15 @@ class ParametroSistemaAdminForm(forms.ModelForm):
     class Meta:
         model = models.ParametroSistema
         fields = "__all__"
+        widgets = {
+            "descripcion": forms.Textarea(
+                attrs={
+                    "rows": 3,
+                    "style": "width:100%;",  # full row
+                }
+            ),
+        }
+
 
 
 class ParametroSistemaAdmin(GuardedModelAdmin):
