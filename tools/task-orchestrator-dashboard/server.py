@@ -163,6 +163,9 @@ async def get_projects():
         projects = []
         for project_row in projects_rows:
             project_dict = dict_from_row(project_row)
+            # Projects use 'name' directly, no 'title' to pop
+            # if 'title' in project_dict:
+            #     project_dict['name'] = project_dict.pop('title')
             project_id = project_dict["id"]
 
             # Get features for this project
@@ -174,6 +177,9 @@ async def get_projects():
             features = []
             for feature_row in features_rows:
                 feature_dict = dict_from_row(feature_row)
+                # Features use 'name' directly, no 'title' to pop
+                # if 'title' in feature_dict:
+                #     feature_dict['name'] = feature_dict.pop('title')
                 feature_id = feature_dict["id"]
 
                 # Get tasks for this feature
@@ -182,7 +188,11 @@ async def get_projects():
                     (feature_id,)
                 ).fetchall()
 
-                tasks = [TaskStatus(**dict_from_row(task_row)) for task_row in tasks_rows]
+                tasks = []
+                for task_row in tasks_rows:
+                    task_dict = dict_from_row(task_row)
+                    task_dict['name'] = task_dict.pop('title') # Map title to name for TaskStatus model
+                    tasks.append(TaskStatus(**task_dict))
 
                 feature_dict["tasks"] = tasks
                 features.append(Feature(**feature_dict))
@@ -211,6 +221,9 @@ async def get_project(project_id: str):
             raise HTTPException(status_code=404, detail="Project not found")
 
         project_dict = dict_from_row(project_row)
+        # Projects use 'name' directly, no 'title' to pop
+        # if 'title' in project_dict:
+        #     project_dict['name'] = project_dict.pop('title')
 
         # Get features
         features_rows = cursor.execute(
@@ -221,6 +234,9 @@ async def get_project(project_id: str):
         features = []
         for feature_row in features_rows:
             feature_dict = dict_from_row(feature_row)
+            # Features use 'name' directly, no 'title' to pop
+            # if 'title' in feature_dict:
+            #     feature_dict['name'] = feature_dict.pop('title')
             feature_id = feature_dict["id"]
 
             # Get tasks
@@ -229,7 +245,11 @@ async def get_project(project_id: str):
                 (feature_id,)
             ).fetchall()
 
-            tasks = [TaskStatus(**dict_from_row(task_row)) for task_row in tasks_rows]
+            tasks = []
+            for task_row in tasks_rows:
+                task_dict = dict_from_row(task_row)
+                task_dict['name'] = task_dict.pop('title') # Map title to name for TaskStatus model
+                tasks.append(TaskStatus(**task_dict))
             feature_dict["tasks"] = tasks
             features.append(Feature(**feature_dict))
 
@@ -261,7 +281,7 @@ if __name__ == "__main__":
 
     print("🚀 Starting Task Orchestrator Dashboard Server")
     print(f"📁 Database: {Path(DEFAULT_DB_PATH).absolute()}")
-    print(f"🌐 Dashboard: http://localhost:8000")
-    print(f"📖 API Docs: http://localhost:8000/docs")
+    print(f"🌐 Dashboard: http://localhost:8888")
+    print(f"📖 API Docs: http://localhost:8888/docs")
 
-    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")
+    uvicorn.run(app, host="0.0.0.0", port=8888, log_level="info")

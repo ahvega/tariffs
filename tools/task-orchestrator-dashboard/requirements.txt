@@ -2,13 +2,10 @@
 # Python 3.8+
 
 # Web framework
-fastapi==0.109.0
+fastapi==0.120.1
 
 # ASGI server
-uvicorn[standard]==0.27.0
+uvicorn==0.38.0
 
 # Data validation
-pydantic==2.5.3
-
-# Python environment variables
-python-dotenv==1.0.0
+pydantic==2.12.3
