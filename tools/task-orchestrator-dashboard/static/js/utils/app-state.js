@@ -110,4 +110,4 @@ class AppState {
 }
 
 // Create global instance
-const appState = new AppState();
+window.appState = new AppState();
