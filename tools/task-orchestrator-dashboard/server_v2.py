@@ -634,7 +634,7 @@ async def get_tasks(
     feature_id: Optional[str] = Query(None),
     status: Optional[str] = Query(None),
     priority: Optional[str] = Query(None),
-    limit: Optional[int] = Query(100)
+    limit: Optional[int] = Query(1000)  # Increased from 100 to handle larger projects
 ):
     """Get all tasks with computed project_id, with optional filtering"""
     pool = get_db_pool()
