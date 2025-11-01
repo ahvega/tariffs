@@ -111,6 +111,44 @@
             color: var(--primary);
         }
 
+        .btn-refresh {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--success);
+            border: 1px solid var(--success);
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-refresh:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn-refresh:active {
+            transform: translateY(0);
+        }
+
+        .btn-refresh.loading {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-refresh .refresh-icon {
+            font-size: 1rem;
+            transition: transform 0.3s;
+        }
+
+        .btn-refresh.loading .refresh-icon {
+            animation: spin 1s linear infinite;
+        }
+
         .project-icon {
             font-size: 1rem;
         }
@@ -941,6 +979,10 @@
             <button class="btn-project-selector" id="btn-project-selector">
                 <span class="project-icon">📁</span>
                 <span id="current-project-name">Select Project</span>
+            </button>
+            <button class="btn-refresh" id="btn-refresh" title="Refresh database to load latest changes">
+                <span class="refresh-icon">🔄</span>
+                <span>Refresh Data</span>
             </button>
             <div class="connection-status">
                 <div class="status-indicator" id="connection-status"></div>

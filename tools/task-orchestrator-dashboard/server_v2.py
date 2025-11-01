@@ -355,6 +355,44 @@ async def health_check():
         }
 
 
+@app.post("/api/refresh")
+async def refresh_database():
+    """
+    Refresh database connections to pick up latest data.
+    
+    Useful when database is in read-only immutable mode and needs to reload
+    changes made by other processes (e.g., MCP Task Orchestrator container).
+    """
+    try:
+        pool = get_db_pool()
+        
+        # Close all existing connections
+        pool.close_all()
+        logger.info("Closed all database connections for refresh")
+        
+        # Connections will be automatically recreated on next request
+        # Force a test connection to verify it works
+        with pool.get_connection() as conn:
+            cursor = conn.cursor()
+            projects_count = cursor.execute("SELECT COUNT(*) FROM projects").fetchone()[0]
+        
+        logger.info(f"Database refreshed successfully ({projects_count} projects)")
+        
+        return {
+            "success": True,
+            "message": "Database connections refreshed successfully",
+            "projects_count": projects_count,
+            "timestamp": datetime.now().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Failed to refresh database: {e}")
+        return {
+            "success": False,
+            "message": f"Failed to refresh database: {str(e)}",
+            "timestamp": datetime.now().isoformat()
+        }
+
+
 @app.get("/api/stats")
 async def get_stats():
     """Get overall statistics"""

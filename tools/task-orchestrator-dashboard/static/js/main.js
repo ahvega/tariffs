@@ -54,8 +54,72 @@ class DashboardApp {
             } else {
                 console.warn('DetailModal component not loaded');
             }
+
+            // Initialize refresh button
+            this.setupRefreshButton();
         } catch (error) {
             console.error('Error initializing global components:', error);
+        }
+    }
+
+    /**
+     * Setup refresh button handler
+     */
+    setupRefreshButton() {
+        const refreshBtn = document.getElementById('btn-refresh');
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', async () => {
+                await this.refreshDatabase();
+            });
+        }
+    }
+
+    /**
+     * Refresh database connections and reload current view
+     */
+    async refreshDatabase() {
+        const refreshBtn = document.getElementById('btn-refresh');
+        const refreshIcon = refreshBtn.querySelector('.refresh-icon');
+        
+        try {
+            // Add loading state
+            refreshBtn.classList.add('loading');
+            refreshBtn.disabled = true;
+            
+            console.log('Refreshing database...');
+            
+            // Call refresh endpoint
+            const response = await fetch('/api/refresh', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                console.log('Database refreshed:', result.message);
+                Helpers.showToast('Data refreshed successfully!', 'success');
+                
+                // Reload current view to show updated data
+                await this.loadView(this.currentView);
+                
+                // Reload project selector if it's open
+                if (window.projectSelector) {
+                    window.projectSelector.loadProjects();
+                }
+            } else {
+                console.error('Refresh failed:', result.message);
+                Helpers.showToast('Failed to refresh data: ' + result.message, 'error');
+            }
+        } catch (error) {
+            console.error('Error refreshing database:', error);
+            Helpers.showToast('Error refreshing data', 'error');
+        } finally {
+            // Remove loading state
+            refreshBtn.classList.remove('loading');
+            refreshBtn.disabled = false;
         }
     }
 
