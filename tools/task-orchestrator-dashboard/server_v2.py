@@ -675,18 +675,12 @@ async def get_tasks(
         tasks_rows = cursor.execute(query, tuple(params)).fetchall()
 
         tasks = []
-        for i, task_row in enumerate(tasks_rows):
+        for task_row in tasks_rows:
             task_dict = _task_from_row(task_row)
-            
-            # Debug first few tasks
-            if i < 3:
-                logger.info(f"Task {i}: title='{task_dict.get('title', 'N/A')[:30]}', project_id={task_dict.get('project_id')}, computed_project_id={task_dict.get('computed_project_id')}")
             
             # Use computed_project_id as the effective project_id
             if 'computed_project_id' in task_dict:
                 task_dict['project_id'] = task_dict['computed_project_id']
-                if i < 3:
-                    logger.info(f"  -> Set project_id to: {task_dict.get('project_id')}")
             
             tasks.append(TaskStatus(**task_dict))
 
