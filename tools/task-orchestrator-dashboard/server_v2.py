@@ -635,31 +635,39 @@ async def get_tasks(
     priority: Optional[str] = Query(None),
     limit: Optional[int] = Query(100)
 ):
-    """Get all tasks, with optional filtering"""
+    """Get all tasks with computed project_id, with optional filtering"""
     pool = get_db_pool()
 
     with pool.get_connection() as conn:
         cursor = conn.cursor()
 
-        # Build query
-        query = "SELECT * FROM tasks WHERE 1=1"
+        # Build query with LEFT JOIN to get project_id from features
+        # Use COALESCE to get project_id from task directly or from feature
+        query = """
+            SELECT 
+                t.*,
+                COALESCE(t.project_id, f.project_id) as computed_project_id
+            FROM tasks t
+            LEFT JOIN features f ON t.feature_id = f.id
+            WHERE 1=1
+        """
         params = []
 
         if feature_id:
             f_bytes, f_str = _uuid_params(feature_id)
             f_nodash = f_str.replace('-', '') if f_str else None
-            query += " AND (feature_id = ? OR LOWER(CAST(feature_id AS TEXT)) = LOWER(?) OR LOWER(REPLACE(CAST(feature_id AS TEXT), '-', '')) = LOWER(?))"
+            query += " AND (t.feature_id = ? OR LOWER(CAST(t.feature_id AS TEXT)) = LOWER(?) OR LOWER(REPLACE(CAST(t.feature_id AS TEXT), '-', '')) = LOWER(?))"
             params.extend([f_bytes, f_str, f_nodash])
 
         if status:
-            query += " AND status = ?"
+            query += " AND t.status = ?"
             params.append(status)
 
         if priority:
-            query += " AND priority = ?"
+            query += " AND t.priority = ?"
             params.append(priority)
 
-        query += " ORDER BY created_at DESC LIMIT ?"
+        query += " ORDER BY t.created_at DESC LIMIT ?"
         params.append(limit)
 
         # Execute query
@@ -668,6 +676,9 @@ async def get_tasks(
         tasks = []
         for task_row in tasks_rows:
             task_dict = _task_from_row(task_row)
+            # Use computed_project_id as the effective project_id
+            if 'computed_project_id' in task_dict and task_dict['computed_project_id']:
+                task_dict['project_id'] = task_dict['computed_project_id']
             tasks.append(TaskStatus(**task_dict))
 
         return tasks
