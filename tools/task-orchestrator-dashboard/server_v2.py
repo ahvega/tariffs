@@ -84,6 +84,7 @@ class TaskStatus(BaseModel):
     created_at: Optional[str] = None
     updated_at: Optional[str] = None
     feature_id: Optional[str] = None
+    project_id: Optional[str] = None  # Computed from task.project_id or feature.project_id
 
 
 class Feature(BaseModel):
