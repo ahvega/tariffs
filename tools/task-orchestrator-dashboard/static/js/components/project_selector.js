@@ -39,8 +39,8 @@ class ProjectSelector {
         
         // Listen for project changes from AppState
         if (window.appState) {
-            window.appState.addListener((projectId, projectName) => {
-                this.updateCurrentProjectDisplay(projectName);
+            window.appState.subscribe((state) => {
+                this.updateCurrentProjectDisplay(state.projectName);
             });
             
             // Set initial display if project already selected
