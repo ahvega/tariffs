@@ -50,13 +50,23 @@ class KanbanBoard {
                 api.getDependencies()
             ]);
 
+            console.log(`[Kanban] Selected project ID: ${projectId}`);
+            console.log(`[Kanban] Total tasks from API: ${tasks.length}`);
+            console.log(`[Kanban] Sample task project_ids:`, tasks.slice(0, 3).map(t => ({ title: t.title.substring(0, 30), project_id: t.project_id })));
+
             // Filter by project if one is selected
             this.tasks = projectId 
-                ? tasks.filter(task => task.project_id === projectId)
+                ? tasks.filter(task => {
+                    const matches = task.project_id === projectId;
+                    if (!matches && tasks.indexOf(task) < 3) {
+                        console.log(`[Kanban] Task "${task.title.substring(0, 30)}" project_id "${task.project_id}" doesn't match selected "${projectId}"`);
+                    }
+                    return matches;
+                })
                 : tasks;
             this.dependencies = dependencies;
 
-            console.log(`Loaded ${this.tasks.length} tasks for Kanban (project: ${projectId || 'all'})`);
+            console.log(`[Kanban] Filtered to ${this.tasks.length} tasks (project: ${projectId || 'all'})`);
         } catch (error) {
             console.error('Failed to load Kanban data:', error);
             throw error;
