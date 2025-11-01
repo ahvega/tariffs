@@ -4,8 +4,14 @@
 # Web framework
 fastapi==0.120.1
 
-# ASGI server
-uvicorn==0.38.0
+# ASGI server with WebSocket support
+uvicorn[standard]==0.38.0
 
 # Data validation
 pydantic==2.12.3
+
+# Docker integration
+docker==7.1.0
+
+# WebSocket support
+websockets==12.0

@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  dashboard:
+    build: .
+    image: task-orchestrator-dashboard:latest
+    container_name: task-orchestrator-dashboard
+    ports:
+      - "${DASHBOARD_PORT:-8888}:8888"
+    environment:
+      - TASK_ORCHESTRATOR_DB=${TASK_ORCHESTRATOR_DB:-/data/tasks.db}
+      - ENABLE_WEBSOCKET=${ENABLE_WEBSOCKET:-true}
+      - ENABLE_DOCKER_DETECTION=${ENABLE_DOCKER_DETECTION:-false}
+    volumes:
+      # Reuse the MCP server's named volume that contains tasks.db
+      - mcp-task-data:/data:ro
+    restart: unless-stopped
+
+volumes:
+  mcp-task-data:
+    external: true
+    name: mcp-task-data

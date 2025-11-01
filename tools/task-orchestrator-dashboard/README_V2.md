@@ -1,11 +1,6 @@
-# Task Orchestrator Dashboard
+# Task Orchestrator Dashboard v2.0
 
-    ["'![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-    [![FastAPI](https://img.shields.io/badge/FastAPI-0.120+-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-    [![Docker](https://img.shields.io/badge/Docker-Desktop-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
-    [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
-
-**Real-time monitoring dashboard for MCP Task Orchestrator** with Docker integration
+**Real-time monitoring dashboard for MCP Task Orchestrator with Docker integration**
 
 ## 🎯 What's New in v2.0
 
@@ -41,42 +36,42 @@
 
 ### Installation
 
-    ```bash
-    cd tools/task-orchestrator-dashboard
+```bash
+cd tools/task-orchestrator-dashboard
 
-    # Activate virtual environment
-    venv\Scripts\activate   # Windows
-    # or
-    source venv/bin/activate  # Linux/macOS
+# Activate virtual environment
+venv\Scripts\activate   # Windows
+# or
+source venv/bin/activate  # Linux/macOS
 
-    # Install dependencies
-    pip install -r requirements.txt
-    ```
+# Install dependencies
+pip install -r requirements.txt
+```
 
 ### Running v2.0
 
-#### **Option 1: Use PowerShell startup script (Windows)**
+**Option 1: Use PowerShell startup script (Windows)**
 
-    ```powershell
-    .\start-server-v2.ps1
-    ```
+```powershell
+.\start-server-v2.ps1
+```
 
-#### **Option 2: Direct Python**
+**Option 2: Direct Python**
 
-    ```bash
-    python server_v2.py
-    ```
+```bash
+python server_v2.py
+```
 
-#### **Option 3: With custom configuration**
+**Option 3: With custom configuration**
 
-    ```bash
-    # Set environment variables
-    set TASK_ORCHESTRATOR_DB=path\to\tasks.db
-    set ENABLE_WEBSOCKET=true
-    set ENABLE_DOCKER_DETECTION=true
+```bash
+# Set environment variables
+set TASK_ORCHESTRATOR_DB=path\to\tasks.db
+set ENABLE_WEBSOCKET=true
+set ENABLE_DOCKER_DETECTION=true
 
-    python server_v2.py
-    ```
+python server_v2.py
+```
 
 ### Accessing the Dashboard
 
@@ -114,11 +109,11 @@
 
 ### Environment Variables
 
-| Variable                  | Default         | Description                        |
-| ------------------------- | --------------- | ---------------------------------- |
-| `TASK_ORCHESTRATOR_DB`    | `data/tasks.db` | Path to task-orchestrator database |
-| `ENABLE_WEBSOCKET`        | `true`          | Enable WebSocket real-time updates |
-| `ENABLE_DOCKER_DETECTION` | `true`          | Auto-detect Docker volumes         |
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `TASK_ORCHESTRATOR_DB` | `data/tasks.db` | Path to task-orchestrator database |
+| `ENABLE_WEBSOCKET` | `true` | Enable WebSocket real-time updates |
+| `ENABLE_DOCKER_DETECTION` | `true` | Auto-detect Docker volumes |
 
 ### Docker Volume Access
 
@@ -135,58 +130,58 @@ The dashboard automatically detects Docker volumes using platform-specific strat
 
 **Fallback (all platforms):**
 
-    ```bash
-    # Manual copy from container
-    docker cp mcp-task-orchestrator:/app/data/tasks.db ./data/tasks.db
-    ```
+```bash
+# Manual copy from container
+docker cp mcp-task-orchestrator:/app/data/tasks.db ./data/tasks.db
+```
 
 ## 🧪 Testing
 
 ### Component Tests
 
-    ```bash
-    python test_phase1.py
-    ```
+```bash
+python test_phase1.py
+```
 
 Expected output:
 
-    ```bash
-    [PASS] Services imported successfully
-    [PASS] Docker detection test passed
-    [PASS] Database pool test passed
-    [PASS] WebSocket manager test passed
-    [PASS] ALL TESTS PASSED
-    ```
+```
+[PASS] Services imported successfully
+[PASS] Docker detection test passed
+[PASS] Database pool test passed
+[PASS] WebSocket manager test passed
+[PASS] ALL TESTS PASSED
+```
 
 ### API Tests
 
-    ```bash
-    # Health check
-    curl http://localhost:8888/api/health
+```bash
+# Health check
+curl http://localhost:8888/api/health
 
-    # Get enhanced stats
-    curl http://localhost:8888/api/stats
+# Get enhanced stats
+curl http://localhost:8888/api/stats
 
-    # Search
-    curl "http://localhost:8888/api/search?q=authentication"
-    ```
+# Search
+curl "http://localhost:8888/api/search?q=authentication"
+```
 
 ### WebSocket Test (Browser Console)
 
-    ```javascript
-    const ws = new WebSocket("ws://localhost:8888/ws");
-    ws.onmessage = (e) => console.log(JSON.parse(e.data));
-    ```
+```javascript
+const ws = new WebSocket('ws://localhost:8888/ws');
+ws.onmessage = (e) => console.log(JSON.parse(e.data));
+```
 
 ## 📊 Performance Metrics
 
-| Metric              | v1.0    | v2.0      | Improvement   |
-| ------------------- | ------- | --------- | ------------- |
-| Update Latency      | 10s     | 1-2s      | 83% faster    |
-| API Endpoints       | 5       | 15+       | 3x more       |
-| Database Tables     | 3       | 13        | 4.3x coverage |
-| Concurrent Requests | Limited | Excellent | Unlimited     |
-| Real-Time Updates   | ❌      | ✅        | New feature   |
+| Metric | v1.0 | v2.0 | Improvement |
+|--------|------|------|-------------|
+| Update Latency | 10s | 1-2s | 83% faster |
+| API Endpoints | 5 | 15+ | 3x more |
+| Database Tables | 3 | 13 | 4.3x coverage |
+| Concurrent Requests | Limited | Excellent | Unlimited |
+| Real-Time Updates | ❌ | ✅ | New feature |
 
 ## 🔄 Backward Compatibility
 
@@ -199,67 +194,67 @@ v2.0 is fully backward compatible with v1.0:
 
 ## 🗂️ Project Structure
 
-    ```bash
-    tools/task-orchestrator-dashboard/
-    ├── services/                      # NEW: Service layer
-    │   ├── __init__.py
-    │   ├── docker_volume_detector.py  # Docker integration
-    │   ├── websocket_manager.py       # WebSocket real-time updates
-    │   └── database_pool.py           # Connection pooling
-    ├── server.py                      # v1.0 (original)
-    ├── server_v2.py                   # NEW: v2.0 with Phase 1 features
-    ├── dashboard.html                 # Original dashboard UI
-    ├── dashboard_v1_backup.html       # Backup of original
-    ├── requirements.txt               # Updated with new dependencies
-    ├── test_phase1.py                 # NEW: Component tests
-    ├── start-server-v2.ps1           # NEW: Windows startup script
-    ├── README.md                      # Original README
-    ├── README_V2.md                   # This file
-    ├── IMPLEMENTATION_PLAN.md         # NEW: Complete implementation plan
-    ├── PHASE1_SUMMARY.md              # NEW: Phase 1 detailed summary
-    └── PHASE1_TESTING_GUIDE.md        # NEW: Comprehensive testing guide
-    ```
+```
+tools/task-orchestrator-dashboard/
+├── services/                      # NEW: Service layer
+│   ├── __init__.py
+│   ├── docker_volume_detector.py  # Docker integration
+│   ├── websocket_manager.py       # WebSocket real-time updates
+│   └── database_pool.py           # Connection pooling
+├── server.py                      # v1.0 (original)
+├── server_v2.py                   # NEW: v2.0 with Phase 1 features
+├── dashboard.html                 # Original dashboard UI
+├── dashboard_v1_backup.html       # Backup of original
+├── requirements.txt               # Updated with new dependencies
+├── test_phase1.py                 # NEW: Component tests
+├── start-server-v2.ps1           # NEW: Windows startup script
+├── README.md                      # Original README
+├── README_V2.md                   # This file
+├── IMPLEMENTATION_PLAN.md         # NEW: Complete implementation plan
+├── PHASE1_SUMMARY.md              # NEW: Phase 1 detailed summary
+└── PHASE1_TESTING_GUIDE.md        # NEW: Comprehensive testing guide
+```
 
 ## 🔍 Troubleshooting
 
 ### Database not found
 
-    ```bash
-    # Check if database exists
-    ls data/tasks.db
+```bash
+# Check if database exists
+ls data/tasks.db
 
-    # Copy from Docker
-    docker cp mcp-task-orchestrator:/app/data/tasks.db ./data/tasks.db
+# Copy from Docker
+docker cp mcp-task-orchestrator:/app/data/tasks.db ./data/tasks.db
 
-    # Or set custom path
-    set TASK_ORCHESTRATOR_DB=C:\path\to\tasks.db
-    ```
+# Or set custom path
+set TASK_ORCHESTRATOR_DB=C:\path\to\tasks.db
+```
 
 ### Docker connection failed
 
-    ```bash
-    # Disable Docker detection
-    set ENABLE_DOCKER_DETECTION=false
-    python server_v2.py
-    ```
+```bash
+# Disable Docker detection
+set ENABLE_DOCKER_DETECTION=false
+python server_v2.py
+```
 
 ### WebSocket issues
 
-    ```bash
-    # Disable WebSocket (fallback to polling)
-    set ENABLE_WEBSOCKET=false
-    python server_v2.py
-    ```
+```bash
+# Disable WebSocket (fallback to polling)
+set ENABLE_WEBSOCKET=false
+python server_v2.py
+```
 
 ### Import errors
 
-    ```bash
-    # Reinstall dependencies
-    pip install -r requirements.txt
+```bash
+# Reinstall dependencies
+pip install -r requirements.txt
 
-    # Verify installation
-    python test_phase1.py
-    ```
+# Verify installation
+python test_phase1.py
+```
 
 ## 🎯 Roadmap
 
@@ -286,10 +281,10 @@ Run the dashboard as an independent container alongside the MCP server while rea
 
 ### Using Docker Compose (recommended)
 
-    ```bash
-    docker compose up --build -d
-    # Open http://localhost:8888
-    ```
+```bash
+docker compose up --build -d
+# Open http://localhost:8888
+```
 
 Compose mounts the external volume `mcp-task-data` to `/data:ro` and sets:
 
@@ -299,15 +294,15 @@ Compose mounts the external volume `mcp-task-data` to `/data:ro` and sets:
 
 ### Using Docker directly
 
-    ```bash
-    docker build -t task-orchestrator-dashboard .
-    docker run --rm -p 8888:8888 \
-    -e TASK_ORCHESTRATOR_DB=/data/tasks.db \
-    -e ENABLE_WEBSOCKET=true \
-    -e ENABLE_DOCKER_DETECTION=false \
-    -v mcp-task-data:/data:ro \
-    task-orchestrator-dashboard
-    ```
+```bash
+docker build -t task-orchestrator-dashboard .
+docker run --rm -p 8888:8888 \
+  -e TASK_ORCHESTRATOR_DB=/data/tasks.db \
+  -e ENABLE_WEBSOCKET=true \
+  -e ENABLE_DOCKER_DETECTION=false \
+  -v mcp-task-data:/data:ro \
+  task-orchestrator-dashboard
+```
 
 ### Helper Commands
 
@@ -324,11 +319,11 @@ Compose mounts the external volume `mcp-task-data` to `/data:ro` and sets:
 
 Copy `.env.example` to `.env` to override defaults used by `docker-compose.yml`:
 
-    ```bash
-    cp .env.example .env
-    # or on Windows PowerShell
-    Copy-Item .env.example .env
-    ```
+```
+cp .env.example .env
+# or on Windows PowerShell
+Copy-Item .env.example .env
+```
 
 Editable keys:
 
@@ -384,7 +379,7 @@ Built on top of [task-orchestrator](https://github.com/jpicklyk/task-orchestrato
 **Status:** ✅ Complete and Ready for Use
 **Last Updated:** 2025-10-29
 
-## 📚 Documentation V2
+## 📚 Documentation
 
 - **[PHASE1_COMPLETE.md](PHASE1_COMPLETE.md)** - Phase 1 completion summary
 - **[PHASE2_COMPLETE.md](PHASE2_COMPLETE.md)** - Phase 2 completion summary

@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.sqlite
+
+# Envs
+venv/
+.venv/
+
+# VCS
+.git/
+.gitignore
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node/NPM (if ever added)
+node_modules/
+
+# Data (mounted via volume in container)
+data/
+
+# Local env (used by compose, not needed in build context)
+.env
