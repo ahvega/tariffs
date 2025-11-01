@@ -27,8 +27,11 @@ class Analytics {
      */
     async loadData() {
         try {
-            this.data = await api.getAnalyticsOverview();
-            console.log('Analytics data loaded:', this.data);
+            // Get selected project from global state
+            const projectId = window.appState ? window.appState.getProjectId() : null;
+            
+            this.data = await api.getAnalyticsOverview(projectId);
+            console.log(`Analytics data loaded for project: ${projectId || 'all'}`, this.data);
         } catch (error) {
             console.error('Failed to load analytics data:', error);
             throw error;
@@ -250,6 +253,12 @@ class Analytics {
     setupWebSocketListener() {
         wsClient.on('database_update', () => {
             console.log('Database updated, reloading analytics...');
+            this.reload();
+        });
+
+        // Listen for project selection changes
+        window.addEventListener('project-selected', () => {
+            console.log('Project changed, reloading analytics...');
             this.reload();
         });
     }

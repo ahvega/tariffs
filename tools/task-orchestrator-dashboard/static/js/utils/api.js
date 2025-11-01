@@ -121,8 +121,9 @@ class APIClient {
     }
 
     // Analytics
-    async getAnalyticsOverview() {
-        return this.fetch('/api/analytics/overview');
+    async getAnalyticsOverview(projectId = null) {
+        const query = projectId ? `?project_id=${projectId}` : '';
+        return this.fetch(`/api/analytics/overview${query}`);
     }
 
     async getActivityTimeline(days = 7, entityType = null) {

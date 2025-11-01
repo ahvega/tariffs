@@ -36,11 +36,19 @@ class DependencyGraph {
      */
     async loadData() {
         try {
+            // Get selected project from global state
+            const projectId = window.appState ? window.appState.getProjectId() : null;
+            
             const dependencies = await api.getDependencies();
             const tasks = await api.getTasks();
 
-            // Build nodes from tasks
-            this.data.nodes = tasks.map(task => ({
+            // Filter tasks by project if one is selected
+            const filteredTasks = projectId
+                ? tasks.filter(task => task.project_id === projectId)
+                : tasks;
+
+            // Build nodes from filtered tasks
+            this.data.nodes = filteredTasks.map(task => ({
                 data: {
                     id: task.id,
                     label: task.title,
@@ -52,17 +60,20 @@ class DependencyGraph {
                 }
             }));
 
-            // Build edges from dependencies
-            this.data.edges = dependencies.map(dep => ({
-                data: {
-                    id: `${dep.from_task_id}-${dep.to_task_id}`,
-                    source: dep.from_task_id,
-                    target: dep.to_task_id,
-                    type: dep.type
-                }
-            }));
+            // Build edges from dependencies - only include edges between filtered tasks
+            const taskIds = new Set(filteredTasks.map(t => t.id));
+            this.data.edges = dependencies
+                .filter(dep => taskIds.has(dep.from_task_id) && taskIds.has(dep.to_task_id))
+                .map(dep => ({
+                    data: {
+                        id: `${dep.from_task_id}-${dep.to_task_id}`,
+                        source: dep.from_task_id,
+                        target: dep.to_task_id,
+                        type: dep.type
+                    }
+                }));
 
-            console.log(`Loaded ${this.data.nodes.length} nodes and ${this.data.edges.length} edges`);
+            console.log(`Loaded ${this.data.nodes.length} nodes and ${this.data.edges.length} edges (project: ${projectId || 'all'})`);
         } catch (error) {
             console.error('Failed to load graph data:', error);
             throw error;
@@ -260,6 +271,12 @@ class DependencyGraph {
         wsClient.on('task_update', (data) => {
             console.log('Task updated:', data);
             this.updateNode(data.task_id);
+        });
+
+        // Listen for project selection changes
+        window.addEventListener('project-selected', () => {
+            console.log('Project changed, reloading graph...');
+            this.reload();
         });
     }
 

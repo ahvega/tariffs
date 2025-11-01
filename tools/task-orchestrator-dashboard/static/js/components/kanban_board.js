@@ -42,15 +42,21 @@ class KanbanBoard {
      */
     async loadData() {
         try {
+            // Get selected project from global state
+            const projectId = window.appState ? window.appState.getProjectId() : null;
+            
             const [tasks, dependencies] = await Promise.all([
                 api.getTasks(),
                 api.getDependencies()
             ]);
 
-            this.tasks = tasks;
+            // Filter by project if one is selected
+            this.tasks = projectId 
+                ? tasks.filter(task => task.project_id === projectId)
+                : tasks;
             this.dependencies = dependencies;
 
-            console.log(`Loaded ${tasks.length} tasks for Kanban`);
+            console.log(`Loaded ${this.tasks.length} tasks for Kanban (project: ${projectId || 'all'})`);
         } catch (error) {
             console.error('Failed to load Kanban data:', error);
             throw error;
@@ -194,6 +200,12 @@ class KanbanBoard {
 
         wsClient.on('task_update', (data) => {
             console.log('Task updated:', data);
+            this.reload();
+        });
+
+        // Listen for project selection changes
+        window.addEventListener('project-selected', () => {
+            console.log('Project changed, reloading Kanban...');
             this.reload();
         });
     }

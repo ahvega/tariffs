@@ -1197,46 +1197,65 @@ async def get_task_locks():
 
 
 @app.get("/api/analytics/overview")
-async def get_analytics_overview():
-    """Get comprehensive analytics data"""
+async def get_analytics_overview(
+    project_id: Optional[str] = Query(None, description="Filter by project ID")
+):
+    """Get comprehensive analytics data, optionally filtered by project"""
     pool = get_db_pool()
 
     with pool.get_connection() as conn:
         cursor = conn.cursor()
 
+        # Build WHERE clause for project filtering
+        where_clause = "WHERE project_id = ?" if project_id else ""
+        params = (project_id,) if project_id else ()
+
         # Tasks by status
-        status_stats = cursor.execute("""
+        status_stats = cursor.execute(f"""
             SELECT status, COUNT(*) as count
             FROM tasks
+            {where_clause}
             GROUP BY status
-        """).fetchall()
+        """, params).fetchall()
 
         # Tasks by priority
-        priority_stats = cursor.execute("""
+        priority_stats = cursor.execute(f"""
             SELECT priority, COUNT(*) as count
             FROM tasks
+            {where_clause}
             GROUP BY priority
-        """).fetchall()
+        """, params).fetchall()
 
         # Average complexity
-        avg_complexity = cursor.execute("""
+        avg_complexity = cursor.execute(f"""
             SELECT AVG(complexity) as avg_complexity
             FROM tasks
-        """).fetchone()[0] or 0
+            {where_clause}
+        """, params).fetchone()[0] or 0
 
-        # Blocked tasks count
-        blocked_count = cursor.execute("""
-            SELECT COUNT(DISTINCT to_task_id)
-            FROM dependencies
-            WHERE type = 'BLOCKS'
-        """).fetchone()[0]
+        # Blocked tasks count - only count tasks in the filtered project
+        if project_id:
+            blocked_count = cursor.execute("""
+                SELECT COUNT(DISTINCT d.to_task_id)
+                FROM dependencies d
+                JOIN tasks t ON d.to_task_id = t.id
+                WHERE d.type = 'BLOCKS' AND t.project_id = ?
+            """, (project_id,)).fetchone()[0]
+        else:
+            blocked_count = cursor.execute("""
+                SELECT COUNT(DISTINCT to_task_id)
+                FROM dependencies
+                WHERE type = 'BLOCKS'
+            """).fetchone()[0]
 
+        # Build response with proper key names matching frontend expectations
         return {
-            "tasks_by_status": {row[0]: row[1] for row in status_stats},
-            "tasks_by_priority": {row[0]: row[1] for row in priority_stats},
+            "task_status_distribution": {row[0]: row[1] for row in status_stats},
+            "task_priority_distribution": {row[0]: row[1] for row in priority_stats},
             "average_complexity": round(avg_complexity, 2),
             "blocked_tasks": blocked_count,
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
+            "project_id": project_id
         }
 
 
